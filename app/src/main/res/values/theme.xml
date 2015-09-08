@@ -11,18 +11,18 @@
         <item name="android:radioButtonStyle">@style/RadioButton</item>
     </style>
 
-    <style name="Button" parent="@android:style/Widget.Button"></style>
+    <style name="Button" parent="@android:style/Widget.Holo.Button"></style>
 
-    <style name="ListView" parent="@android:style/Widget.ListView">
+    <style name="ListView" parent="@android:style/Widget.Holo.ListView">
 
-
-    </style>
-
-    <style name="TextView" parent="@android:style/Widget.TextView">
 
     </style>
 
-    <style name="EditText" parent="@android:style/Widget.EditText">
+    <style name="TextView" parent="@android:style/Widget.Holo.TextView">
+
+    </style>
+
+    <style name="EditText" parent="@android:style/Widget.Holo.EditText">
 
     </style>
 

@@ -2,9 +2,13 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account_new.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account_remove.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account_select_all.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account_select_none.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/app.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/close_dark.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/close_light.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/oauth_refresh.png" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

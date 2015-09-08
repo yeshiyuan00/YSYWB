@@ -1,9 +1,7 @@
 package com.ysy.ysywb.weibo;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -29,7 +27,6 @@ public class Weibo {
 
     private WeiboDialogListener mAuthDialogListener;
 
-    private static final int DEFAULT_AUTH_ACTIVITY_CODE = 32973;
 
     public static final String TOKEN = "access_token";
     public static final String EXPIRES = "expires_in";
@@ -97,11 +94,9 @@ public class Weibo {
     }
 
 
-    private void startDialogAuth(Activity activity, String[] permissions) {
+    private void startDialogAuth(Activity activity) {
         WeiboParameters params = new WeiboParameters();
-        if (permissions.length > 0) {
-            params.add("scope", TextUtils.join(",", permissions));
-        }
+
         CookieSyncManager.createInstance(activity);
         dialog(activity, params, new WeiboDialogListener() {
 
@@ -154,7 +149,7 @@ public class Weibo {
 
         mAuthDialogListener = listener;
 
-        startDialogAuth(activity, new String[]{});
+        startDialogAuth(activity);
 
 
     }
@@ -171,12 +166,9 @@ public class Weibo {
             parameters.add(TOKEN, mAccessToken.getToken());
         }
         String url = URL_OAUTH2_ACCESS_AUTHORIZE + "?" + Utility.encodeUrl(parameters);
-        if (context.checkCallingOrSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-//            Utility.showAlert(context, "Error",
-//                    "Application requires permission to access the Internet");
-        } else {
-            new WeiboDialog(this, context, url, listener).show();
-        }
+
+        new WeiboDialog(this, context, url, listener).show();
+
     }
 
     public boolean isSessionValid() {
