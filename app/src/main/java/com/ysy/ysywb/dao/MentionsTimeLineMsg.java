@@ -29,7 +29,10 @@ public class MentionsTimeLineMsg implements TimeLineMsg {
         token.setToken(GlobalContext.getInstance().getToken());
         token.setExpiresIn(GlobalContext.getInstance().getExpires());
 
-        String url = URLHelper.getMentionsTimeLine();
+        //String url = URLHelper.getMentionsTimeLine(); //https://api.weibo.com/2/statuses/mentions.json
+        // String url = URLHelper.getuserTimeLine(); //https://api.weibo.com/2/statuses/user_timeline.json
+        String url = URLHelper.getfriendTimeLine(); //https://api.weibo.com/2/statuses/friends_timeline.json
+
         WeiboParameters bundle = new WeiboParameters();
         bundle.add("access_token", GlobalContext.getInstance().getToken());
         try {

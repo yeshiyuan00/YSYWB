@@ -41,7 +41,7 @@ public class MentionsTimeLineActivity extends FragmentActivity {
         mViewPager.setAdapter(new TimeLinePagerAdapter(getSupportFragmentManager()));
         mViewPager.setOnPageChangeListener(simpleOnPageChangeListener);
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 3; i++) {
             actionBar.addTab(
                     actionBar.newTab()
                             .setText("Tab " + (i + 1))

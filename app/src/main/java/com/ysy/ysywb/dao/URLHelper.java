@@ -17,4 +17,16 @@ public class URLHelper {
         return URLManager.getRealUrl("mentions");
 
     }
+
+    public static String getuserTimeLine() {
+
+        return URLManager.getRealUrl("user_timeline");
+
+    }
+
+    public static String getfriendTimeLine() {
+
+        return URLManager.getRealUrl("friends_timeline");
+
+    }
 }

@@ -236,7 +236,7 @@ public class Utility {
             } else if (method.equals("DELETE")) {
                 request = new HttpDelete(url);
             }
-            setHeader(method, request, params, url, token);
+            //setHeader(method, request, params, url, token);
             HttpResponse response = client.execute(request);
             StatusLine status = response.getStatusLine();
             int statusCode = status.getStatusCode();
