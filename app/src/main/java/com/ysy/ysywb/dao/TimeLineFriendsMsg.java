@@ -18,7 +18,7 @@ import java.util.Map;
  * Date: 2015/9/8
  * Time: 14:14
  */
-public class FriendsTimeLineMsg {
+public class TimeLineFriendsMsg {
 
     private String getMsgs() {
         String msg = "";

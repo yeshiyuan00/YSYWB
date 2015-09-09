@@ -8,7 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.dao.MentionsTimeLineMsg;
+import com.ysy.ysywb.dao.TimeLineMentionsMsg;
 import com.ysy.ysywb.support.utils.GlobalContext;
 
 /**
@@ -43,7 +43,7 @@ public class HomeActivity extends Activity {
         new AsyncTask<Void,String,String>(){
             @Override
             protected String doInBackground(Void... params) {
-                return new MentionsTimeLineMsg().getMsgs();
+                return new TimeLineMentionsMsg().getMsgs();
             }
 
             @Override

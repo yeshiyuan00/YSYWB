@@ -26,7 +26,13 @@ public class URLHelper {
 
     public static String getfriendTimeLine() {
 
-        return URLManager.getRealUrl("friends_timeline");
+        return URLManager.getRealUrl("friendstimeline");
+
+    }
+
+    public static String getMyCommentsTimeLine() {
+
+        return URLManager.getRealUrl("commentstimeline");
 
     }
 }

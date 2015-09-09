@@ -18,7 +18,7 @@ import java.util.Map;
  * Date: 2015/9/8
  * Time: 14:47
  */
-public class MentionsTimeLineMsg {
+public class TimeLineMentionsMsg {
 
     public String getMsgs() {
         String msg = "";

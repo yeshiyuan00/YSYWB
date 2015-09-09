@@ -1,6 +1,9 @@
 package com.ysy.ysywb.support.http;
 
 
+import android.util.Log;
+
+import com.ysy.ysywb.support.debug.Debug;
 import com.ysy.ysywb.support.utils.GlobalContext;
 
 import org.json.JSONException;
@@ -112,6 +115,9 @@ public class HttpUtility {
             result = EntityUtils.toString(entity);
         } catch (IOException ignored) {
 
+        }
+        if (Debug.debug) {
+            Log.e("HttpUtility", result);
         }
 
         return result;

@@ -25,8 +25,9 @@ import com.ysy.ysywb.weibo.WeiboParameters;
 public class OAuthActivity extends Activity {
 
     public static String URL_OAUTH2_ACCESS_AUTHORIZE = "https://api.weibo.com/oauth2/authorize";
-    public static final String APP_KEY = "1065511513";// 替换为开发者的appkey，例如"1646212960";
+    public static final String APP_KEY = "1065511513";// 替换为开发者的appkey，例如"1646212960";//468987987
     private static final String CONSUMER_SECRET = "df428e88aae8bd31f20481d149c856ed";// 替换为开发者的appkey，例如"94098772160b6f8ffc1315374d8861f9";
+    //755e56b044e2a7517a748832ccb2709c
     private static final String DIRECT_URL = "https://api.weibo.com/oauth2/default.html";
 
     private WebView webView;

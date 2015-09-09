@@ -5,13 +5,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-
-    <ListView
-        android:id="@+id/listView"
+    <EditText
+        android:id="@+id/status_new_content"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:fastScrollEnabled="true" />
+        android:gravity="left|top" />
 
 </LinearLayout>
