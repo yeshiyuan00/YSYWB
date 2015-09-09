@@ -1,10 +1,7 @@
 package com.ysy.ysywb.dao;
 
-import com.ysy.ysywb.support.utils.GlobalContext;
-import com.ysy.ysywb.weibo.Token;
-import com.ysy.ysywb.weibo.Utility;
-import com.ysy.ysywb.weibo.WeiboException;
-import com.ysy.ysywb.weibo.WeiboParameters;
+import com.ysy.ysywb.support.http.HttpMethod;
+import com.ysy.ysywb.support.http.HttpUtility;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,25 +18,17 @@ import java.util.Map;
  * Date: 2015/9/8
  * Time: 14:47
  */
-public class MentionsTimeLineMsg implements TimeLineMsg {
-    @Override
+public class MentionsTimeLineMsg {
+
     public String getMsgs() {
         String msg = "";
-        Token token = new Token();
-        token.setToken(GlobalContext.getInstance().getToken());
-        token.setExpiresIn(GlobalContext.getInstance().getExpires());
 
-        //String url = URLHelper.getMentionsTimeLine(); //https://api.weibo.com/2/statuses/mentions.json
-        // String url = URLHelper.getuserTimeLine(); //https://api.weibo.com/2/statuses/user_timeline.json
-        String url = URLHelper.getfriendTimeLine(); //https://api.weibo.com/2/statuses/friends_timeline.json
+        String url = URLHelper.getMentionsTimeLine();
 
-        WeiboParameters bundle = new WeiboParameters();
-        bundle.add("access_token", GlobalContext.getInstance().getToken());
-        try {
-            msg = Utility.openUrl(GlobalContext.getInstance(), url, "GET", bundle, token);
-        } catch (WeiboException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        Map<String, String> map = new HashMap<String, String>();
+
+        msg = HttpUtility.getInstance().execute(HttpMethod.Get, url, map);
+
         return msg;
     }
 

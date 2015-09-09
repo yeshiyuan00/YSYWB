@@ -13,6 +13,8 @@ import android.text.TextUtils;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.support.utils.GlobalContext;
+import com.ysy.ysywb.ui.timeline.TimeLineFriendsFragment;
+import com.ysy.ysywb.ui.timeline.TimeLineMentionsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.List;
  * Date: 2015/9/8
  * Time: 15:04
  */
-public class MentionsTimeLineActivity extends FragmentActivity {
+public class MainTimeLineActivity extends FragmentActivity {
 
     private ViewPager mViewPager;
 
@@ -41,12 +43,20 @@ public class MentionsTimeLineActivity extends FragmentActivity {
         mViewPager.setAdapter(new TimeLinePagerAdapter(getSupportFragmentManager()));
         mViewPager.setOnPageChangeListener(simpleOnPageChangeListener);
 
-        for (int i = 0; i < 3; i++) {
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText("Tab " + (i + 1))
-                            .setTabListener(tabListener));
-        }
+
+        actionBar.addTab(actionBar.newTab()
+                .setText("首页")
+                .setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab()
+                .setText("回复")
+                .setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab()
+                .setText("评论")
+                .setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab()
+                .setText("私信")
+                .setTabListener(tabListener));
+
 
         Intent intent = getIntent();
         String token = intent.getStringExtra("token");
@@ -93,9 +103,10 @@ public class MentionsTimeLineActivity extends FragmentActivity {
 
         public TimeLinePagerAdapter(FragmentManager fm) {
             super(fm);
-            list.add(new MentionsFragment());
-            list.add(new MentionsFragment());
-            list.add(new MentionsFragment());
+            list.add(new TimeLineFriendsFragment());
+            list.add(new TimeLineFriendsFragment());
+            list.add(new TimeLineMentionsFragment());
+            list.add(new TimeLineMentionsFragment());
         }
 
         @Override

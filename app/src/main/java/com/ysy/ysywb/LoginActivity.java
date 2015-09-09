@@ -21,7 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ysy.ysywb.ui.MentionsTimeLineActivity;
+import com.ysy.ysywb.ui.MainTimeLineActivity;
 import com.ysy.ysywb.ui.login.OAuthActivity;
 
 import java.util.ArrayList;
@@ -116,7 +116,7 @@ public class LoginActivity extends Activity implements AdapterView.OnItemClickLi
         boolean haveUsername = !TextUtils.isEmpty(username);
 
         if (haveToken) {
-            Intent intent = new Intent(LoginActivity.this, MentionsTimeLineActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainTimeLineActivity.class);
             intent.putExtra("token", token);
             intent.putExtra("expires", expires);
 
@@ -174,7 +174,7 @@ public class LoginActivity extends Activity implements AdapterView.OnItemClickLi
 
         editor.commit();
 
-        Intent intent = new Intent(this, MentionsTimeLineActivity.class);
+        Intent intent = new Intent(this, MainTimeLineActivity.class);
         intent.putExtra("token", token);
         intent.putExtra("expires", expires);
 
