@@ -1,10 +1,13 @@
 package com.ysy.ysywb.ui.timeline;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,15 +15,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.dao.TimeLineFriendsMsg;
+import com.ysy.ysywb.domain.TimeLineMsgList;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: ysy
@@ -43,11 +45,16 @@ public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
         listView = (ListView) view.findViewById(R.id.listView);
         timeLineAdapter = new TimeLineAdapter();
         listView.setAdapter(timeLineAdapter);
-
+        listView.setOnItemLongClickListener(onItemLongClickListener);
         new TimeLineTask().execute();
 
         return view;
 
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        return super.onContextItemSelected(item);//To change body of overridden methods use File | Settings | File Templates.
     }
 
     @Override
@@ -72,7 +79,65 @@ public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
         return true;
     }
 
-    class TimeLineTask extends AsyncTask<Void, List<Map<String, String>>, List<Map<String, String>>> {
+    AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener() {
+        @Override
+        public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            view.setSelected(true);
+            MyAlertDialogFragment.newInstance().setView(view).show(getFragmentManager(), "");
+            return false;
+        }
+    };
+
+    static class MyAlertDialogFragment extends DialogFragment {
+        View view;
+
+        public static MyAlertDialogFragment newInstance() {
+            MyAlertDialogFragment frag = new MyAlertDialogFragment();
+            frag.setRetainInstance(true);
+            Bundle args = new Bundle();
+            frag.setArguments(args);
+            return frag;
+        }
+
+        @Override
+        public void onCancel(DialogInterface dialog) {
+            view.setSelected(false);
+        }
+
+        public MyAlertDialogFragment setView(View view) {
+            this.view = view;
+            return this;
+        }
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            String[] items = {getString(R.string.take_camera), getString(R.string.select_pic)};
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.select))
+                    .setItems(items, new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            switch (which) {
+                                case 0:
+
+                                    break;
+                                case 1:
+
+                                    break;
+                            }
+
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    class TimeLineTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
         DialogFragment dialogFragment = ProgressFragment.newInstance();
 
         @Override
@@ -81,14 +146,14 @@ public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
         }
 
         @Override
-        protected List<Map<String, String>> doInBackground(Void... params) {
-            return new TimeLineFriendsMsg().getMsgList();
+        protected TimeLineMsgList doInBackground(Void... params) {
+            return new TimeLineFriendsMsg().getGSONMsgList();
         }
 
         @Override
-        protected void onPostExecute(List<Map<String, String>> o) {
-            list=o;
-            Toast.makeText(getActivity(), "" + list.size(), Toast.LENGTH_SHORT).show();
+        protected void onPostExecute(TimeLineMsgList o) {
+            list = o;
+            Toast.makeText(getActivity(), "" + list.getStatuses().size(), Toast.LENGTH_SHORT).show();
             dialogFragment.dismissAllowingStateLoss();
             timeLineAdapter.notifyDataSetChanged();
             super.onPostExecute(o);

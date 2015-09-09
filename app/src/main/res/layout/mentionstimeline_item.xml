@@ -1,28 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/listitem_background_selector"
+    android:padding="5dp">
 
     <ImageView
+        android:id="@+id/pic"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:background="@drawable/app"
-        android:id="@+id/pic" android:layout_gravity="left|center_vertical"/>
-    <LinearLayout
-        android:orientation="vertical"
+        android:layout_gravity="left|center_vertical"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/app" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/pic"
+        android:text="用户名"
+        android:textColor="@drawable/text_selector" />
+
+    <TextView
+
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/username"
+        android:layout_alignParentRight="true"
+        android:text="几分钟"
+        android:textColor="@drawable/text_selector" />
+
+    <TextView
+        android:id="@+id/content"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:id="@+id/linearLayout" android:layout_gravity="center">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/username" android:layout_gravity="center|left"/>
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/content"/>
-    </LinearLayout>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/username"
+        android:layout_centerInParent="true"
+        android:layout_toRightOf="@id/pic"
+        android:text="内容"
+        android:textColor="@drawable/text_selector" />
+
+    <TextView
+        android:id="@+id/source"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@id/content"
+        android:layout_toRightOf="@id/pic"
+        android:text="来源"
+        android:visibility="gone" />
+
+</RelativeLayout>

@@ -1,23 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/app/libs/httpclientandroidlib-1.1.1.jar" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account_new.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account_remove.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account_select_all.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account_select_none.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/app.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/close_dark.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/close_light.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/oauth_refresh.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/status_camera.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/status_gps.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/status_send.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/status_write.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/statusnewactivity_layout.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/friendstimelinefragment_menu.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/mentionstimelinefragment_menu.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/statusnewactivity_menu.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/libs/fastjson-1.1.22.jar" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/libs/gson-2.2.2.jar" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

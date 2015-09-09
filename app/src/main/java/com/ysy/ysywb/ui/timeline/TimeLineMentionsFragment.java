@@ -1,6 +1,5 @@
 package com.ysy.ysywb.ui.timeline;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,10 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.dao.TimeLineMentionsMsg;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * User: ysy
@@ -38,20 +33,20 @@ public class TimeLineMentionsFragment extends TimeLineAbstractFragment {
         timeLineAdapter = new TimeLineAdapter();
         listView.setAdapter(timeLineAdapter);
 
-        new AsyncTask<Void, List<Map<String, String>>, List<Map<String, String>>>() {
-
-            @Override
-            protected List<Map<String, String>> doInBackground(Void... params) {
-                return new TimeLineMentionsMsg().getMsgList();
-            }
-
-            @Override
-            protected void onPostExecute(List<Map<String, String>> o) {
-                list = o;
-                timeLineAdapter.notifyDataSetChanged();
-                super.onPostExecute(o);
-            }
-        }.execute();
+//        new AsyncTask<Void, List<Map<String, String>>, List<Map<String, String>>>() {
+//
+//            @Override
+//            protected List<Map<String, String>> doInBackground(Void... params) {
+//                return new TimeLineMentionsMsg().getMsgList();
+//            }
+//
+//            @Override
+//            protected void onPostExecute(List<Map<String, String>> o) {
+//                list = o;
+//                timeLineAdapter.notifyDataSetChanged();
+//                super.onPostExecute(o);
+//            }
+//        }.execute();
         return view;
     }
 

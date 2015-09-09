@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +23,14 @@ import ch.boye.httpclientandroidlib.HttpVersion;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.StatusLine;
 import ch.boye.httpclientandroidlib.client.HttpClient;
+import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
 import ch.boye.httpclientandroidlib.client.protocol.ClientContext;
 import ch.boye.httpclientandroidlib.client.utils.URIBuilder;
 import ch.boye.httpclientandroidlib.impl.client.BasicCookieStore;
 import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
+import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 import ch.boye.httpclientandroidlib.params.BasicHttpParams;
 import ch.boye.httpclientandroidlib.params.CoreProtocolPNames;
 import ch.boye.httpclientandroidlib.params.HttpParams;
@@ -73,7 +76,32 @@ public class HttpUtility {
 
 
     private String doPost(String url, Map<String, String> param) {
-        return "";
+        List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+        formparams.add(new BasicNameValuePair("access_token", GlobalContext.getInstance().getToken()));
+
+        Set<String> keys = param.keySet();
+        for (String key : keys) {
+            formparams.add(new BasicNameValuePair(key, param.get(key)));
+        }
+        UrlEncodedFormEntity entity = null;
+
+        try {
+            entity = new UrlEncodedFormEntity(formparams);
+        } catch (UnsupportedEncodingException e) {
+
+        }
+
+        HttpPost httpPost = new HttpPost(url);
+        httpPost.setEntity(entity);
+
+        HttpResponse response = null;
+
+        try {
+            response=httpClient.execute(httpPost);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+       return dealWithResponse(response);
     }
 
     private String doGet(String url, Map<String, String> param) throws URISyntaxException, IOException {

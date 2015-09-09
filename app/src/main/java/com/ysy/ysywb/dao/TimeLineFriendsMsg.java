@@ -1,5 +1,10 @@
 package com.ysy.ysywb.dao;
 
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.ysy.ysywb.domain.TimeLineMsgList;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 
@@ -58,6 +63,20 @@ public class TimeLineFriendsMsg {
             e.printStackTrace();
         }
         return list;
+    }
+
+    public TimeLineMsgList getGSONMsgList() {
+        Gson gson = new Gson();
+
+        TimeLineMsgList value = null;
+        try {
+            value = gson.fromJson(getMsgs(), TimeLineMsgList.class);
+
+        } catch (JsonSyntaxException e) {
+            Log.e("gson", "------------------------------");
+            Log.e("gson", getMsgs());
+        }
+        return value;
     }
 
 }

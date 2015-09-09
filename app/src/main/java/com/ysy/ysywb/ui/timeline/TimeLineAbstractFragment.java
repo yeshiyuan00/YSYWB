@@ -5,14 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ysy.ysywb.R;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import com.ysy.ysywb.domain.TimeLineMsgList;
+import com.ysy.ysywb.domain.WeiboMsg;
 
 /**
  * User: ysy
@@ -21,20 +20,27 @@ import java.util.Map;
  */
 public abstract class TimeLineAbstractFragment extends Fragment {
     protected ListView listView;
-    protected List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+    protected TimeLineMsgList list = new TimeLineMsgList();
     protected TimeLineAdapter timeLineAdapter;
 
 
     protected class TimeLineAdapter extends BaseAdapter {
 
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+
+
         @Override
         public int getCount() {
-            return list.size();
+            if (list.getStatuses() != null) {
+                return list.getStatuses().size();
+            } else {
+                return 0;
+            }
         }
 
         @Override
         public Object getItem(int position) {
-            return list.get(position);
+            return list.getStatuses().get(position);
         }
 
         @Override
@@ -44,20 +50,27 @@ public abstract class TimeLineAbstractFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder;
+            ViewHolder holder = new ViewHolder();
             if (convertView == null) {
-                LayoutInflater inflater = getActivity().getLayoutInflater();
                 convertView = inflater.inflate(R.layout.mentionstimeline_item, parent, false);
-                holder = new ViewHolder();
                 holder.screenName = (TextView) convertView.findViewById(R.id.username);
+                holder.pic = (ImageView) convertView.findViewById(R.id.pic);
                 holder.txt = (TextView) convertView.findViewById(R.id.content);
+                holder.time = (TextView) convertView.findViewById(R.id.time);
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            holder.screenName.setText(list.get(position).get("screen_name"));
 
-            holder.txt.setText(list.get(position).get("text"));
+                WeiboMsg msg = list.getStatuses().get(position);
+                holder.screenName.setText(msg.getUser().getScreen_name());
+
+                holder.txt.setText(msg.getText());
+
+                holder.time.setText(msg.getCreated_at());
+
+
+            holder.pic.setImageDrawable(getResources().getDrawable(R.drawable.app));
 
             return convertView;
         }
@@ -66,6 +79,7 @@ public abstract class TimeLineAbstractFragment extends Fragment {
     static class ViewHolder {
         TextView screenName;
         TextView txt;
-
+        ImageView pic;
+        TextView time;
     }
 }
