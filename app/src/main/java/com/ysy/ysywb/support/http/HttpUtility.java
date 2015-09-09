@@ -19,6 +19,7 @@ import java.util.Set;
 
 import ch.boye.httpclientandroidlib.HttpEntity;
 import ch.boye.httpclientandroidlib.HttpResponse;
+import ch.boye.httpclientandroidlib.HttpStatus;
 import ch.boye.httpclientandroidlib.HttpVersion;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.StatusLine;
@@ -97,11 +98,11 @@ public class HttpUtility {
         HttpResponse response = null;
 
         try {
-            response=httpClient.execute(httpPost);
+            response = httpClient.execute(httpPost);
         } catch (IOException e) {
             e.printStackTrace();
         }
-       return dealWithResponse(response);
+        return dealWithResponse(response);
     }
 
     private String doGet(String url, Map<String, String> param) throws URISyntaxException, IOException {
@@ -128,7 +129,7 @@ public class HttpUtility {
         int statusCode = status.getStatusCode();
         String result = "";
 
-        if (statusCode != 200) {
+        if (statusCode != HttpStatus.SC_OK) {
             return dealWithError(httpResponse);
         }
 
@@ -158,7 +159,7 @@ public class HttpUtility {
 
         String result = "";
 
-        if (statusCode != 200) {
+        if (statusCode != HttpStatus.SC_OK) {
             result = readResult(httpResponse);
             String err = null;
             int errCode = 0;
