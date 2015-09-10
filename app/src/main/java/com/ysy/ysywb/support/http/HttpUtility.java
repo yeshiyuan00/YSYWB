@@ -4,7 +4,6 @@ package com.ysy.ysywb.support.http;
 import android.util.Log;
 
 import com.ysy.ysywb.support.debug.Debug;
-import com.ysy.ysywb.support.utils.GlobalContext;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,11 +65,9 @@ public class HttpUtility {
                 return doPost(url, param);
 
             case Get:
-                try {
-                    return doGet(url, param);
-                } catch (Exception e) {
 
-                }
+                return doGet(url, param);
+
         }
         return "";
     }
@@ -78,7 +75,7 @@ public class HttpUtility {
 
     private String doPost(String url, Map<String, String> param) {
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
-        formparams.add(new BasicNameValuePair("access_token", GlobalContext.getInstance().getToken()));
+
 
         Set<String> keys = param.keySet();
         for (String key : keys) {
@@ -105,23 +102,40 @@ public class HttpUtility {
         return dealWithResponse(response);
     }
 
-    private String doGet(String url, Map<String, String> param) throws URISyntaxException, IOException {
+    private String doGet(String url, Map<String, String> param) {
         List<NameValuePair> qparams = new ArrayList<NameValuePair>();
 
-        URIBuilder uriBuilder = new URIBuilder(url);
-        uriBuilder.addParameter("access_token", GlobalContext.getInstance().getToken());
-        Set<String> keys = param.keySet();
-        for (String key : keys) {
-            uriBuilder.addParameter(key, param.get(key));
+        try {
+            URIBuilder uriBuilder = new URIBuilder(url);
+
+            Set<String> keys = param.keySet();
+            for (String key : keys) {
+                uriBuilder.addParameter(key, param.get(key));
+            }
+
+            httpGet.setURI(uriBuilder.build());
+            if (Debug.debug)
+                Log.e("HttpUtility", uriBuilder.build().toString());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-        httpGet.setURI(uriBuilder.build());
         ch.boye.httpclientandroidlib.client.CookieStore cookieStore = new BasicCookieStore();
         HttpContext localContext = new BasicHttpContext();
         localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
-        HttpResponse response = httpClient.execute(httpGet, localContext);
+        HttpResponse response = null;
+        try {
+            response = httpClient.execute(httpGet, localContext);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        return dealWithResponse(response);
+        if (response != null) {
+            return dealWithResponse(response);
+        } else {
+            return "";
+        }
+
     }
 
     private String dealWithResponse(HttpResponse httpResponse) {

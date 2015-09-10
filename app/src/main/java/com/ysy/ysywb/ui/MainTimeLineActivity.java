@@ -10,9 +10,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.support.utils.GlobalContext;
+import com.ysy.ysywb.ui.timeline.TimeLineAbstractFragment;
 import com.ysy.ysywb.ui.timeline.TimeLineFriendsFragment;
 import com.ysy.ysywb.ui.timeline.TimeLineMentionsFragment;
 
@@ -28,15 +30,25 @@ public class MainTimeLineActivity extends FragmentActivity {
 
     private ViewPager mViewPager;
 
+    private String token;
+
+    private String screen_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.timeline_viewpage);
+        setContentView(R.layout.maintimelineactivity_viewpager_layout);
         final ActionBar actionBar = getActionBar();
 
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-        actionBar.setTitle("叛逆的心之所在");
+        Intent intent = getIntent();
+
+        token = intent.getStringExtra("token");
+        screen_name = intent.getStringExtra("screen_name");
+
+        if (!TextUtils.isEmpty(screen_name))
+            actionBar.setTitle(screen_name);
 
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -57,19 +69,17 @@ public class MainTimeLineActivity extends FragmentActivity {
                 .setText("私信")
                 .setTabListener(tabListener));
 
+        actionBar.addTab(actionBar.newTab()
+                .setText("资料")
+                .setTabListener(tabListener));
 
-        Intent intent = getIntent();
-        String token = intent.getStringExtra("token");
-        String expires = intent.getStringExtra("expires");
-        String username = intent.getStringExtra("username");
+    }
 
-        if (TextUtils.isEmpty(username))
-            setTitle(username);
-
-        GlobalContext.getInstance().setToken(token);
-        GlobalContext.getInstance().setExpires(expires);
-
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.maintimelineactivity_menu, menu);
+        return true;
     }
 
     ViewPager.SimpleOnPageChangeListener simpleOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
@@ -103,10 +113,14 @@ public class MainTimeLineActivity extends FragmentActivity {
 
         public TimeLinePagerAdapter(FragmentManager fm) {
             super(fm);
-            list.add(new TimeLineFriendsFragment());
-            list.add(new TimeLineFriendsFragment());
-            list.add(new TimeLineMentionsFragment());
-            list.add(new TimeLineMentionsFragment());
+
+            TimeLineAbstractFragment home = new TimeLineFriendsFragment();
+            TimeLineAbstractFragment mentions = new TimeLineMentionsFragment();
+            home.setToken(token);
+            mentions.setToken(token);
+
+            list.add(home);
+            list.add(mentions);
         }
 
         @Override

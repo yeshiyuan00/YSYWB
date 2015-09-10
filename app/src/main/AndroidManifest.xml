@@ -36,7 +36,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
+            android:name=".ui.login.AccountActivity"
             android:screenOrientation="portrait"
             android:uiOptions="splitActionBarWhenNarrow">
             <intent-filter>
@@ -45,7 +45,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.MainTimeLineActivity" />
+        <activity android:name=".ui.MainTimeLineActivity"  android:uiOptions="splitActionBarWhenNarrow"/>
         <activity android:name=".ui.send.StatusNewActivity" android:uiOptions="splitActionBarWhenNarrow"
             android:windowSoftInputMode="stateVisible|adjustResize"/>
         <activity

@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.dao.TimeLineFriendsMsg;
-import com.ysy.ysywb.domain.TimeLineMsgList;
+import com.ysy.ysywb.bean.TimeLineMsgList;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
 
 /**
@@ -41,7 +41,7 @@ public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();
-        View view = inflater.inflate(R.layout.timeline, container, false);
+        View view = inflater.inflate(R.layout.fragment_listview_layout, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
         timeLineAdapter = new TimeLineAdapter();
         listView.setAdapter(timeLineAdapter);
@@ -59,8 +59,8 @@ public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.friendstimelinefragment_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.friendstimelinefragment_menu, menu);
     }
 
     @Override
@@ -147,15 +147,18 @@ public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
 
         @Override
         protected TimeLineMsgList doInBackground(Void... params) {
-            return new TimeLineFriendsMsg().getGSONMsgList();
+            return new TimeLineFriendsMsg().getGSONMsgList(token);
         }
 
         @Override
         protected void onPostExecute(TimeLineMsgList o) {
-            list = o;
-            Toast.makeText(getActivity(), "" + list.getStatuses().size(), Toast.LENGTH_SHORT).show();
+            if(o!=null){
+                list = o;
+                Toast.makeText(getActivity(), "" + list.getStatuses().size(), Toast.LENGTH_SHORT).show();
+
+                timeLineAdapter.notifyDataSetChanged();
+            }
             dialogFragment.dismissAllowingStateLoss();
-            timeLineAdapter.notifyDataSetChanged();
             super.onPostExecute(o);
         }
     }

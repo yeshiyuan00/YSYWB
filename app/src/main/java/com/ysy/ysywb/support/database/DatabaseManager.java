@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.ysy.ysywb.dao.WeiboAccount;
+import com.ysy.ysywb.bean.WeiboAccount;
 import com.ysy.ysywb.support.database.table.AccountTable;
 
 import java.util.ArrayList;
@@ -45,6 +45,8 @@ public class DatabaseManager {
         ContentValues cv = new ContentValues();
         cv.put(AccountTable.ID, account.getUid());
         cv.put(AccountTable.OAUTH_TOKEN, account.getAccess_token());
+        cv.put(AccountTable.USERNAME, account.getUsername());
+        cv.put(AccountTable.USERNICK, account.getUsernick());
 
         long result = wsd.insert(AccountTable.TABLE_NAME,
                 AccountTable.ID, cv);
@@ -52,14 +54,6 @@ public class DatabaseManager {
         return result;
     }
 
-    public long updateAccount(WeiboAccount account) {
-        ContentValues cv = new ContentValues();
-        cv.put(AccountTable.ID, account.getUid());
-        cv.put(AccountTable.OAUTH_TOKEN, account.getAccess_token());
-        long result = wsd.insert(AccountTable.TABLE_NAME,
-                AccountTable.ID, cv);
-        return result;
-    }
 
     public List<WeiboAccount> getAccountList() {
         List<WeiboAccount> weiboAccountList = new ArrayList<WeiboAccount>();
@@ -67,11 +61,19 @@ public class DatabaseManager {
         Cursor c = rsd.rawQuery(sql, null);
 
         while (c.moveToNext()) {
-            WeiboAccount weiboAccount = new WeiboAccount();
+            WeiboAccount account = new WeiboAccount();
             int colid = c.getColumnIndex(AccountTable.OAUTH_TOKEN);
-            weiboAccount.setAccess_token(c.getString(colid));
-            weiboAccountList.add(weiboAccount);
+            account.setAccess_token(c.getString(colid));
+            colid = c.getColumnIndex(AccountTable.USERNICK);
+            account.setUsernick(c.getString(colid));
+            weiboAccountList.add(account);
         }
         return weiboAccountList;
+    }
+
+    public void removeAccount(String uid) {
+        String[] args = {uid};
+        String column = AccountTable.ID;
+        wsd.delete(AccountTable.TABLE_NAME, column + "=?", args);
     }
 }

@@ -3,12 +3,12 @@
     <item
         android:id="@+id/menu_select_all"
         android:checkable="true"
-        android:icon="@drawable/account_select_all"
+        android:icon="@drawable/accountactivity_select_all"
         android:showAsAction="ifRoom|withText"
         android:title="全选" />
     <item
         android:id="@+id/menu_add_account"
-        android:icon="@drawable/account_remove"
+        android:icon="@drawable/accountactivity_remove"
         android:showAsAction="ifRoom|withText"
         android:title="删除" />
 </menu>

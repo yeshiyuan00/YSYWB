@@ -9,7 +9,6 @@ import android.util.Log;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.dao.TimeLineMentionsMsg;
-import com.ysy.ysywb.support.utils.GlobalContext;
 
 /**
  * User: ysy
@@ -23,7 +22,7 @@ public class HomeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.timeline);
+        setContentView(R.layout.fragment_listview_layout);
 
         Intent intent = getIntent();
 
@@ -35,8 +34,8 @@ public class HomeActivity extends Activity {
         if (TextUtils.isEmpty(username))
             setTitle(username);
 
-        GlobalContext.getInstance().setToken(token);
-        GlobalContext.getInstance().setExpires(expires);
+//        GlobalContext.getInstance().setToken(token);
+//        GlobalContext.getInstance().setExpires(expires);
 
         //((TextView) findViewById(R.id.tvResult)).setText(token);
 

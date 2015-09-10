@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/listitem_background_selector"
+    android:background="@drawable/listview_item_background_selector"
     android:padding="5dp">
 
     <ImageView
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/pic"
         android:text="用户名"
-        android:textColor="@drawable/text_selector" />
+        android:textColor="@drawable/listview_item_text_selector" />
 
     <TextView
 
@@ -30,7 +30,7 @@
         android:layout_alignBottom="@id/username"
         android:layout_alignParentRight="true"
         android:text="几分钟"
-        android:textColor="@drawable/text_selector" />
+        android:textColor="@drawable/listview_item_text_selector" />
 
     <TextView
         android:id="@+id/content"
@@ -40,7 +40,7 @@
         android:layout_centerInParent="true"
         android:layout_toRightOf="@id/pic"
         android:text="内容"
-        android:textColor="@drawable/text_selector" />
+        android:textColor="@drawable/listview_item_text_selector" />
 
     <TextView
         android:id="@+id/source"

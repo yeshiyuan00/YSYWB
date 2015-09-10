@@ -1,4 +1,4 @@
-package com.ysy.ysywb.domain;
+package com.ysy.ysywb.bean;
 
 import java.util.List;
 

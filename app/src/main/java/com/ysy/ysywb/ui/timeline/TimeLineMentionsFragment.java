@@ -28,7 +28,7 @@ public class TimeLineMentionsFragment extends TimeLineAbstractFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();
-        View view = inflater.inflate(R.layout.timeline, container, false);
+        View view = inflater.inflate(R.layout.fragment_listview_layout, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
         timeLineAdapter = new TimeLineAdapter();
         listView.setAdapter(timeLineAdapter);

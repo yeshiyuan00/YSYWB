@@ -1,4 +1,4 @@
-package com.ysy.ysywb.dao;
+package com.ysy.ysywb.bean;
 
 /**
  * User: ysy

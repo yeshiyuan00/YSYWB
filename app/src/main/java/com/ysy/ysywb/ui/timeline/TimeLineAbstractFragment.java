@@ -10,8 +10,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.domain.TimeLineMsgList;
-import com.ysy.ysywb.domain.WeiboMsg;
+import com.ysy.ysywb.bean.TimeLineMsgList;
+import com.ysy.ysywb.bean.WeiboMsg;
 
 /**
  * User: ysy
@@ -23,11 +23,16 @@ public abstract class TimeLineAbstractFragment extends Fragment {
     protected TimeLineMsgList list = new TimeLineMsgList();
     protected TimeLineAdapter timeLineAdapter;
 
+    protected String token;
+
+    public void setToken(String token){
+        this.token=token;
+    }
+
 
     protected class TimeLineAdapter extends BaseAdapter {
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
 
         @Override
         public int getCount() {
@@ -52,7 +57,7 @@ public abstract class TimeLineAbstractFragment extends Fragment {
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder holder = new ViewHolder();
             if (convertView == null) {
-                convertView = inflater.inflate(R.layout.mentionstimeline_item, parent, false);
+                convertView = inflater.inflate(R.layout.fragment_listview_item_layout, parent, false);
                 holder.screenName = (TextView) convertView.findViewById(R.id.username);
                 holder.pic = (ImageView) convertView.findViewById(R.id.pic);
                 holder.txt = (TextView) convertView.findViewById(R.id.content);
