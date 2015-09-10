@@ -11,11 +11,14 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Menu;
-import android.view.MenuInflater;
 
 import com.ysy.ysywb.R;
+import com.ysy.ysywb.bean.TimeLineMsgList;
+import com.ysy.ysywb.ui.timeline.MyInfoFragment;
 import com.ysy.ysywb.ui.timeline.TimeLineAbstractFragment;
+import com.ysy.ysywb.ui.timeline.TimeLineCommentsFragment;
 import com.ysy.ysywb.ui.timeline.TimeLineFriendsFragment;
+import com.ysy.ysywb.ui.timeline.TimeLineMailsFragment;
 import com.ysy.ysywb.ui.timeline.TimeLineMentionsFragment;
 
 import java.util.ArrayList;
@@ -33,6 +36,18 @@ public class MainTimeLineActivity extends FragmentActivity {
     private String token;
 
     private String screen_name;
+
+    private TimeLineMsgList homeList = new TimeLineMsgList();
+    private TimeLineMsgList mentionList = new TimeLineMsgList();
+    private TimeLineMsgList commentList = new TimeLineMsgList();
+    private TimeLineMsgList mailList = new TimeLineMsgList();
+
+
+    private int homelist_position = 0;
+    private int mentionList_position = 0;
+    private int commentList_position = 0;
+    private int mailList_position = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +67,8 @@ public class MainTimeLineActivity extends FragmentActivity {
 
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new TimeLinePagerAdapter(getSupportFragmentManager()));
+        TimeLinePagerAdapter timeLinePagerAdapter = new TimeLinePagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(timeLinePagerAdapter);
         mViewPager.setOnPageChangeListener(simpleOnPageChangeListener);
 
 
@@ -73,13 +89,14 @@ public class MainTimeLineActivity extends FragmentActivity {
                 .setText("资料")
                 .setTabListener(tabListener));
 
+        ((TimeLineAbstractFragment) timeLinePagerAdapter.getItem(0)).refresh();
+
     }
 
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.maintimelineactivity_menu, menu);
-        return true;
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 
     ViewPager.SimpleOnPageChangeListener simpleOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
@@ -116,11 +133,17 @@ public class MainTimeLineActivity extends FragmentActivity {
 
             TimeLineAbstractFragment home = new TimeLineFriendsFragment();
             TimeLineAbstractFragment mentions = new TimeLineMentionsFragment();
-            home.setToken(token);
-            mentions.setToken(token);
+            TimeLineAbstractFragment comments = new TimeLineCommentsFragment();
+            TimeLineAbstractFragment mails = new TimeLineMailsFragment();
+            TimeLineAbstractFragment info = new MyInfoFragment();
+//            home.setToken(token);
+//            mentions.setToken(token);
 
             list.add(home);
             list.add(mentions);
+            list.add(comments);
+            list.add(mails);
+            list.add(info);
         }
 
         @Override
@@ -134,5 +157,74 @@ public class MainTimeLineActivity extends FragmentActivity {
             return list.size();
         }
 
+    }
+
+    public int getMentionList_position() {
+        return mentionList_position;
+    }
+
+    public void setMentionList_position(int mentionList_position) {
+        this.mentionList_position = mentionList_position;
+    }
+
+    public int getCommentList_position() {
+        return commentList_position;
+    }
+
+    public void setCommentList_position(int commentList_position) {
+        this.commentList_position = commentList_position;
+    }
+
+    public int getMailList_position() {
+        return mailList_position;
+    }
+
+    public void setMailList_position(int mailList_position) {
+        this.mailList_position = mailList_position;
+    }
+
+    public int getHomelist_position() {
+        return homelist_position;
+    }
+
+    public void setHomelist_position(int homelist_position) {
+        this.homelist_position = homelist_position;
+    }
+
+
+    public TimeLineMsgList getMentionList() {
+        return mentionList;
+    }
+
+    public void setMentionList(TimeLineMsgList mentionList) {
+        this.mentionList = mentionList;
+    }
+
+    public TimeLineMsgList getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(TimeLineMsgList commentList) {
+        this.commentList = commentList;
+    }
+
+    public TimeLineMsgList getMailList() {
+        return mailList;
+    }
+
+    public void setMailList(TimeLineMsgList mailList) {
+        this.mailList = mailList;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public TimeLineMsgList getHomeList() {
+        return homeList;
+    }
+
+    public void setHomeList(TimeLineMsgList homeList) {
+        this.homeList = homeList;
     }
 }

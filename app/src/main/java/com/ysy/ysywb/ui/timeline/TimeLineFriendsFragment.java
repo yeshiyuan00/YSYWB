@@ -15,13 +15,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.dao.TimeLineFriendsMsg;
 import com.ysy.ysywb.bean.TimeLineMsgList;
+import com.ysy.ysywb.dao.TimeLineFriendsMsg;
+import com.ysy.ysywb.ui.MainTimeLineActivity;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
 
 /**
@@ -31,11 +33,17 @@ import com.ysy.ysywb.ui.send.StatusNewActivity;
  */
 public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
 
+    @Override
+    protected TimeLineMsgList getList() {
+        return activity.getHomeList();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
         setHasOptionsMenu(true);
+        setRetainInstance(true);
+
     }
 
     @Override
@@ -46,10 +54,30 @@ public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
         timeLineAdapter = new TimeLineAdapter();
         listView.setAdapter(timeLineAdapter);
         listView.setOnItemLongClickListener(onItemLongClickListener);
-        new TimeLineTask().execute();
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
 
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                activity.setHomelist_position(firstVisibleItem);
+            }
+        });
+        new TimeLineTask().execute();
         return view;
 
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
     @Override
@@ -77,6 +105,11 @@ public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void refresh() {
+        super.refresh();
     }
 
     AdapterView.OnItemLongClickListener onItemLongClickListener = new AdapterView.OnItemLongClickListener() {
@@ -147,16 +180,19 @@ public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
 
         @Override
         protected TimeLineMsgList doInBackground(Void... params) {
-            return new TimeLineFriendsMsg().getGSONMsgList(token);
+            MainTimeLineActivity activity = (MainTimeLineActivity) getActivity();
+
+            return new TimeLineFriendsMsg().getGSONMsgList(activity.getToken());
         }
 
         @Override
         protected void onPostExecute(TimeLineMsgList o) {
-            if(o!=null){
-                list = o;
-                Toast.makeText(getActivity(), "" + list.getStatuses().size(), Toast.LENGTH_SHORT).show();
+            if (o != null) {
+                activity.setHomeList(o);
+                Toast.makeText(getActivity(), "" + activity.getHomeList().getStatuses().size(), Toast.LENGTH_SHORT).show();
 
                 timeLineAdapter.notifyDataSetChanged();
+                listView.smoothScrollToPosition(activity.getHomelist_position());
             }
             dialogFragment.dismissAllowingStateLoss();
             super.onPostExecute(o);

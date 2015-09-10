@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.ysy.ysywb.R;
+import com.ysy.ysywb.bean.TimeLineMsgList;
 
 /**
  * User: ysy
@@ -17,6 +18,11 @@ import com.ysy.ysywb.R;
  * Time: 15:19
  */
 public class TimeLineMentionsFragment extends TimeLineAbstractFragment {
+
+    @Override
+    protected TimeLineMsgList getList() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

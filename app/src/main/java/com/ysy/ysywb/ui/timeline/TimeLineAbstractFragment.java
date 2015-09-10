@@ -1,5 +1,6 @@
 package com.ysy.ysywb.ui.timeline;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgList;
 import com.ysy.ysywb.bean.WeiboMsg;
+import com.ysy.ysywb.ui.MainTimeLineActivity;
 
 /**
  * User: ysy
@@ -20,15 +22,23 @@ import com.ysy.ysywb.bean.WeiboMsg;
  */
 public abstract class TimeLineAbstractFragment extends Fragment {
     protected ListView listView;
-    protected TimeLineMsgList list = new TimeLineMsgList();
+    // protected TimeLineMsgList list = new TimeLineMsgList();
     protected TimeLineAdapter timeLineAdapter;
+    protected MainTimeLineActivity activity;
 
-    protected String token;
 
-    public void setToken(String token){
-        this.token=token;
+    public void refresh() {
+
     }
 
+    protected abstract TimeLineMsgList getList();
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        activity = (MainTimeLineActivity) getActivity();
+    }
 
     protected class TimeLineAdapter extends BaseAdapter {
 
@@ -36,8 +46,8 @@ public abstract class TimeLineAbstractFragment extends Fragment {
 
         @Override
         public int getCount() {
-            if (list.getStatuses() != null) {
-                return list.getStatuses().size();
+            if (getList() != null && getList().getStatuses() != null) {
+                return getList().getStatuses().size();
             } else {
                 return 0;
             }
@@ -45,7 +55,7 @@ public abstract class TimeLineAbstractFragment extends Fragment {
 
         @Override
         public Object getItem(int position) {
-            return list.getStatuses().get(position);
+            return getList().getStatuses().get(position);
         }
 
         @Override
@@ -67,12 +77,12 @@ public abstract class TimeLineAbstractFragment extends Fragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-                WeiboMsg msg = list.getStatuses().get(position);
-                holder.screenName.setText(msg.getUser().getScreen_name());
+            WeiboMsg msg = getList().getStatuses().get(position);
+            holder.screenName.setText(msg.getUser().getScreen_name());
 
-                holder.txt.setText(msg.getText());
+            holder.txt.setText(msg.getText());
 
-                holder.time.setText(msg.getCreated_at());
+            holder.time.setText(msg.getCreated_at());
 
 
             holder.pic.setImageDrawable(getResources().getDrawable(R.drawable.app));
