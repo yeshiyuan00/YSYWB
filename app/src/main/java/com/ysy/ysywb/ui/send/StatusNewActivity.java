@@ -27,7 +27,7 @@ import com.ysy.ysywb.dao.StatusNewMsg;
  * Date: 2015/9/9
  * Time: 10:38
  */
-public class StatusNewActivity extends Activity {
+public class StatusNewActivity extends Activity implements DialogInterface.OnClickListener {
     private static final int CAMERA_RESULT = 0;
 
     private static final int PIC_RESULT = 1;
@@ -62,8 +62,7 @@ public class StatusNewActivity extends Activity {
 
                 break;
             case R.id.menu_add_pic:
-                MyAlertDialogFragment myAlertDialogFragment = MyAlertDialogFragment.newInstance();
-                myAlertDialogFragment.show(getFragmentManager(), "");
+                new MyAlertDialogFragment().show(getFragmentManager(), "");
                 break;
 
             case R.id.menu_send:
@@ -80,46 +79,33 @@ public class StatusNewActivity extends Activity {
         return true;
     }
 
-    static class MyAlertDialogFragment extends DialogFragment {
+    class MyAlertDialogFragment extends DialogFragment {
 
-
-        public static MyAlertDialogFragment newInstance() {
-            MyAlertDialogFragment frag = new MyAlertDialogFragment();
-            frag.setRetainInstance(true);
-            Bundle args = new Bundle();
-            frag.setArguments(args);
-            return frag;
-        }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             String[] items = {getString(R.string.take_camera), getString(R.string.select_pic)};
 
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+            AlertDialog.Builder builder = new AlertDialog.Builder(StatusNewActivity.this)
                     .setTitle(getString(R.string.select))
-                    .setItems(items, new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                            switch (which) {
-                                case 0:
-                                    Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                                    startActivityForResult(i, CAMERA_RESULT);
-                                    break;
-                                case 1:
-                                    Intent choosePictureIntent = new Intent(Intent.ACTION_PICK,
-                                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                    startActivityForResult(choosePictureIntent, PIC_RESULT);
-                                    break;
-                            }
-
-                        }
-                    });
-
-
+                    .setItems(items, StatusNewActivity.this);
             return builder.create();
+        }
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        switch (which) {
+            case 0:
+                Intent i = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(i, CAMERA_RESULT);
+                break;
+            case 1:
+                Intent choosePictureIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(choosePictureIntent, PIC_RESULT);
+                break;
         }
     }
 
@@ -141,7 +127,8 @@ public class StatusNewActivity extends Activity {
         StatusNewTask(String content) {
             this.content = content;
         }
-        ProgressFragment progressFragment = ProgressFragment.newInstance();
+
+        ProgressFragment progressFragment = new ProgressFragment();
 
         @Override
         protected void onPreExecute() {
@@ -174,25 +161,14 @@ public class StatusNewActivity extends Activity {
         }
     }
 
-    static class ProgressFragment extends DialogFragment {
-
-        public static ProgressFragment newInstance() {
-            ProgressFragment frag = new ProgressFragment();
-            frag.setRetainInstance(true); //注意这句
-            Bundle args = new Bundle();
-            frag.setArguments(args);
-            return frag;
-        }
+    class ProgressFragment extends DialogFragment {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-
             ProgressDialog dialog = new ProgressDialog(getActivity());
             dialog.setMessage("发送中");
             dialog.setIndeterminate(false);
             dialog.setCancelable(true);
-
-
             return dialog;
         }
     }

@@ -10,6 +10,8 @@ public class GlobalContext extends Application {
 
     private static GlobalContext myApplication = null;
 
+    private boolean isAppForeground = false;
+
 
     @Override
     public void onCreate() {
@@ -20,5 +22,18 @@ public class GlobalContext extends Application {
     public static GlobalContext getInstance() {
         return myApplication;
     }
+
+    public void setAppForegroundFlag() {
+        isAppForeground = true;
+    }
+
+    public void removeAppForegroundFlag() {
+        isAppForeground = false;
+    }
+
+    public boolean isAppForeground() {
+        return isAppForeground;
+    }
+
 
 }

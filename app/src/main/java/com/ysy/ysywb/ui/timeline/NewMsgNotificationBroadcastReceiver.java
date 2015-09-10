@@ -12,6 +12,6 @@ import android.content.Intent;
 public class NewMsgNotificationBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-//To change body of implemented methods use File | Settings | File Templates.
+
     }
 }

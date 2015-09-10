@@ -5,7 +5,6 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -14,12 +13,12 @@ import android.view.Menu;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgList;
-import com.ysy.ysywb.ui.timeline.MyInfoTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.FriendsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MailsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MentionsTimeLineFragment;
+import com.ysy.ysywb.ui.timeline.MyInfoTimeLineFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +28,7 @@ import java.util.List;
  * Date: 2015/9/8
  * Time: 15:04
  */
-public class MainTimeLineActivity extends FragmentActivity {
+public class MainTimeLineActivity extends AbstractMainActivity {
 
     private ViewPager mViewPager;
 
