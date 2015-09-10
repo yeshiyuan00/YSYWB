@@ -20,7 +20,7 @@ import com.ysy.ysywb.ui.MainTimeLineActivity;
  * Date: 2015/9/9
  * Time: 10:17
  */
-public abstract class TimeLineAbstractFragment extends Fragment {
+public abstract class AbstractTimeLineFragment extends Fragment {
     protected ListView listView;
     // protected TimeLineMsgList list = new TimeLineMsgList();
     protected TimeLineAdapter timeLineAdapter;

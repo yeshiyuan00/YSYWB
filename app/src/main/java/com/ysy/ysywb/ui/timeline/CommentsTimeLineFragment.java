@@ -7,7 +7,7 @@ import com.ysy.ysywb.bean.TimeLineMsgList;
  * Date: 2015/9/9
  * Time: 10:49
  */
-public class TimeLineCommentsFragment extends TimeLineAbstractFragment {
+public class CommentsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
     protected TimeLineMsgList getList() {

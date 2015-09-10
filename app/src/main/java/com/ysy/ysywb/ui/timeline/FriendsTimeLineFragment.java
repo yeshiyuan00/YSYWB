@@ -31,7 +31,7 @@ import com.ysy.ysywb.ui.send.StatusNewActivity;
  * Date: 2015/9/9
  * Time: 10:03
  */
-public class TimeLineFriendsFragment extends TimeLineAbstractFragment {
+public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
     protected TimeLineMsgList getList() {

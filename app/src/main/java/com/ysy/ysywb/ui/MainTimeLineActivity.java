@@ -14,12 +14,12 @@ import android.view.Menu;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgList;
-import com.ysy.ysywb.ui.timeline.MyInfoFragment;
-import com.ysy.ysywb.ui.timeline.TimeLineAbstractFragment;
-import com.ysy.ysywb.ui.timeline.TimeLineCommentsFragment;
-import com.ysy.ysywb.ui.timeline.TimeLineFriendsFragment;
-import com.ysy.ysywb.ui.timeline.TimeLineMailsFragment;
-import com.ysy.ysywb.ui.timeline.TimeLineMentionsFragment;
+import com.ysy.ysywb.ui.timeline.MyInfoTimeLineFragment;
+import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
+import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
+import com.ysy.ysywb.ui.timeline.FriendsTimeLineFragment;
+import com.ysy.ysywb.ui.timeline.MailsTimeLineFragment;
+import com.ysy.ysywb.ui.timeline.MentionsTimeLineFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +89,7 @@ public class MainTimeLineActivity extends FragmentActivity {
                 .setText("资料")
                 .setTabListener(tabListener));
 
-        ((TimeLineAbstractFragment) timeLinePagerAdapter.getItem(0)).refresh();
+        ((AbstractTimeLineFragment) timeLinePagerAdapter.getItem(0)).refresh();
 
     }
 
@@ -131,11 +131,11 @@ public class MainTimeLineActivity extends FragmentActivity {
         public TimeLinePagerAdapter(FragmentManager fm) {
             super(fm);
 
-            TimeLineAbstractFragment home = new TimeLineFriendsFragment();
-            TimeLineAbstractFragment mentions = new TimeLineMentionsFragment();
-            TimeLineAbstractFragment comments = new TimeLineCommentsFragment();
-            TimeLineAbstractFragment mails = new TimeLineMailsFragment();
-            TimeLineAbstractFragment info = new MyInfoFragment();
+            AbstractTimeLineFragment home = new FriendsTimeLineFragment();
+            AbstractTimeLineFragment mentions = new MentionsTimeLineFragment();
+            AbstractTimeLineFragment comments = new CommentsTimeLineFragment();
+            AbstractTimeLineFragment mails = new MailsTimeLineFragment();
+            AbstractTimeLineFragment info = new MyInfoTimeLineFragment();
 //            home.setToken(token);
 //            mentions.setToken(token);
 
