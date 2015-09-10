@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class WeiboMsg{
     public String getCreated_at() {
-        SimpleDateFormat format = new SimpleDateFormat("kk:mm");
+        SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss a");
         return format.format(new Date(created_at));
     }
 

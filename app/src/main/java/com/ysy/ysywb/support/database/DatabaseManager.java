@@ -1,9 +1,77 @@
 package com.ysy.ysywb.support.database;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.ysy.ysywb.dao.WeiboAccount;
+import com.ysy.ysywb.support.database.table.AccountTable;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * User: ysy
  * Date: 2015/9/9
  * Time: 17:22
  */
 public class DatabaseManager {
+    private static DatabaseManager singleton = null;
+
+    private SQLiteDatabase wsd = null;
+
+    private SQLiteDatabase rsd = null;
+
+    private DatabaseManager() {
+
+    }
+
+    public synchronized static DatabaseManager getInstance() {
+
+        if (singleton == null) {
+            DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+            SQLiteDatabase wsd = databaseHelper.getWritableDatabase();
+            SQLiteDatabase rsd = databaseHelper.getReadableDatabase();
+
+            singleton = new DatabaseManager();
+            singleton.wsd = wsd;
+            singleton.rsd = rsd;
+        }
+
+        return singleton;
+    }
+
+    public long addAccount(WeiboAccount account) {
+        ContentValues cv = new ContentValues();
+        cv.put(AccountTable.ID, account.getUid());
+        cv.put(AccountTable.OAUTH_TOKEN, account.getAccess_token());
+
+        long result = wsd.insert(AccountTable.TABLE_NAME,
+                AccountTable.ID, cv);
+
+        return result;
+    }
+
+    public long updateAccount(WeiboAccount account) {
+        ContentValues cv = new ContentValues();
+        cv.put(AccountTable.ID, account.getUid());
+        cv.put(AccountTable.OAUTH_TOKEN, account.getAccess_token());
+        long result = wsd.insert(AccountTable.TABLE_NAME,
+                AccountTable.ID, cv);
+        return result;
+    }
+
+    public List<WeiboAccount> getAccountList() {
+        List<WeiboAccount> weiboAccountList = new ArrayList<WeiboAccount>();
+        String sql = "select * from " + AccountTable.TABLE_NAME;
+        Cursor c = rsd.rawQuery(sql, null);
+
+        while (c.moveToNext()) {
+            WeiboAccount weiboAccount = new WeiboAccount();
+            int colid = c.getColumnIndex(AccountTable.OAUTH_TOKEN);
+            weiboAccount.setAccess_token(c.getString(colid));
+            weiboAccountList.add(weiboAccount);
+        }
+        return weiboAccountList;
+    }
 }

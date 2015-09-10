@@ -3,6 +3,7 @@ package com.ysy.ysywb;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.ActionMode;
@@ -21,13 +22,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ysy.ysywb.dao.WeiboAccount;
+import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.ui.MainTimeLineActivity;
 import com.ysy.ysywb.ui.login.OAuthActivity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class LoginActivity extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
 
@@ -35,7 +36,7 @@ public class LoginActivity extends Activity implements AdapterView.OnItemClickLi
 
     private AccountAdapter listAdapter;
 
-    private List<Map<String, String>> listData = new ArrayList<Map<String, String>>();
+    private List<WeiboAccount> weiboAccountList = new ArrayList<WeiboAccount>();
 
     private ActionMode mActionMode;
 
@@ -54,6 +55,8 @@ public class LoginActivity extends Activity implements AdapterView.OnItemClickLi
         listView.setAdapter(listAdapter);
 
         listView.setMultiChoiceModeListener(multiChoiceModeLinstener);
+
+        new AccountDBTask().execute(null, null, null);
     }
 
     private AbsListView.MultiChoiceModeListener multiChoiceModeLinstener = new AbsListView.MultiChoiceModeListener() {
@@ -149,34 +152,30 @@ public class LoginActivity extends Activity implements AdapterView.OnItemClickLi
             String access_token = values.getString("access_token");
             String expires_in = values.getString("expires_in");
 
-            Map<String, String> map = new HashMap<String, String>();
 
-            map.put("token", access_token);
-            map.put("expires", expires_in);
-            listData.add(map);
+            WeiboAccount weiboAccount = new WeiboAccount();
+            weiboAccount.setAccess_token(access_token);
 
-            listAdapter.notifyDataSetChanged();
-
+            long result = DatabaseManager.getInstance().addAccount(weiboAccount);
+            new AccountDBTask().execute();
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        String token = listData.get(i).get("token");
-        String expires = listData.get(i).get("expires");
+        String token = weiboAccountList.get(i).getAccess_token();
 
         SharedPreferences settings = getPreferences(MODE_PRIVATE);
 
         SharedPreferences.Editor editor = settings.edit();
 
         editor.putString("token", token);
-        editor.putString("expires", expires);
+
 
         editor.commit();
 
         Intent intent = new Intent(this, MainTimeLineActivity.class);
         intent.putExtra("token", token);
-        intent.putExtra("expires", expires);
 
         startActivity(intent);
     }
@@ -194,12 +193,12 @@ public class LoginActivity extends Activity implements AdapterView.OnItemClickLi
 
         @Override
         public int getCount() {
-            return listData.size();  //To change body of implemented methods use File | Settings | File Templates.
+            return weiboAccountList.size();  //To change body of implemented methods use File | Settings | File Templates.
         }
 
         @Override
         public Object getItem(int i) {
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
+            return weiboAccountList.get(i);  //To change body of implemented methods use File | Settings | File Templates.
         }
 
         @Override
@@ -230,7 +229,7 @@ public class LoginActivity extends Activity implements AdapterView.OnItemClickLi
 
             TextView textView = (TextView) mView.findViewById(R.id.textView);
 
-            textView.setText(listData.get(i).get("token"));
+            textView.setText(weiboAccountList.get(i).getAccess_token());
             return mView;
         }
 
@@ -260,6 +259,21 @@ public class LoginActivity extends Activity implements AdapterView.OnItemClickLi
             needCheckbox = true;
             allChecked = false;
             notifyDataSetChanged();
+        }
+    }
+
+    class AccountDBTask extends AsyncTask<Void, List<WeiboAccount>, List<WeiboAccount>> {
+
+        @Override
+        protected List<WeiboAccount> doInBackground(Void... params) {
+            return DatabaseManager.getInstance().getAccountList();
+        }
+
+        @Override
+        protected void onPostExecute(List<WeiboAccount> weiboAccounts) {
+            weiboAccountList = weiboAccounts;
+            listAdapter.notifyDataSetChanged();
+            super.onPostExecute(weiboAccounts);
         }
     }
 }
