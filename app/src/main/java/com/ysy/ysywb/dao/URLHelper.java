@@ -24,7 +24,7 @@ public class URLHelper {
 
     }
 
-    public static String getfriendTimeLine() {
+    public static String getFriendsTimeLine() {
 
         return URLManager.getRealUrl("friendstimeline");
 

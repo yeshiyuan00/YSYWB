@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">四叶草</string>
 
+    <!--system -->
+    <string name="timeout">请求超时</string>
 
     <!--maintimelineactivity_layout -->
     <string name="home">首页</string>

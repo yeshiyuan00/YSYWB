@@ -3,6 +3,7 @@ package com.ysy.ysywb.support.http;
 
 import android.util.Log;
 
+import com.ysy.ysywb.R;
 import com.ysy.ysywb.support.debug.Debug;
 import com.ysy.ysywb.support.utils.ActivityUtils;
 
@@ -134,7 +135,7 @@ public class HttpUtility {
             response = httpClient.execute(httpGet, localContext);
         } catch (ConnectTimeoutException e) {
             Log.e("HttpUtility", "connection request timeout");
-            ActivityUtils.showTips("超时");
+            ActivityUtils.showTips(R.string.timeout);
         } catch (ClientProtocolException e) {
         } catch (IOException e) {
 

@@ -17,7 +17,8 @@ import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgList;
-import com.ysy.ysywb.dao.TimeLineFriendsMsg;
+import com.ysy.ysywb.bean.WeiboMsg;
+import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
 import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
@@ -138,12 +139,11 @@ public class MainTimeLineActivity extends AbstractMainActivity {
     };
 
 
-
     FriendsTimeLineFragment.Commander frinedsTimeLineMsgCommand = new FriendsTimeLineFragment.Commander() {
         @Override
         public void getNewFriendsTimeLineMsg() {
 
-            new TimeLineTask().execute();
+            new FriendsTimeLineTask().execute();
 
         }
 
@@ -154,7 +154,9 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
         @Override
         public void newWeibo() {
-            startActivity(new Intent(MainTimeLineActivity.this, StatusNewActivity.class));
+            Intent intent = new Intent(MainTimeLineActivity.this, StatusNewActivity.class);
+            intent.putExtra("token", token);
+            startActivity(intent);
         }
     };
 
@@ -194,9 +196,9 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     }
 
-    class TimeLineTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
+    class FriendsTimeLineTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
 
-        DialogFragment dialogFragment = ProgressFragment.newInstance();
+        DialogFragment dialogFragment = new ProgressFragment();
 
         @Override
         protected void onPreExecute() {
@@ -206,35 +208,33 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         @Override
         protected TimeLineMsgList doInBackground(Void... params) {
 
-            return new TimeLineFriendsMsg().getGSONMsgList(getToken());
+            FriendsTimeLineMsgDao dao = new FriendsTimeLineMsgDao(token);
 
+            WeiboMsg msg = homeList.getStatuses().get(0);
+
+            if (msg != null) {
+                dao.setSince_id(msg.getId());
+            }
+            return dao.getGSONMsgList();
         }
 
         @Override
-        protected void onPostExecute(TimeLineMsgList o) {
-            if (o != null) {
-                setHomeList(o);
+        protected void onPostExecute(TimeLineMsgList newValue) {
+            if (newValue != null) {
+                setHomeList(newValue);
 
                 Toast.makeText(MainTimeLineActivity.this, "" + getHomeList().getStatuses().size(), Toast.LENGTH_SHORT).show();
 
-                home.refresh();
+                home.refreshAndScrollTo(homelist_position);
                 //   listView.smoothScrollToPosition(activity.getHomelist_position());
 
             }
             dialogFragment.dismissAllowingStateLoss();
-            super.onPostExecute(o);
+            super.onPostExecute(newValue);
         }
     }
 
     static class ProgressFragment extends DialogFragment {
-
-        public static ProgressFragment newInstance() {
-            ProgressFragment frag = new ProgressFragment();
-            frag.setRetainInstance(true); //注意这句
-            Bundle args = new Bundle();
-            frag.setArguments(args);
-            return frag;
-        }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -248,61 +248,9 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         }
     }
 
-    public int getMentionList_position() {
-        return mentionList_position;
-    }
-
-    public void setMentionList_position(int mentionList_position) {
-        this.mentionList_position = mentionList_position;
-    }
-
-    public int getCommentList_position() {
-        return commentList_position;
-    }
-
-    public void setCommentList_position(int commentList_position) {
-        this.commentList_position = commentList_position;
-    }
-
-    public int getMailList_position() {
-        return mailList_position;
-    }
-
-    public void setMailList_position(int mailList_position) {
-        this.mailList_position = mailList_position;
-    }
-
-    public int getHomelist_position() {
-        return homelist_position;
-    }
 
     public void setHomelist_position(int homelist_position) {
         this.homelist_position = homelist_position;
-    }
-
-
-    public TimeLineMsgList getMentionList() {
-        return mentionList;
-    }
-
-    public void setMentionList(TimeLineMsgList mentionList) {
-        this.mentionList = mentionList;
-    }
-
-    public TimeLineMsgList getCommentList() {
-        return commentList;
-    }
-
-    public void setCommentList(TimeLineMsgList commentList) {
-        this.commentList = commentList;
-    }
-
-    public TimeLineMsgList getMailList() {
-        return mailList;
-    }
-
-    public void setMailList(TimeLineMsgList mailList) {
-        this.mailList = mailList;
     }
 
     public String getToken() {

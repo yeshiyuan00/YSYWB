@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.dao.StatusNewMsg;
+import com.ysy.ysywb.dao.StatusNewMsgDao;
 
 /**
  * User: ysy
@@ -28,6 +28,8 @@ import com.ysy.ysywb.dao.StatusNewMsg;
  * Time: 10:38
  */
 public class StatusNewActivity extends Activity implements DialogInterface.OnClickListener {
+    private String token = "";
+
     private static final int CAMERA_RESULT = 0;
 
     private static final int PIC_RESULT = 1;
@@ -39,6 +41,9 @@ public class StatusNewActivity extends Activity implements DialogInterface.OnCli
         setContentView(R.layout.statusnewactivity_layout);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+
+        Intent intent = getIntent();
+        token = intent.getStringExtra("token");
     }
 
 
@@ -148,7 +153,7 @@ public class StatusNewActivity extends Activity implements DialogInterface.OnCli
 
         @Override
         protected String doInBackground(Void... params) {
-            new StatusNewMsg().sendNewMsg(content);
+            new StatusNewMsgDao(token).sendNewMsg(content);
             return null;
         }
 

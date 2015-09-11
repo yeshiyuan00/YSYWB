@@ -17,7 +17,6 @@ import com.ysy.ysywb.ui.login.AccountActivity;
 public class MyInfoTimeLineFragment extends Fragment {
 
 
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);

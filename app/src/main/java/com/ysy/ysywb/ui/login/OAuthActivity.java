@@ -150,7 +150,7 @@ public class OAuthActivity extends Activity {
         @Override
         protected Void doInBackground(String... params) {
             String token = params[0];
-            WeiboUser weiboUser = OAuthDao.getOAuthUserInfo(token);
+            WeiboUser weiboUser = new OAuthDao(token).getOAuthUserInfo();
             WeiboAccount weiboAccount = new WeiboAccount();
             weiboAccount.setAccess_token(token);
             weiboAccount.setUsername(weiboUser.getName());

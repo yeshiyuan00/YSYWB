@@ -15,15 +15,14 @@ import java.util.Map;
 
 /**
  * User: ysy
- * Date: 2015/9/9
- * Time: 10:32
+ * Date: 2015/9/11
+ * Time: 15:08
  */
-public class TimeLineCommentsMsg {
-
+public class MentionsTimeLineMsgDao {
     private String getMsgs() {
         String msg = "";
 
-        String url = URLHelper.getMyCommentsTimeLine();
+        String url = URLHelper.getMentionsTimeLine();
 
         Map<String, String> map = new HashMap<String, String>();
 
@@ -31,7 +30,6 @@ public class TimeLineCommentsMsg {
 
         return msg;
     }
-
 
     public List<Map<String, String>> getMsgList() {
         List<Map<String, String>> list = new ArrayList<Map<String, String>>();
@@ -66,4 +64,59 @@ public class TimeLineCommentsMsg {
 
         return list;
     }
+
+    public String access_token;
+    public String since_id;
+    public String max_id;
+    public String count;
+    public String page;
+    public String filter_by_author;
+    public String filter_by_source;
+    public String filter_by_type;
+    public String trim_user;
+
+    public MentionsTimeLineMsgDao(String access_token) {
+        this.access_token = access_token;
+    }
+
+    public MentionsTimeLineMsgDao setSince_id(String since_id) {
+        this.since_id = since_id;
+        return this;
+    }
+
+    public MentionsTimeLineMsgDao setMax_id(String max_id) {
+        this.max_id = max_id;
+        return this;
+    }
+
+    public MentionsTimeLineMsgDao setCount(String count) {
+        this.count = count;
+        return this;
+    }
+
+    public MentionsTimeLineMsgDao setPage(String page) {
+        this.page = page;
+        return this;
+    }
+
+    public MentionsTimeLineMsgDao setFilter_by_author(String filter_by_author) {
+        this.filter_by_author = filter_by_author;
+        return this;
+    }
+
+    public MentionsTimeLineMsgDao setFilter_by_source(String filter_by_source) {
+        this.filter_by_source = filter_by_source;
+        return this;
+    }
+
+    public MentionsTimeLineMsgDao setFilter_by_type(String filter_by_type) {
+        this.filter_by_type = filter_by_type;
+        return this;
+    }
+
+    public MentionsTimeLineMsgDao setTrim_user(String trim_user) {
+        this.trim_user = trim_user;
+        return this;
+    }
+
 }

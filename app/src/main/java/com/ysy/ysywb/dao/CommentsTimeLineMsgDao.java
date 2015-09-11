@@ -1,5 +1,7 @@
 package com.ysy.ysywb.dao;
 
+import android.text.TextUtils;
+
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 
@@ -14,13 +16,15 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: ysy
- * Date: 2015/9/8
- * Time: 14:47
+ * Created with IntelliJ IDEA.
+ * User: qii
+ * Date: 12-7-29
+ * Time: 下午1:17
+ * To change this template use File | Settings | File Templates.
  */
-public class TimeLineMentionsMsg {
+public class CommentsTimeLineMsgDao {
 
-    public String getMsgs() {
+    private String getMsgs() {
         String msg = "";
 
         String url = URLHelper.getMyCommentsTimeLine();
@@ -32,8 +36,8 @@ public class TimeLineMentionsMsg {
         return msg;
     }
 
-    public List<Map<String, String>> getMsgList() {
 
+    public List<Map<String, String>> getMsgList() {
         List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         String msg = getMsgs();
 
@@ -46,7 +50,6 @@ public class TimeLineMentionsMsg {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("id", object.optString("id"));
                 map.put("text", object.optString("text"));
-
                 Iterator iterator = object.keys();
                 String key;
                 while (iterator.hasNext()) {
@@ -58,12 +61,23 @@ public class TimeLineMentionsMsg {
                         map.put("screen_name", ((JSONObject) value).optString("screen_name"));
                     }
                 }
-
                 list.add(map);
             }
+
         } catch (JSONException e) {
-            e.printStackTrace();
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+
         return list;
     }
+
+    private String access_token;
+
+
+    public CommentsTimeLineMsgDao(String access_token) {
+        if (TextUtils.isEmpty(access_token))
+            throw new IllegalArgumentException();
+        this.access_token = access_token;
+    }
+
 }

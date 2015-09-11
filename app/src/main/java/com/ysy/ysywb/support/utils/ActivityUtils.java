@@ -16,4 +16,8 @@ public class ActivityUtils {
             }
         });
     }
+
+    public static void showTips(final int resId) {
+        showTips(GlobalContext.getInstance().getString(resId));
+    }
 }

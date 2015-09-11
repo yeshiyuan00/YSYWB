@@ -13,6 +13,11 @@ import com.ysy.ysywb.bean.TimeLineMsgList;
 public class MailsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
+    public void refreshAndScrollTo(int positon) {
+
+    }
+
+    @Override
     public void refresh() {
 
     }
@@ -29,6 +34,11 @@ public class MailsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
     protected void listViewItemLongClick(AdapterView parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    protected void rememberListViewPosition(int position) {
 
     }
 }
