@@ -1,5 +1,8 @@
 package com.ysy.ysywb.ui.timeline;
 
+import android.view.View;
+import android.widget.AdapterView;
+
 import com.ysy.ysywb.bean.TimeLineMsgList;
 
 /**
@@ -10,7 +13,22 @@ import com.ysy.ysywb.bean.TimeLineMsgList;
 public class CommentsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
+    public void refresh() {
+
+    }
+
+    @Override
     protected TimeLineMsgList getList() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void scrollToBottom() {
+
+    }
+
+    @Override
+    protected void listViewItemLongClick(AdapterView parent, View view, int position, long id) {
+
     }
 }

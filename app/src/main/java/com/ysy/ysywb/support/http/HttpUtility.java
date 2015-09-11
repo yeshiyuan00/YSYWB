@@ -4,7 +4,9 @@ package com.ysy.ysywb.support.http;
 import android.util.Log;
 
 import com.ysy.ysywb.support.debug.Debug;
+import com.ysy.ysywb.support.utils.ActivityUtils;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,6 +24,7 @@ import ch.boye.httpclientandroidlib.HttpStatus;
 import ch.boye.httpclientandroidlib.HttpVersion;
 import ch.boye.httpclientandroidlib.NameValuePair;
 import ch.boye.httpclientandroidlib.StatusLine;
+import ch.boye.httpclientandroidlib.client.ClientProtocolException;
 import ch.boye.httpclientandroidlib.client.HttpClient;
 import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
@@ -33,6 +36,7 @@ import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 import ch.boye.httpclientandroidlib.params.BasicHttpParams;
 import ch.boye.httpclientandroidlib.params.CoreProtocolPNames;
+import ch.boye.httpclientandroidlib.params.HttpConnectionParams;
 import ch.boye.httpclientandroidlib.params.HttpParams;
 import ch.boye.httpclientandroidlib.protocol.BasicHttpContext;
 import ch.boye.httpclientandroidlib.protocol.HttpContext;
@@ -53,6 +57,8 @@ public class HttpUtility {
         HttpParams params = new BasicHttpParams();
         params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
         httpClient = new DefaultHttpClient(params);
+        HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 2000);
+        HttpConnectionParams.setSoTimeout(httpClient.getParams(), 2000);
     }
 
     public static HttpUtility getInstance() {
@@ -126,8 +132,12 @@ public class HttpUtility {
         HttpResponse response = null;
         try {
             response = httpClient.execute(httpGet, localContext);
+        } catch (ConnectTimeoutException e) {
+            Log.e("HttpUtility", "connection request timeout");
+            ActivityUtils.showTips("超时");
+        } catch (ClientProtocolException e) {
         } catch (IOException e) {
-            e.printStackTrace();
+
         }
 
         if (response != null) {

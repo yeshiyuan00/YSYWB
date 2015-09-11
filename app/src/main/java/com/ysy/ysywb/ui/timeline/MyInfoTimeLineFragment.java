@@ -1,13 +1,12 @@
 package com.ysy.ysywb.ui.timeline;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.TimeLineMsgList;
 import com.ysy.ysywb.ui.login.AccountActivity;
 
 /**
@@ -15,20 +14,9 @@ import com.ysy.ysywb.ui.login.AccountActivity;
  * Date: 2015/9/10
  * Time: 14:56
  */
-public class MyInfoTimeLineFragment extends AbstractTimeLineFragment {
+public class MyInfoTimeLineFragment extends Fragment {
 
 
-    @Override
-    protected TimeLineMsgList getList() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-        setRetainInstance(true);
-
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

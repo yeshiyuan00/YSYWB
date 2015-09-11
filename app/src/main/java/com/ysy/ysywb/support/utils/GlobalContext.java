@@ -1,5 +1,6 @@
 package com.ysy.ysywb.support.utils;
 
+import android.app.Activity;
 import android.app.Application;
 
 /**
@@ -11,6 +12,8 @@ public class GlobalContext extends Application {
     private static GlobalContext myApplication = null;
 
     private boolean isAppForeground = false;
+
+    private Activity activity = null;
 
 
     @Override
@@ -35,5 +38,12 @@ public class GlobalContext extends Application {
         return isAppForeground;
     }
 
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
 
 }

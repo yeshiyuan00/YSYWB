@@ -7,6 +7,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.ysy.ysywb.R;
@@ -20,16 +21,24 @@ import com.ysy.ysywb.bean.TimeLineMsgList;
 public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
+    public void refresh() {
+
+    }
+
+    @Override
     protected TimeLineMsgList getList() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);    //To change body of overridden methods use File | Settings | File Templates.
-        setHasOptionsMenu(true);
+    protected void scrollToBottom() {
+
     }
 
+    @Override
+    protected void listViewItemLongClick(AdapterView parent, View view, int position, long id) {
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
