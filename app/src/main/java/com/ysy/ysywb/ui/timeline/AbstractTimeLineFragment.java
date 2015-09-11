@@ -22,7 +22,7 @@ import com.ysy.ysywb.ui.MainTimeLineActivity;
  */
 public abstract class AbstractTimeLineFragment extends Fragment {
     protected ListView listView;
-    // protected TimeLineMsgList list = new TimeLineMsgList();
+
     protected TimeLineAdapter timeLineAdapter;
     protected MainTimeLineActivity activity;
 

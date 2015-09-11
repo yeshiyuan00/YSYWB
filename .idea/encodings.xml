@@ -3,9 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/libs/fastjson-1.1.22.jar" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-ldpi/listitem_background_pressed.xml" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-ldpi/listitem_background_pressed.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/friendstimelinefragment_search.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/maintimelineactivity_account_management.png" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/maintimelineactivity_search.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/maintimelineactivity_settings.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/menu/myinfofragment_menu.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/raw/spec.txt" charset="GBK" />

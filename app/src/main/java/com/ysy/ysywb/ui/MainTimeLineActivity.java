@@ -1,18 +1,24 @@
 package com.ysy.ysywb.ui;
 
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgList;
+import com.ysy.ysywb.dao.TimeLineFriendsMsg;
+import com.ysy.ysywb.ui.send.StatusNewActivity;
 import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.FriendsTimeLineFragment;
@@ -30,11 +36,17 @@ import java.util.List;
  */
 public class MainTimeLineActivity extends AbstractMainActivity {
 
-    private ViewPager mViewPager;
+    private ViewPager mViewPager = null;
+    private TimeLinePagerAdapter timeLinePagerAdapter = null;
 
-    private String token;
+    private String token = "";
 
-    private String screen_name;
+    private String screen_name = "";
+    private AbstractTimeLineFragment home = null;
+    private AbstractTimeLineFragment mentions = null;
+    private AbstractTimeLineFragment comments = null;
+    private AbstractTimeLineFragment mails = null;
+    private AbstractTimeLineFragment info = null;
 
     private TimeLineMsgList homeList = new TimeLineMsgList();
     private TimeLineMsgList mentionList = new TimeLineMsgList();
@@ -52,53 +64,56 @@ public class MainTimeLineActivity extends AbstractMainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.maintimelineactivity_viewpager_layout);
-        final ActionBar actionBar = getActionBar();
-
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         Intent intent = getIntent();
 
         token = intent.getStringExtra("token");
         screen_name = intent.getStringExtra("screen_name");
 
-        if (!TextUtils.isEmpty(screen_name))
-            actionBar.setTitle(screen_name);
+        buildViewPager();
+        buildActionBarAndViewPagerTitles();
 
-
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        TimeLinePagerAdapter timeLinePagerAdapter = new TimeLinePagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(timeLinePagerAdapter);
-        mViewPager.setOnPageChangeListener(simpleOnPageChangeListener);
-
-
-        actionBar.addTab(actionBar.newTab()
-                .setText("首页")
-                .setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab()
-                .setText("回复")
-                .setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab()
-                .setText("评论")
-                .setTabListener(tabListener));
-        actionBar.addTab(actionBar.newTab()
-                .setText("私信")
-                .setTabListener(tabListener));
-
-        actionBar.addTab(actionBar.newTab()
-                .setText("资料")
-                .setTabListener(tabListener));
-
-        ((AbstractTimeLineFragment) timeLinePagerAdapter.getItem(0)).refresh();
 
     }
 
+    private void buildViewPager() {
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        timeLinePagerAdapter = new TimeLinePagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(timeLinePagerAdapter);
+        mViewPager.setOnPageChangeListener(onPageChangeListener);
+    }
+
+    private void buildActionBarAndViewPagerTitles() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setTitle(screen_name);
+        actionBar.addTab(actionBar.newTab()
+                .setText(getString(R.string.home))
+                .setTabListener(tabListener));
+
+        actionBar.addTab(actionBar.newTab()
+                .setText(getString(R.string.mentions))
+                .setTabListener(tabListener));
+
+        actionBar.addTab(actionBar.newTab()
+                .setText(getString(R.string.comments))
+                .setTabListener(tabListener));
+
+        actionBar.addTab(actionBar.newTab()
+                .setText(getString(R.string.mail))
+                .setTabListener(tabListener));
+
+        actionBar.addTab(actionBar.newTab()
+                .setText(getString(R.string.info))
+                .setTabListener(tabListener));
+    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    ViewPager.SimpleOnPageChangeListener simpleOnPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
+    ViewPager.SimpleOnPageChangeListener onPageChangeListener = new ViewPager.SimpleOnPageChangeListener() {
         @Override
         public void onPageSelected(int position) {
             getActionBar().setSelectedNavigationItem(position);
@@ -122,6 +137,27 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         }
     };
 
+
+
+    FriendsTimeLineFragment.Commander frinedsTimeLineMsgCommand = new FriendsTimeLineFragment.Commander() {
+        @Override
+        public void getNewFriendsTimeLineMsg() {
+
+            new TimeLineTask().execute();
+
+        }
+
+        @Override
+        public void replayTo(int position) {
+
+        }
+
+        @Override
+        public void newWeibo() {
+            startActivity(new Intent(MainTimeLineActivity.this, StatusNewActivity.class));
+        }
+    };
+
     class TimeLinePagerAdapter extends
             FragmentStatePagerAdapter {
 
@@ -130,11 +166,11 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         public TimeLinePagerAdapter(FragmentManager fm) {
             super(fm);
 
-            AbstractTimeLineFragment home = new FriendsTimeLineFragment();
-            AbstractTimeLineFragment mentions = new MentionsTimeLineFragment();
-            AbstractTimeLineFragment comments = new CommentsTimeLineFragment();
-            AbstractTimeLineFragment mails = new MailsTimeLineFragment();
-            AbstractTimeLineFragment info = new MyInfoTimeLineFragment();
+            home = new FriendsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
+            mentions = new MentionsTimeLineFragment();
+            comments = new CommentsTimeLineFragment();
+            mails = new MailsTimeLineFragment();
+            info = new MyInfoTimeLineFragment();
 //            home.setToken(token);
 //            mentions.setToken(token);
 
@@ -156,6 +192,60 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             return list.size();
         }
 
+    }
+
+    class TimeLineTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
+
+        DialogFragment dialogFragment = ProgressFragment.newInstance();
+
+        @Override
+        protected void onPreExecute() {
+            dialogFragment.show(getSupportFragmentManager(), "");
+        }
+
+        @Override
+        protected TimeLineMsgList doInBackground(Void... params) {
+
+            return new TimeLineFriendsMsg().getGSONMsgList(getToken());
+
+        }
+
+        @Override
+        protected void onPostExecute(TimeLineMsgList o) {
+            if (o != null) {
+                setHomeList(o);
+
+                Toast.makeText(MainTimeLineActivity.this, "" + getHomeList().getStatuses().size(), Toast.LENGTH_SHORT).show();
+
+                home.refresh();
+                //   listView.smoothScrollToPosition(activity.getHomelist_position());
+
+            }
+            dialogFragment.dismissAllowingStateLoss();
+            super.onPostExecute(o);
+        }
+    }
+
+    static class ProgressFragment extends DialogFragment {
+
+        public static ProgressFragment newInstance() {
+            ProgressFragment frag = new ProgressFragment();
+            frag.setRetainInstance(true); //注意这句
+            Bundle args = new Bundle();
+            frag.setArguments(args);
+            return frag;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            ProgressDialog dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("刷新中");
+            dialog.setIndeterminate(false);
+            dialog.setCancelable(true);
+
+            return dialog;
+        }
     }
 
     public int getMentionList_position() {

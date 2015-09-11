@@ -2,7 +2,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_account_management1"
-          android:icon="@drawable/maintimelineactivity_search"
+          android:icon="@drawable/friendstimelinefragment_search"
           android:title="搜索"
           android:showAsAction="ifRoom|withText"
             />
