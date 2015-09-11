@@ -2,7 +2,6 @@ package com.ysy.ysywb.support.http;
 
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.support.debug.Debug;
 import com.ysy.ysywb.support.utils.ActivityUtils;
 import com.ysy.ysywb.support.utils.AppLogger;
 
@@ -168,9 +167,9 @@ public class HttpUtility {
         } catch (IOException ignored) {
 
         }
-        if (Debug.debug) {
-           AppLogger.d(result);
-        }
+
+        AppLogger.d(result);
+
 
         return result;
     }

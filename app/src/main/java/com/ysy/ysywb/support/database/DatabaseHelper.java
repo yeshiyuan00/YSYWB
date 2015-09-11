@@ -3,12 +3,11 @@ package com.ysy.ysywb.support.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.ysy.ysywb.support.database.table.AccountTable;
 import com.ysy.ysywb.support.database.table.GroupTable;
 import com.ysy.ysywb.support.database.table.HomeTable;
-import com.ysy.ysywb.support.debug.Debug;
+import com.ysy.ysywb.support.utils.AppLogger;
 import com.ysy.ysywb.support.utils.GlobalContext;
 
 /**
@@ -77,10 +76,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //To change body of implemented methods use File | Settings | File Templates.
-        if (Debug.debug) {
-            Log.w("LOG_TAG", "Upgrading database from version "
-                    + oldVersion + " to " + newVersion + ",which will destroy all old data");
-        }
+        AppLogger.d("Upgrading database from version "
+                + oldVersion + " to " + newVersion + ",which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + AccountTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + GroupTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + HomeTable.TABLE_NAME);

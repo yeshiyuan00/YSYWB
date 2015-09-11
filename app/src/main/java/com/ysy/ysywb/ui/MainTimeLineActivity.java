@@ -17,7 +17,6 @@ import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgList;
-import com.ysy.ysywb.bean.WeiboMsg;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
 import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
@@ -210,10 +209,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
             FriendsTimeLineMsgDao dao = new FriendsTimeLineMsgDao(token);
 
-            WeiboMsg msg = homeList.getStatuses().get(0);
-
-            if (msg != null) {
-                dao.setSince_id(msg.getId());
+            if (homeList.getStatuses().size() > 0) {
+                dao.setSince_id(homeList.getStatuses().get(0).getId());
             }
             return dao.getGSONMsgList();
         }
