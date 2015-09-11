@@ -1,11 +1,10 @@
 package com.ysy.ysywb.support.http;
 
 
-import android.util.Log;
-
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.support.debug.Debug;
 import com.ysy.ysywb.support.utils.ActivityUtils;
+import com.ysy.ysywb.support.utils.AppLogger;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
@@ -121,8 +120,7 @@ public class HttpUtility {
             }
 
             httpGet.setURI(uriBuilder.build());
-            if (Debug.debug)
-                Log.e("HttpUtility", uriBuilder.build().toString());
+            AppLogger.e(uriBuilder.build().toString());
         } catch (URISyntaxException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -134,7 +132,7 @@ public class HttpUtility {
         try {
             response = httpClient.execute(httpGet, localContext);
         } catch (ConnectTimeoutException e) {
-            Log.e("HttpUtility", "connection request timeout");
+            AppLogger.e("connection request timeout");
             ActivityUtils.showTips(R.string.timeout);
         } catch (ClientProtocolException e) {
         } catch (IOException e) {
@@ -171,7 +169,7 @@ public class HttpUtility {
 
         }
         if (Debug.debug) {
-            Log.e("HttpUtility", result);
+           AppLogger.d(result);
         }
 
         return result;

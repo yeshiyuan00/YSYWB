@@ -1,7 +1,6 @@
 package com.ysy.ysywb.dao;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -9,6 +8,7 @@ import com.ysy.ysywb.bean.WeiboUser;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.http.URLManager;
+import com.ysy.ysywb.support.utils.AppLogger;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,8 +57,7 @@ public class OAuthDao {
         try {
             user = gson.fromJson(result, WeiboUser.class);
         } catch (JsonSyntaxException e) {
-            Log.e("gson", "------------------------------");
-            Log.e("gson", result);
+            AppLogger.e(result);
         }
 
         return user;

@@ -1,7 +1,6 @@
 package com.ysy.ysywb.dao;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -9,6 +8,7 @@ import com.ysy.ysywb.bean.TimeLineMsgList;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.utils.ActivityUtils;
+import com.ysy.ysywb.support.utils.AppLogger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,21 +49,20 @@ public class FriendsTimeLineMsgDao {
 
         } catch (JsonSyntaxException e) {
             ActivityUtils.showTips("发生错误，请重刷");
-            Log.e("gson", "------------------------------");
-            Log.e("gson", e.getMessage().toString());
+            AppLogger.e(e.getMessage().toString());
         }
         return value;
     }
 
 
-        public String access_token;
-        public String since_id;
-        public String max_id;
-        public String count;
-        public String page;
-        public String base_app;
-        public String feature;
-        public String trim_user;
+    public String access_token;
+    public String since_id;
+    public String max_id;
+    public String count;
+    public String page;
+    public String base_app;
+    public String feature;
+    public String trim_user;
 
     public FriendsTimeLineMsgDao(String access_token) {
         if (TextUtils.isEmpty(access_token))
