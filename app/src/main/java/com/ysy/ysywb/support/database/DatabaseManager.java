@@ -47,16 +47,16 @@ public class DatabaseManager {
         return singleton;
     }
 
-    public OAuthActivity.DBResult addAccount(WeiboAccount account) {
+    public OAuthActivity.DBResult addOrUpdateAccount(WeiboAccount account) {
         ContentValues cv = new ContentValues();
         cv.put(AccountTable.UID, account.getUid());
         cv.put(AccountTable.OAUTH_TOKEN, account.getAccess_token());
         cv.put(AccountTable.USERNAME, account.getUsername());
         cv.put(AccountTable.USERNICK, account.getUsernick());
 
-        String sql = "select * from " + AccountTable.TABLE_NAME + " where "
-                + AccountTable.UID + " = " + account.getUid();
-        Cursor c = rsd.rawQuery(sql, null);
+
+        Cursor c = rsd.query(AccountTable.TABLE_NAME, null, AccountTable.UID + "=?",
+                new String[]{account.getUid()}, null, null, null);
         if (c != null && c.getCount() > 0) {
             String[] args = {account.getUid()};
             wsd.update(AccountTable.TABLE_NAME, cv, AccountTable.UID + "=?", args);

@@ -1,5 +1,6 @@
 package com.ysy.ysywb.bean;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -8,7 +9,7 @@ import java.util.Date;
  * Date: 2015/9/9
  * Time: 16:14
  */
-public class WeiboMsg {
+public class WeiboMsg implements Serializable {
     public String getCreated_at() {
         SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss a");
         return format.format(new Date(created_at));

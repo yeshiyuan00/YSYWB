@@ -1,11 +1,13 @@
 package com.ysy.ysywb.bean;
 
+import java.io.Serializable;
+
 /**
  * User: ysy
  * Date: 2015/9/9
  * Time: 16:15
  */
-public class WeiboUser{
+public class WeiboUser implements Serializable {
     public String getId() {
         return id;
     }
@@ -217,7 +219,7 @@ public class WeiboUser{
     private String profile_image_url;
     private String domain;
     private String gender;
-    private String  statuses_count;
+    private String statuses_count;
     private String favourites_count;
     private String created_at;
     private String following;

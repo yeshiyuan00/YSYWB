@@ -149,8 +149,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         @Override
         public void listViewFooterViewClick(View view) {
             if (!isBusying) {
-                ((TextView) view.findViewById(R.id.textView)).setText("loading");
-                new FriendsTimeLineGetOlderMsgListTask().execute();
+                new FriendsTimeLineGetOlderMsgListTask(view).execute();
             }
         }
 
@@ -173,7 +172,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         @Override
         public void replayTo(int position, View view) {
             Intent intent = new Intent(MainTimeLineActivity.this, BrowserWeiboMsgActivity.class);
-            intent.putExtra("content", homeList.getStatuses().get(position).getText());
+            intent.putExtra("msg", homeList.getStatuses().get(position));
             startActivity(intent);
             view.setSelected(false);
         }
@@ -188,7 +187,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         @Override
         public void onItemClick(int position) {
             Intent intent = new Intent(MainTimeLineActivity.this, BrowserWeiboMsgActivity.class);
-            intent.putExtra("content", homeList.getStatuses().get(position).getText());
+            intent.putExtra("msg", homeList.getStatuses().get(position));
             startActivity(intent);
         }
     };
@@ -275,15 +274,16 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     class FriendsTimeLineGetOlderMsgListTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
         View footerView;
-        DialogFragment dialogFragment = new ProgressFragment();
+
+        public FriendsTimeLineGetOlderMsgListTask(View view) {
+            footerView = view;
+        }
 
         @Override
         protected void onPreExecute() {
             frinedsTimeLineMsgCommand.isBusying = true;
-            // dialogFragment.show(getSupportFragmentManager(), "");
-            footerView = MainTimeLineActivity.this.getLayoutInflater().inflate(R.layout.fragment_listview_footer_layout, null);
-            home.getListView().addFooterView(footerView);
-            home.refresh();
+
+            ((TextView) footerView.findViewById(R.id.textView)).setText("loading");
         }
 
         @Override
@@ -294,8 +294,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
                 dao.setMax_id(homeList.getStatuses().get(homeList.getStatuses().size() - 1).getId());
             }
             TimeLineMsgList result = dao.getGSONMsgList();
-            if (result != null)
-                DatabaseManager.getInstance().addHomeLineMsg(result);
+
             return result;
 
         }
@@ -305,11 +304,13 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             if (newValue != null) {
                 Toast.makeText(MainTimeLineActivity.this, "" + newValue.getStatuses().size(), Toast.LENGTH_SHORT).show();
 
-                homeList.getStatuses().addAll(newValue.getStatuses());
-                home.refreshAndScrollTo(homelist_position);
+                homeList.getStatuses().addAll(newValue.getStatuses().subList(1, newValue.getStatuses().size() - 1));
+
             }
             //  dialogFragment.dismissAllowingStateLoss();
             frinedsTimeLineMsgCommand.isBusying = false;
+            home.refresh();
+            ((TextView) footerView.findViewById(R.id.textView)).setText("click to load older message");
 
             super.onPostExecute(newValue);
         }
