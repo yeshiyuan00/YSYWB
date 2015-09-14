@@ -7,6 +7,8 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/friendstimelinefragment_search.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/maintimelineactivity_account_management.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/maintimelineactivity_settings.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_listview_footer_layout.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/browserweibomsgactivity_menu.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/menu/myinfofragment_menu.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/raw/spec.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml" charset="GBK" />

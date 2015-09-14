@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgList;
@@ -25,12 +24,27 @@ import com.ysy.ysywb.bean.TimeLineMsgList;
 public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     private Commander commander;
 
-    public static interface Commander {
-        public void getNewFriendsTimeLineMsg();
+    public static abstract class Commander {
+        public volatile boolean isBusying = false;
 
-        public void replayTo(int position);
+        public void getNewFriendsTimeLineMsgList() {
+        }
 
-        public void newWeibo();
+        public void getOlderFriendsTimeLineMsgList() {
+        }
+
+        public void replayTo(int position, View view) {
+        }
+
+        public void newWeibo() {
+        }
+
+        public void onItemClick(int position) {
+        }
+
+        public void listViewFooterViewClick(View view) {
+
+        }
     }
 
     public FriendsTimeLineFragment setCommander(Commander commander) {
@@ -45,8 +59,7 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
     protected void scrollToBottom() {
-        Toast.makeText(getActivity(), "底部", Toast.LENGTH_SHORT).show();
-        commander.getNewFriendsTimeLineMsg();
+        commander.getOlderFriendsTimeLineMsgList();
     }
 
     @Override
@@ -56,8 +69,18 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
+    protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
+        commander.onItemClick(position);
+    }
+
+    @Override
     protected void rememberListViewPosition(int position) {
         activity.setHomelist_position(position);
+    }
+
+    @Override
+    protected void listViewFooterViewClick(View view) {
+        commander.listViewFooterViewClick(view);
     }
 
     public void refresh() {
@@ -85,7 +108,7 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
                 commander.newWeibo();
                 break;
             case R.id.friendstimelinefragment_refresh:
-                commander.getNewFriendsTimeLineMsg();
+                commander.getNewFriendsTimeLineMsgList();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -131,16 +154,15 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
 
                 switch (which) {
                     case 0:
-                        commander.getNewFriendsTimeLineMsg();
+                        commander.getNewFriendsTimeLineMsgList();
                         break;
                     case 1:
-                        commander.replayTo(position);
+                        commander.replayTo(position, view);
                         break;
                 }
             }
         };
     }
-
 
 
     static class ProgressFragment extends DialogFragment {

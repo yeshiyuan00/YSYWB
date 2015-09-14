@@ -13,11 +13,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgList;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
+import com.ysy.ysywb.support.database.DatabaseManager;
+import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
 import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
@@ -70,6 +74,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         token = intent.getStringExtra("token");
         screen_name = intent.getStringExtra("screen_name");
 
+        homeList = DatabaseManager.getInstance().getHomeLineMsgList();
+
         buildViewPager();
         buildActionBarAndViewPagerTitles();
 
@@ -95,13 +101,13 @@ public class MainTimeLineActivity extends AbstractMainActivity {
                 .setText(getString(R.string.mentions))
                 .setTabListener(tabListener));
 
-        actionBar.addTab(actionBar.newTab()
-                .setText(getString(R.string.comments))
-                .setTabListener(tabListener));
-
-        actionBar.addTab(actionBar.newTab()
-                .setText(getString(R.string.mail))
-                .setTabListener(tabListener));
+//        actionBar.addTab(actionBar.newTab()
+//                .setText(getString(R.string.comments))
+//                .setTabListener(tabListener));
+//
+//        actionBar.addTab(actionBar.newTab()
+//                .setText(getString(R.string.mail))
+//                .setTabListener(tabListener));
 
         actionBar.addTab(actionBar.newTab()
                 .setText(getString(R.string.info))
@@ -139,22 +145,51 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
 
     FriendsTimeLineFragment.Commander frinedsTimeLineMsgCommand = new FriendsTimeLineFragment.Commander() {
-        @Override
-        public void getNewFriendsTimeLineMsg() {
 
-            new FriendsTimeLineTask().execute();
+        @Override
+        public void listViewFooterViewClick(View view) {
+            if (!isBusying) {
+                ((TextView) view.findViewById(R.id.textView)).setText("loading");
+                new FriendsTimeLineGetOlderMsgListTask().execute();
+
+            }
+        }
+
+        @Override
+        public void getNewFriendsTimeLineMsgList() {
+
+            new FriendsTimeLineGetNewMsgListTask().execute();
 
         }
 
         @Override
-        public void replayTo(int position) {
+        public void getOlderFriendsTimeLineMsgList() {
+//            if (!isBusying) {
+//                new FriendsTimeLineGetOlderMsgListTask().execute();
+//
+//            }
 
+        }
+
+        @Override
+        public void replayTo(int position, View view) {
+            Intent intent = new Intent(MainTimeLineActivity.this, BrowserWeiboMsgActivity.class);
+            intent.putExtra("content", homeList.getStatuses().get(position).getText());
+            startActivity(intent);
+            view.setSelected(false);
         }
 
         @Override
         public void newWeibo() {
             Intent intent = new Intent(MainTimeLineActivity.this, StatusNewActivity.class);
             intent.putExtra("token", token);
+            startActivity(intent);
+        }
+
+        @Override
+        public void onItemClick(int position) {
+            Intent intent = new Intent(MainTimeLineActivity.this, BrowserWeiboMsgActivity.class);
+            intent.putExtra("content", homeList.getStatuses().get(position).getText());
             startActivity(intent);
         }
     };
@@ -195,7 +230,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     }
 
-    class FriendsTimeLineTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
+    class FriendsTimeLineGetNewMsgListTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
 
         DialogFragment dialogFragment = new ProgressFragment();
 
@@ -212,15 +247,21 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             if (homeList.getStatuses().size() > 0) {
                 dao.setSince_id(homeList.getStatuses().get(0).getId());
             }
-            return dao.getGSONMsgList();
+            TimeLineMsgList result = dao.getGSONMsgList();
+            if (result != null)
+                DatabaseManager.getInstance().addHomeLineMsg(result);
+            return result;
         }
 
         @Override
         protected void onPostExecute(TimeLineMsgList newValue) {
             if (newValue != null) {
-                Toast.makeText(MainTimeLineActivity.this, "" + newValue.getStatuses().size(),
+                Toast.makeText(MainTimeLineActivity.this, "total " +
+                                newValue.getStatuses().size() + " new messages",
                         Toast.LENGTH_SHORT).show();
 
+                if (homelist_position > 0)
+                    homelist_position += newValue.getStatuses().size();
                 newValue.getStatuses().addAll(getHomeList().getStatuses());
                 setHomeList(newValue);
 
@@ -229,6 +270,48 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
             }
             dialogFragment.dismissAllowingStateLoss();
+            super.onPostExecute(newValue);
+        }
+    }
+
+    class FriendsTimeLineGetOlderMsgListTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
+        View footerView;
+        DialogFragment dialogFragment = new ProgressFragment();
+
+        @Override
+        protected void onPreExecute() {
+            frinedsTimeLineMsgCommand.isBusying = true;
+            // dialogFragment.show(getSupportFragmentManager(), "");
+            footerView = MainTimeLineActivity.this.getLayoutInflater().inflate(R.layout.fragment_listview_footer_layout, null);
+            home.getListView().addFooterView(footerView);
+            home.refresh();
+        }
+
+        @Override
+        protected TimeLineMsgList doInBackground(Void... params) {
+
+            FriendsTimeLineMsgDao dao = new FriendsTimeLineMsgDao(token);
+            if (homeList.getStatuses().size() > 0) {
+                dao.setMax_id(homeList.getStatuses().get(homeList.getStatuses().size() - 1).getId());
+            }
+            TimeLineMsgList result = dao.getGSONMsgList();
+            if (result != null)
+                DatabaseManager.getInstance().addHomeLineMsg(result);
+            return result;
+
+        }
+
+        @Override
+        protected void onPostExecute(TimeLineMsgList newValue) {
+            if (newValue != null) {
+                Toast.makeText(MainTimeLineActivity.this, "" + newValue.getStatuses().size(), Toast.LENGTH_SHORT).show();
+
+                homeList.getStatuses().addAll(newValue.getStatuses());
+                home.refreshAndScrollTo(homelist_position);
+            }
+            //  dialogFragment.dismissAllowingStateLoss();
+            frinedsTimeLineMsgCommand.isBusying = false;
+
             super.onPostExecute(newValue);
         }
     }

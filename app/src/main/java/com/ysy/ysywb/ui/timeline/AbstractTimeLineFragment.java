@@ -2,6 +2,7 @@ package com.ysy.ysywb.ui.timeline;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,11 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
     protected abstract void listViewItemLongClick(AdapterView parent, View view, int position, long id);
 
+    protected abstract void listViewItemClick(AdapterView parent, View view, int position, long id);
+
     protected abstract void rememberListViewPosition(int position);
+
+    protected abstract void listViewFooterViewClick(View view);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,10 +53,18 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         setRetainInstance(true);
     }
 
+    public ListView getListView() {
+        return listView;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listview_layout, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
+
+        View footerView = inflater.inflate(R.layout.fragment_listview_footer_layout, null);
+        listView.addFooterView(footerView);
+
         timeLineAdapter = new TimeLineAdapter();
         listView.setAdapter(timeLineAdapter);
 
@@ -83,6 +96,17 @@ public abstract class AbstractTimeLineFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 listViewItemLongClick(parent, view, position, id);
                 return true;
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (position < getList().getStatuses().size()) {
+                    listViewItemClick(parent, view, position, id);
+                } else {
+                    listViewFooterViewClick(view);
+                }
             }
         });
         return view;
@@ -131,8 +155,11 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
             holder.txt.setText(msg.getText());
 
-            holder.time.setText(msg.getCreated_at());
-
+            if (!TextUtils.isEmpty(msg.getListviewItemShowTime())) {
+                holder.time.setText(msg.getListviewItemShowTime());
+            } else {
+                holder.time.setText(msg.getCreated_at());
+            }
 
             holder.pic.setImageDrawable(getResources().getDrawable(R.drawable.app));
             WeiboMsg recontent = msg.getRetweeted_status();

@@ -143,7 +143,7 @@ public class OAuthActivity extends Activity {
         @Override
         protected void onPreExecute() {
             progressFragment.setAsyncTask(this);
-            progressFragment.show(getFragmentManager(),"");
+            progressFragment.show(getFragmentManager(), "");
 
         }
 
@@ -163,12 +163,22 @@ public class OAuthActivity extends Activity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            progressFragment.dismissAllowingStateLoss();
+            if (progressFragment.isVisible()) {
+                progressFragment.dismissAllowingStateLoss();
+            }
             Toast.makeText(OAuthActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
             finish();
 
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(isFinishing())
+            webView.stopLoading();
+    }
+
 
     static class ProgressFragment extends DialogFragment {
 

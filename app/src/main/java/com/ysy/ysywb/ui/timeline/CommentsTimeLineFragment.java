@@ -38,7 +38,17 @@ public class CommentsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
+    protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
+
+    }
+
+    @Override
     protected void rememberListViewPosition(int position) {
+
+    }
+
+    @Override
+    protected void listViewFooterViewClick(View view) {
 
     }
 }

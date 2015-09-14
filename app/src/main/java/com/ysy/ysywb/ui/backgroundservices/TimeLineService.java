@@ -1,4 +1,4 @@
-package com.ysy.ysywb.ui.timeline;
+package com.ysy.ysywb.ui.backgroundservices;
 
 import android.app.Service;
 import android.content.Intent;
@@ -16,4 +16,13 @@ public class TimeLineService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+
 }

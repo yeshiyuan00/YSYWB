@@ -138,6 +138,14 @@ public class WeiboMsg {
         this.retweeted_status = retweeted_status;
     }
 
+    public String getListviewItemShowTime() {
+        return listviewItemShowTime;
+    }
+
+    public void setListviewItemShowTime(String listviewItemShowTime) {
+        this.listviewItemShowTime = listviewItemShowTime;
+    }
+
     private String created_at;
     private String id;
     private String text;
@@ -154,4 +162,6 @@ public class WeiboMsg {
     private WeiboUser user;
     private WeiboMsg retweeted_status;
     private Geo geo;
+
+    private String listviewItemShowTime;
 }

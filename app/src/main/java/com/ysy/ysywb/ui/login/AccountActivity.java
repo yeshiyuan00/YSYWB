@@ -17,6 +17,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -28,7 +29,9 @@ import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.ui.MainTimeLineActivity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * User: ysy
@@ -64,7 +67,7 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
 
         listView.setMultiChoiceModeListener(multiChoiceModeLinstener);
 
-        new AccountDBTask().execute(null, null, null);
+        new GetAccountListDBTask().execute(null, null, null);
     }
 
     private AbsListView.MultiChoiceModeListener multiChoiceModeLinstener = new AbsListView.MultiChoiceModeListener() {
@@ -91,6 +94,10 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
                         checkAll = false;
                         item.setIcon(R.drawable.accountactivity_select_all);
                     }
+                    return true;
+                case R.id.menu_remove_account:
+                    new RemoveAccountDBTask().execute();
+                    mode.finish();
                     return true;
                 default:
                     Toast.makeText(AccountActivity.this, "删除", Toast.LENGTH_SHORT).show();
@@ -158,7 +165,7 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data != null) {
-            new AccountDBTask().execute();
+            new GetAccountListDBTask().execute();
 
         }
     }
@@ -194,6 +201,8 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
 
         boolean allChecked = false;
 
+        Set<String> checkedItemPostion = new HashSet<String>();
+
         @Override
         public int getCount() {
             return weiboAccountList.size();
@@ -210,7 +219,7 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
 
             LayoutInflater layoutInflater = getLayoutInflater();
 
@@ -219,6 +228,20 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
                 LinearLayout linearLayout = (LinearLayout) mView;
 
                 CheckBox cb = new CheckBox(AccountActivity.this);
+
+                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        WeiboAccount account = weiboAccountList.get(i);
+                        String uid = account.getUid();
+                        if (isChecked) {
+                            checkedItemPostion.add(uid);
+                        } else if (checkedItemPostion.contains(uid)) {
+                            checkedItemPostion.remove(uid);
+                        }
+
+                    }
+                });
 
                 if (allChecked)
                     cb.setChecked(true);
@@ -261,9 +284,13 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
             notifyDataSetChanged();
         }
 
+        public Set<String> getCheckedItemPosition() {
+            return checkedItemPostion;
+        }
+
     }
 
-    class AccountDBTask extends AsyncTask<Void, List<WeiboAccount>, List<WeiboAccount>> {
+    class GetAccountListDBTask extends AsyncTask<Void, List<WeiboAccount>, List<WeiboAccount>> {
 
         @Override
         protected List<WeiboAccount> doInBackground(Void... params) {
@@ -274,6 +301,22 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
         protected void onPostExecute(List<WeiboAccount> weiboAccounts) {
             weiboAccountList = weiboAccounts;
             listAdapter.notifyDataSetChanged();
+
+        }
+    }
+
+    class RemoveAccountDBTask extends AsyncTask<Void, List<WeiboAccount>, List<WeiboAccount>> {
+
+        @Override
+        protected List<WeiboAccount> doInBackground(Void... params) {
+            return DatabaseManager.getInstance().removeAndGetNewAccountList(listAdapter.getCheckedItemPosition());
+        }
+
+        @Override
+        protected void onPostExecute(List<WeiboAccount> weiboAccounts) {
+            weiboAccountList = weiboAccounts;
+            listAdapter.notifyDataSetChanged();
+            Toast.makeText(AccountActivity.this,"remove successfully",Toast.LENGTH_SHORT).show();
 
         }
     }

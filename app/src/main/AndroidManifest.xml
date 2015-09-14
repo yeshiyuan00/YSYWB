@@ -39,6 +39,9 @@
         <activity
             android:name=".ui.login.OAuthActivity"
             android:label="授权" />
+        <activity
+            android:name=".ui.browser.BrowserWeiboMsgActivity"
+            android:uiOptions="splitActionBarWhenNarrow" />
 
         <service android:name=".ui.timeline.TimeLineService" />
         <receiver android:name=".ui.timeline.NewMsgNotificationBroadcastReceiver" />
