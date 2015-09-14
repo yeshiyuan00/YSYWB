@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.WeiboMsg;
+import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.ui.AbstractMainActivity;
 
 /**
@@ -20,8 +20,8 @@ import com.ysy.ysywb.ui.AbstractMainActivity;
  * Time: 9:40
  */
 public class BrowserWeiboMsgActivity extends AbstractMainActivity {
-    private WeiboMsg msg;
-    private WeiboMsg retweetMsg;
+    private WeiboMsgBean msg;
+    private WeiboMsgBean retweetMsg;
 
     private TextView username;
     private TextView content;
@@ -41,7 +41,7 @@ public class BrowserWeiboMsgActivity extends AbstractMainActivity {
 
 
         Intent intent = getIntent();
-        msg = (WeiboMsg) intent.getSerializableExtra("msg");
+        msg = (WeiboMsgBean) intent.getSerializableExtra("msg");
         retweetMsg = msg.getRetweeted_status();
 
         buildView();
@@ -56,6 +56,19 @@ public class BrowserWeiboMsgActivity extends AbstractMainActivity {
 
         comment_number = (Button) findViewById(R.id.comment_number);
         retweet_number = (Button) findViewById(R.id.retweet_number);
+        comment_number.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BrowserWeiboMsgActivity.this, BrowserCommentListActivity.class));
+            }
+        });
+
+        retweet_number.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(BrowserWeiboMsgActivity.this, BrowserRepostListActivity.class));
+            }
+        });
     }
 
     private void buildViewData() {

@@ -8,12 +8,12 @@ import java.util.List;
  * Date: 2015/9/9
  * Time: 16:13
  */
-public class TimeLineMsgList{
-    public List<WeiboMsg> getStatuses() {
+public class TimeLineMsgListBean {
+    public List<WeiboMsgBean> getStatuses() {
         return statuses;
     }
 
-    public void setStatuses(List<WeiboMsg> statuses) {
+    public void setStatuses(List<WeiboMsgBean> statuses) {
         this.statuses = statuses;
     }
 
@@ -41,7 +41,7 @@ public class TimeLineMsgList{
         this.total_number = total_number;
     }
 
-    private List<WeiboMsg> statuses=new ArrayList<WeiboMsg>();
+    private List<WeiboMsgBean> statuses=new ArrayList<WeiboMsgBean>();
     private String previous_cursor="";
     private String next_cursor="0";
     private String total_number="";

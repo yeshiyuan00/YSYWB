@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.TimeLineMsgList;
+import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
 import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
@@ -52,10 +52,10 @@ public class MainTimeLineActivity extends AbstractMainActivity {
     private AbstractTimeLineFragment mails = null;
     private Fragment info = null;
 
-    private TimeLineMsgList homeList = new TimeLineMsgList();
-    private TimeLineMsgList mentionList = new TimeLineMsgList();
-    private TimeLineMsgList commentList = new TimeLineMsgList();
-    private TimeLineMsgList mailList = new TimeLineMsgList();
+    private TimeLineMsgListBean homeList = new TimeLineMsgListBean();
+    private TimeLineMsgListBean mentionList = new TimeLineMsgListBean();
+    private TimeLineMsgListBean commentList = new TimeLineMsgListBean();
+    private TimeLineMsgListBean mailList = new TimeLineMsgListBean();
 
 
     private int homelist_position = 0;
@@ -228,7 +228,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     }
 
-    class FriendsTimeLineGetNewMsgListTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
+    class FriendsTimeLineGetNewMsgListTask extends AsyncTask<Void, TimeLineMsgListBean, TimeLineMsgListBean> {
 
         DialogFragment dialogFragment = new ProgressFragment();
 
@@ -238,21 +238,21 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         }
 
         @Override
-        protected TimeLineMsgList doInBackground(Void... params) {
+        protected TimeLineMsgListBean doInBackground(Void... params) {
 
             FriendsTimeLineMsgDao dao = new FriendsTimeLineMsgDao(token);
 
             if (homeList.getStatuses().size() > 0) {
                 dao.setSince_id(homeList.getStatuses().get(0).getId());
             }
-            TimeLineMsgList result = dao.getGSONMsgList();
+            TimeLineMsgListBean result = dao.getGSONMsgList();
             if (result != null)
                 DatabaseManager.getInstance().addHomeLineMsg(result);
             return result;
         }
 
         @Override
-        protected void onPostExecute(TimeLineMsgList newValue) {
+        protected void onPostExecute(TimeLineMsgListBean newValue) {
             if (newValue != null) {
                 Toast.makeText(MainTimeLineActivity.this, "total " +
                                 newValue.getStatuses().size() + " new messages",
@@ -272,7 +272,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         }
     }
 
-    class FriendsTimeLineGetOlderMsgListTask extends AsyncTask<Void, TimeLineMsgList, TimeLineMsgList> {
+    class FriendsTimeLineGetOlderMsgListTask extends AsyncTask<Void, TimeLineMsgListBean, TimeLineMsgListBean> {
         View footerView;
 
         public FriendsTimeLineGetOlderMsgListTask(View view) {
@@ -287,20 +287,20 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         }
 
         @Override
-        protected TimeLineMsgList doInBackground(Void... params) {
+        protected TimeLineMsgListBean doInBackground(Void... params) {
 
             FriendsTimeLineMsgDao dao = new FriendsTimeLineMsgDao(token);
             if (homeList.getStatuses().size() > 0) {
                 dao.setMax_id(homeList.getStatuses().get(homeList.getStatuses().size() - 1).getId());
             }
-            TimeLineMsgList result = dao.getGSONMsgList();
+            TimeLineMsgListBean result = dao.getGSONMsgList();
 
             return result;
 
         }
 
         @Override
-        protected void onPostExecute(TimeLineMsgList newValue) {
+        protected void onPostExecute(TimeLineMsgListBean newValue) {
             if (newValue != null) {
                 Toast.makeText(MainTimeLineActivity.this, "" + newValue.getStatuses().size(), Toast.LENGTH_SHORT).show();
 
@@ -339,11 +339,11 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         return token;
     }
 
-    public TimeLineMsgList getHomeList() {
+    public TimeLineMsgListBean getHomeList() {
         return homeList;
     }
 
-    public void setHomeList(TimeLineMsgList homeList) {
+    public void setHomeList(TimeLineMsgListBean homeList) {
         this.homeList = homeList;
     }
 }

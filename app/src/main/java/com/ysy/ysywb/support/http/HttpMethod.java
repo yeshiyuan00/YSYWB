@@ -6,5 +6,5 @@ package com.ysy.ysywb.support.http;
  * Time: 8:39
  */
 public enum HttpMethod {
-    Post, Get
+    Post, Get,Get_File
 }

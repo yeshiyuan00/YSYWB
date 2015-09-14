@@ -35,4 +35,8 @@ public class URLHelper {
         return URLManager.getRealUrl("commentstimeline");
 
     }
+
+    public static String getCommentListByMsgId(){
+        return URLManager.getRealUrl("commentstimelinebymsgid");
+    }
 }

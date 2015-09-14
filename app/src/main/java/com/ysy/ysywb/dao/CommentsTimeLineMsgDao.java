@@ -2,6 +2,17 @@ package com.ysy.ysywb.dao;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.ysy.ysywb.bean.CommentListBean;
+import com.ysy.ysywb.support.http.HttpMethod;
+import com.ysy.ysywb.support.http.HttpUtility;
+import com.ysy.ysywb.support.utils.ActivityUtils;
+import com.ysy.ysywb.support.utils.AppLogger;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * User: qii
@@ -24,5 +35,31 @@ public class CommentsTimeLineMsgDao {
         if (TextUtils.isEmpty(access_token))
             throw new IllegalArgumentException();
         this.access_token = access_token;
+    }
+
+    public CommentListBean getCommentListByMsgId(String id) {
+
+        String url = URLHelper.getCommentListByMsgId();
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("access_token", access_token);
+        map.put("id", id);
+        map.put("since_id", since_id);
+        map.put("max_id", max_id);
+        map.put("count", count);
+        map.put("page", page);
+        map.put("filter_by_author", filter_by_author);
+
+        String jsonData = HttpUtility.getInstance().execute(HttpMethod.Get, url, map);
+
+        Gson gson = new Gson();
+        CommentListBean value = null;
+
+        try {
+            value = gson.fromJson(jsonData, CommentListBean.class);
+        }catch (JsonSyntaxException e){
+            ActivityUtils.showTips("发生错误，请重刷");
+            AppLogger.e(e.getMessage().toString());
+        }
+        return value;
     }
 }

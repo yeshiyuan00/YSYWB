@@ -14,7 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.TimeLineMsgList;
+import com.ysy.ysywb.bean.TimeLineMsgListBean;
 
 /**
  * User: ysy
@@ -53,7 +53,7 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
-    protected TimeLineMsgList getList() {
+    protected TimeLineMsgListBean getList() {
         return activity.getHomeList();
     }
 

@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Date: 2015/9/14
  * Time: 8:27
  */
-public class Geo implements Serializable {
+public class GeoBean implements Serializable {
     private String type;
     private String[] coordinates;
 

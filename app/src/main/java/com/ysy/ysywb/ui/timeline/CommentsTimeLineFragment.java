@@ -3,7 +3,7 @@ package com.ysy.ysywb.ui.timeline;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.ysy.ysywb.bean.TimeLineMsgList;
+import com.ysy.ysywb.bean.TimeLineMsgListBean;
 
 /**
  * User: ysy
@@ -23,7 +23,7 @@ public class CommentsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
-    protected TimeLineMsgList getList() {
+    protected TimeLineMsgListBean getList() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

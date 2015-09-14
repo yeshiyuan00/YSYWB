@@ -10,7 +10,7 @@ import android.support.annotation.Nullable;
  * Date: 2015/9/10
  * Time: 15:47
  */
-public class TimeLineService extends Service {
+public class MentionsAndCommentsTimeLineService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {

@@ -14,8 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.TimeLineMsgList;
-import com.ysy.ysywb.bean.WeiboMsg;
+import com.ysy.ysywb.bean.TimeLineMsgListBean;
+import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.ui.MainTimeLineActivity;
 
 /**
@@ -33,7 +33,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
     public abstract void refresh();
 
-    protected abstract TimeLineMsgList getList();
+    protected abstract TimeLineMsgListBean getList();
 
     protected abstract void scrollToBottom();
 
@@ -162,7 +162,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         }
 
         private void bindViewData(ViewHolder holder, int position) {
-            WeiboMsg msg = getList().getStatuses().get(position);
+            WeiboMsgBean msg = getList().getStatuses().get(position);
             holder.screenName.setText(msg.getUser().getScreen_name());
 
             holder.txt.setText(msg.getText());
@@ -175,7 +175,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
             }
 
             holder.pic.setImageDrawable(getResources().getDrawable(R.drawable.app));
-            WeiboMsg recontent = msg.getRetweeted_status();
+            WeiboMsgBean recontent = msg.getRetweeted_status();
             if (recontent != null) {
                 holder.recontent.setVisibility(View.VISIBLE);
                 holder.recontent.setText(recontent.getUser().getScreen_name() + "：" + recontent.getText());

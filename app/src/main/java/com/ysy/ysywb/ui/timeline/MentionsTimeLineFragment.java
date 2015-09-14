@@ -11,7 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.TimeLineMsgList;
+import com.ysy.ysywb.bean.TimeLineMsgListBean;
 
 /**
  * User: ysy
@@ -31,7 +31,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
-    protected TimeLineMsgList getList() {
+    protected TimeLineMsgListBean getList() {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

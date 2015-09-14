@@ -20,8 +20,8 @@ import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.dao.OAuthDao;
-import com.ysy.ysywb.bean.WeiboAccount;
-import com.ysy.ysywb.bean.WeiboUser;
+import com.ysy.ysywb.bean.WeiboAccountBean;
+import com.ysy.ysywb.bean.WeiboUserBean;
 import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.weibo.Utility;
 import com.ysy.ysywb.weibo.WeiboParameters;
@@ -137,7 +137,7 @@ public class OAuthActivity extends Activity {
         }
     }
 
-    class OAuthTask extends AsyncTask<String, WeiboUser, DBResult> {
+    class OAuthTask extends AsyncTask<String, WeiboUserBean, DBResult> {
         ProgressFragment progressFragment = ProgressFragment.newInstance();
 
         @Override
@@ -150,8 +150,8 @@ public class OAuthActivity extends Activity {
         @Override
         protected DBResult doInBackground(String... params) {
             String token = params[0];
-            WeiboUser weiboUser = new OAuthDao(token).getOAuthUserInfo();
-            WeiboAccount weiboAccount = new WeiboAccount();
+            WeiboUserBean weiboUser = new OAuthDao(token).getOAuthUserInfo();
+            WeiboAccountBean weiboAccount = new WeiboAccountBean();
             weiboAccount.setAccess_token(token);
             weiboAccount.setUsername(weiboUser.getName());
             weiboAccount.setUid(weiboUser.getId());

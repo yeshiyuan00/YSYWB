@@ -5,7 +5,7 @@ package com.ysy.ysywb.bean;
  * Date: 2015/9/10
  * Time: 9:08
  */
-public class WeiboAccount {
+public class WeiboAccountBean {
 
     public String getUid() {
         return uid;

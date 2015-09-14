@@ -4,10 +4,10 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.ysy.ysywb.bean.TimeLineMsgList;
-import com.ysy.ysywb.bean.WeiboAccount;
-import com.ysy.ysywb.bean.WeiboMsg;
-import com.ysy.ysywb.bean.WeiboUser;
+import com.ysy.ysywb.bean.TimeLineMsgListBean;
+import com.ysy.ysywb.bean.WeiboAccountBean;
+import com.ysy.ysywb.bean.WeiboMsgBean;
+import com.ysy.ysywb.bean.WeiboUserBean;
 import com.ysy.ysywb.support.database.table.AccountTable;
 import com.ysy.ysywb.support.database.table.HomeTable;
 import com.ysy.ysywb.ui.login.OAuthActivity;
@@ -47,7 +47,7 @@ public class DatabaseManager {
         return singleton;
     }
 
-    public OAuthActivity.DBResult addOrUpdateAccount(WeiboAccount account) {
+    public OAuthActivity.DBResult addOrUpdateAccount(WeiboAccountBean account) {
         ContentValues cv = new ContentValues();
         cv.put(AccountTable.UID, account.getUid());
         cv.put(AccountTable.OAUTH_TOKEN, account.getAccess_token());
@@ -70,13 +70,13 @@ public class DatabaseManager {
     }
 
 
-    public List<WeiboAccount> getAccountList() {
-        List<WeiboAccount> weiboAccountList = new ArrayList<WeiboAccount>();
+    public List<WeiboAccountBean> getAccountList() {
+        List<WeiboAccountBean> weiboAccountList = new ArrayList<WeiboAccountBean>();
         String sql = "select * from " + AccountTable.TABLE_NAME;
         Cursor c = rsd.rawQuery(sql, null);
 
         while (c.moveToNext()) {
-            WeiboAccount account = new WeiboAccount();
+            WeiboAccountBean account = new WeiboAccountBean();
             int colid = c.getColumnIndex(AccountTable.OAUTH_TOKEN);
             account.setAccess_token(c.getString(colid));
             colid = c.getColumnIndex(AccountTable.USERNICK);
@@ -89,19 +89,19 @@ public class DatabaseManager {
         return weiboAccountList;
     }
 
-    public List<WeiboAccount> removeAndGetNewAccountList(Set<String> checkedItemPosition) {
+    public List<WeiboAccountBean> removeAndGetNewAccountList(Set<String> checkedItemPosition) {
         String[] args = checkedItemPosition.toArray(new String[0]);
         String column = AccountTable.UID;
         long result = wsd.delete(AccountTable.TABLE_NAME, column + "=?", args);
         return getAccountList();
     }
 
-    public void addHomeLineMsg(TimeLineMsgList list) {
-        List<WeiboMsg> msgList = list.getStatuses();
+    public void addHomeLineMsg(TimeLineMsgListBean list) {
+        List<WeiboMsgBean> msgList = list.getStatuses();
         int size = msgList.size();
         for (int i = 0; i < size; i++) {
-            WeiboMsg msg = msgList.get(i);
-            WeiboUser user = msg.getUser();
+            WeiboMsgBean msg = msgList.get(i);
+            WeiboUserBean user = msg.getUser();
             ContentValues cv = new ContentValues();
             cv.put(HomeTable.MBLOGID, msg.getId());
             cv.put(HomeTable.NICK, user.getScreen_name());
@@ -112,13 +112,13 @@ public class DatabaseManager {
         }
     }
 
-    public TimeLineMsgList getHomeLineMsgList() {
-        TimeLineMsgList result = new TimeLineMsgList();
-        List<WeiboMsg> msgList = new ArrayList<WeiboMsg>();
+    public TimeLineMsgListBean getHomeLineMsgList() {
+        TimeLineMsgListBean result = new TimeLineMsgListBean();
+        List<WeiboMsgBean> msgList = new ArrayList<WeiboMsgBean>();
         String sql = "select * from " + HomeTable.TABLE_NAME;
         Cursor c = rsd.rawQuery(sql, null);
         while (c.moveToNext()) {
-            WeiboMsg msg = new WeiboMsg();
+            WeiboMsgBean msg = new WeiboMsgBean();
             int colid = c.getColumnIndex(HomeTable.MBLOGID);
             msg.setId(c.getString(colid));
 
@@ -127,7 +127,7 @@ public class DatabaseManager {
 
             msg.setListviewItemShowTime(c.getString(c.getColumnIndex(HomeTable.TIME)));
 
-            WeiboUser user = new WeiboUser();
+            WeiboUserBean user = new WeiboUserBean();
 
             user.setScreen_name(c.getString(c.getColumnIndex(HomeTable.NICK)));
 

@@ -4,6 +4,7 @@ package com.ysy.ysywb.support.http;
 import android.text.TextUtils;
 
 import com.ysy.ysywb.R;
+import com.ysy.ysywb.support.file.FileDownloaderHttpHelper;
 import com.ysy.ysywb.support.utils.ActivityUtils;
 import com.ysy.ysywb.support.utils.AppLogger;
 
@@ -74,7 +75,8 @@ public class HttpUtility {
             case Get:
 
                 return doGet(url, param);
-
+            case Get_File:
+                return doGetFile(url, param);
         }
         return "";
     }
@@ -82,7 +84,6 @@ public class HttpUtility {
 
     private String doPost(String url, Map<String, String> param) {
         List<NameValuePair> formparams = new ArrayList<NameValuePair>();
-
 
         Set<String> keys = param.keySet();
         for (String key : keys) {
@@ -112,11 +113,29 @@ public class HttpUtility {
         return dealWithResponse(response);
     }
 
-    private String doGet(String url, Map<String, String> param) {
-        List<NameValuePair> qparams = new ArrayList<NameValuePair>();
+    public String doGetFile(String url, Map<String, String> param) {
+        HttpResponse response = getDoGetHttpResponse(url, param);
 
+        if (response != null) {
+            return FileDownloaderHttpHelper.saveFile(url, response);
+        } else {
+            return "";
+        }
+    }
+
+    private String doGet(String url, Map<String, String> param) {
+        HttpResponse response = getDoGetHttpResponse(url, param);
+        if (response != null) {
+            return dealWithResponse(response);
+        } else {
+            return "";
+        }
+    }
+
+    private HttpResponse getDoGetHttpResponse(String url, Map<String, String> param) {
+        URIBuilder uriBuilder = null;
         try {
-            URIBuilder uriBuilder = new URIBuilder(url);
+            uriBuilder = new URIBuilder(url);
 
             Set<String> keys = param.keySet();
             for (String key : keys) {
@@ -145,13 +164,7 @@ public class HttpUtility {
         } catch (IOException e) {
 
         }
-
-        if (response != null) {
-            return dealWithResponse(response);
-        } else {
-            return "";
-        }
-
+        return response;
     }
 
     private String dealWithResponse(HttpResponse httpResponse) {

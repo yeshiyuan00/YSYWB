@@ -9,7 +9,7 @@ import java.util.Date;
  * Date: 2015/9/9
  * Time: 16:14
  */
-public class WeiboMsg implements Serializable {
+public class WeiboMsgBean implements Serializable {
     public String getCreated_at() {
         SimpleDateFormat format = new SimpleDateFormat("kk:mm");
         return format.format(new Date(created_at));
@@ -83,11 +83,11 @@ public class WeiboMsg implements Serializable {
         this.in_reply_to_screen_name = in_reply_to_screen_name;
     }
 
-    public Geo getGeo() {
+    public GeoBean getGeo() {
         return geo;
     }
 
-    public void setGeo(Geo geo) {
+    public void setGeo(GeoBean geo) {
         this.geo = geo;
     }
 
@@ -123,19 +123,19 @@ public class WeiboMsg implements Serializable {
 //        this.annotations = annotations;
 //    }
 
-    public WeiboUser getUser() {
+    public WeiboUserBean getUser() {
         return user;
     }
 
-    public void setUser(WeiboUser user) {
+    public void setUser(WeiboUserBean user) {
         this.user = user;
     }
 
-    public WeiboMsg getRetweeted_status() {
+    public WeiboMsgBean getRetweeted_status() {
         return retweeted_status;
     }
 
-    public void setRetweeted_status(WeiboMsg retweeted_status) {
+    public void setRetweeted_status(WeiboMsgBean retweeted_status) {
         this.retweeted_status = retweeted_status;
     }
 
@@ -160,9 +160,9 @@ public class WeiboMsg implements Serializable {
     private String reposts_count;
     private String comments_count;
     // private List annotations;
-    private WeiboUser user;
-    private WeiboMsg retweeted_status;
-    private Geo geo;
+    private WeiboUserBean user;
+    private WeiboMsgBean retweeted_status;
+    private GeoBean geo;
 
     private String listviewItemShowTime;
 }

@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.ysy.ysywb.bean.TimeLineMsgList;
+import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.utils.ActivityUtils;
@@ -39,13 +39,13 @@ public class FriendsTimeLineMsgDao {
     }
 
 
-    public TimeLineMsgList getGSONMsgList() {
+    public TimeLineMsgListBean getGSONMsgList() {
         String json = getMsgListJson();
         Gson gson = new Gson();
 
-        TimeLineMsgList value = null;
+        TimeLineMsgListBean value = null;
         try {
-            value = gson.fromJson(json, TimeLineMsgList.class);
+            value = gson.fromJson(json, TimeLineMsgListBean.class);
 
         } catch (JsonSyntaxException e) {
             ActivityUtils.showTips("发生错误，请重刷");

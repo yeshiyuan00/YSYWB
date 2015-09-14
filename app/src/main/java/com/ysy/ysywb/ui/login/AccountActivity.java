@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.WeiboAccount;
+import com.ysy.ysywb.bean.WeiboAccountBean;
 import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.ui.MainTimeLineActivity;
 
@@ -49,7 +49,7 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
     private AccountAdapter listAdapter;
 
 
-    private List<WeiboAccount> weiboAccountList = new ArrayList<WeiboAccount>();
+    private List<WeiboAccountBean> weiboAccountList = new ArrayList<WeiboAccountBean>();
 
     private ActionMode mActionMode;
 
@@ -232,7 +232,7 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
                 cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        WeiboAccount account = weiboAccountList.get(i);
+                        WeiboAccountBean account = weiboAccountList.get(i);
                         String uid = account.getUid();
                         if (isChecked) {
                             checkedItemPostion.add(uid);
@@ -290,30 +290,30 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
 
     }
 
-    class GetAccountListDBTask extends AsyncTask<Void, List<WeiboAccount>, List<WeiboAccount>> {
+    class GetAccountListDBTask extends AsyncTask<Void, List<WeiboAccountBean>, List<WeiboAccountBean>> {
 
         @Override
-        protected List<WeiboAccount> doInBackground(Void... params) {
+        protected List<WeiboAccountBean> doInBackground(Void... params) {
             return DatabaseManager.getInstance().getAccountList();
         }
 
         @Override
-        protected void onPostExecute(List<WeiboAccount> weiboAccounts) {
+        protected void onPostExecute(List<WeiboAccountBean> weiboAccounts) {
             weiboAccountList = weiboAccounts;
             listAdapter.notifyDataSetChanged();
 
         }
     }
 
-    class RemoveAccountDBTask extends AsyncTask<Void, List<WeiboAccount>, List<WeiboAccount>> {
+    class RemoveAccountDBTask extends AsyncTask<Void, List<WeiboAccountBean>, List<WeiboAccountBean>> {
 
         @Override
-        protected List<WeiboAccount> doInBackground(Void... params) {
+        protected List<WeiboAccountBean> doInBackground(Void... params) {
             return DatabaseManager.getInstance().removeAndGetNewAccountList(listAdapter.getCheckedItemPosition());
         }
 
         @Override
-        protected void onPostExecute(List<WeiboAccount> weiboAccounts) {
+        protected void onPostExecute(List<WeiboAccountBean> weiboAccounts) {
             weiboAccountList = weiboAccounts;
             listAdapter.notifyDataSetChanged();
             Toast.makeText(AccountActivity.this,"remove successfully",Toast.LENGTH_SHORT).show();
