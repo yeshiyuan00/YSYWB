@@ -151,7 +151,6 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             if (!isBusying) {
                 ((TextView) view.findViewById(R.id.textView)).setText("loading");
                 new FriendsTimeLineGetOlderMsgListTask().execute();
-
             }
         }
 
