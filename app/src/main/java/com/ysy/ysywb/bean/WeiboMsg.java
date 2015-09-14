@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class WeiboMsg implements Serializable {
     public String getCreated_at() {
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss a");
+        SimpleDateFormat format = new SimpleDateFormat("kk:mm");
         return format.format(new Date(created_at));
     }
 
