@@ -62,6 +62,8 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_listview_layout, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
 
+        listView.setScrollingCacheEnabled(false);
+
         View footerView = inflater.inflate(R.layout.fragment_listview_footer_layout, null);
         listView.addFooterView(footerView);
 
