@@ -28,7 +28,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
     protected TimeLineAdapter timeLineAdapter;
     protected MainTimeLineActivity activity;
-    private volatile boolean isFlying = false;
 
     public abstract void refreshAndScrollTo(int positon);
 
@@ -78,13 +77,13 @@ public abstract class AbstractTimeLineFragment extends Fragment {
                             scrollToBottom();
                         }
                         rememberListViewPosition(view.getFirstVisiblePosition());
-                        isFlying = false;
+
                         break;
                     case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
-                        isFlying = true;
+
                         break;
                     case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-                        isFlying = false;
+
                         break;
                 }
             }
@@ -156,9 +155,9 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
             WeiboMsg msg = getList().getStatuses().get(position);
             holder.screenName.setText(msg.getUser().getScreen_name());
-            if (!isFlying) {
-                holder.txt.setText(msg.getText());
-            }
+
+            holder.txt.setText(msg.getText());
+          
 
             if (!TextUtils.isEmpty(msg.getListviewItemShowTime())) {
                 holder.time.setText(msg.getListviewItemShowTime());
