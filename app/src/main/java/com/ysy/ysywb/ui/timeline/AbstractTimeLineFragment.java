@@ -140,8 +140,9 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = new ViewHolder();
+            ViewHolder holder = null;
             if (convertView == null) {
+                holder = new ViewHolder();
                 convertView = inflater.inflate(R.layout.fragment_listview_item_layout, parent, false);
                 holder.screenName = (TextView) convertView.findViewById(R.id.username);
                 holder.pic = (ImageView) convertView.findViewById(R.id.pic);
@@ -153,11 +154,17 @@ public abstract class AbstractTimeLineFragment extends Fragment {
                 holder = (ViewHolder) convertView.getTag();
             }
 
+            bindViewData(holder, position);
+
+            return convertView;
+        }
+
+        private void bindViewData(ViewHolder holder, int position) {
             WeiboMsg msg = getList().getStatuses().get(position);
             holder.screenName.setText(msg.getUser().getScreen_name());
 
             holder.txt.setText(msg.getText());
-          
+
 
             if (!TextUtils.isEmpty(msg.getListviewItemShowTime())) {
                 holder.time.setText(msg.getListviewItemShowTime());
@@ -173,8 +180,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
             } else {
                 holder.recontent.setVisibility(View.GONE);
             }
-
-            return convertView;
         }
     }
 
