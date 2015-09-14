@@ -3,54 +3,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/listview_item_background_selector"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:background="@drawable/listview_item_background_selector">
 
     <ImageView
-        android:id="@+id/pic"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_gravity="left|center_vertical"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/app" />
+        android:background="@drawable/app"
+        android:id="@+id/pic" android:layout_gravity="left|center_vertical"
+        android:layout_marginRight="5dp"/>
 
     <TextView
-        android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/pic"
         android:text="用户名"
-        android:textColor="@drawable/listview_item_text_selector" />
+        android:textColor="@drawable/listview_item_text_selector"
+        android:layout_toRightOf="@id/pic"
+        android:id="@+id/username"/>
 
     <TextView
 
-        android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/username"
-        android:layout_alignParentRight="true"
         android:text="几分钟"
-        android:textColor="@drawable/listview_item_text_selector" />
+        android:textColor="@drawable/listview_item_text_selector"
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="fill_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/username"
+        android:id="@+id/time"/>
+
+    <LinearLayout android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/username"
-        android:layout_centerInParent="true"
         android:layout_toRightOf="@id/pic"
-        android:text="内容"
-        android:textColor="@drawable/listview_item_text_selector" />
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="内容"
+            android:textColor="@drawable/listview_item_text_selector"
+            android:id="@+id/content"
+            />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="2dp"
+            android:text="转发内容"
+            android:textColor="@drawable/listview_item_text_selector"
+            android:id="@+id/recontent"/>
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/source"
+        android:layout_toRightOf="@id/pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/content"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/content"
-        android:layout_toRightOf="@id/pic"
+        android:visibility="gone"
         android:text="来源"
-        android:visibility="gone" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@id/content"
+        android:layout_below="@id/content"
+        android:id="@+id/source"/>
 
 </RelativeLayout>

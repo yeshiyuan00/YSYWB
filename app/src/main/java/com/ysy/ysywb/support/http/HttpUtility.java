@@ -1,6 +1,8 @@
 package com.ysy.ysywb.support.http;
 
 
+import android.text.TextUtils;
+
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.support.utils.ActivityUtils;
 import com.ysy.ysywb.support.utils.AppLogger;
@@ -84,7 +86,10 @@ public class HttpUtility {
 
         Set<String> keys = param.keySet();
         for (String key : keys) {
-            formparams.add(new BasicNameValuePair(key, param.get(key)));
+            String value = param.get(key);
+            if (!TextUtils.isEmpty(value)) {
+                formparams.add(new BasicNameValuePair(key, param.get(key)));
+            }
         }
         UrlEncodedFormEntity entity = null;
 
@@ -115,7 +120,10 @@ public class HttpUtility {
 
             Set<String> keys = param.keySet();
             for (String key : keys) {
-                uriBuilder.addParameter(key, param.get(key));
+                String value = param.get(key);
+                if (!TextUtils.isEmpty(value)) {
+                    uriBuilder.addParameter(key, param.get(key));
+                }
             }
 
             httpGet.setURI(uriBuilder.build());

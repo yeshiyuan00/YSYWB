@@ -218,9 +218,11 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         @Override
         protected void onPostExecute(TimeLineMsgList newValue) {
             if (newValue != null) {
-                setHomeList(newValue);
+                Toast.makeText(MainTimeLineActivity.this, "" + newValue.getStatuses().size(),
+                        Toast.LENGTH_SHORT).show();
 
-                Toast.makeText(MainTimeLineActivity.this, "" + getHomeList().getStatuses().size(), Toast.LENGTH_SHORT).show();
+                newValue.getStatuses().addAll(getHomeList().getStatuses());
+                setHomeList(newValue);
 
                 home.refreshAndScrollTo(homelist_position);
                 //   listView.smoothScrollToPosition(activity.getHomelist_position());

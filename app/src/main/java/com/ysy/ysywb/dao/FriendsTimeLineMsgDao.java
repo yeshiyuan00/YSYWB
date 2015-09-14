@@ -25,13 +25,13 @@ public class FriendsTimeLineMsgDao {
 
         Map<String, String> map = new HashMap<String, String>();
         map.put("access_token", access_token);
-//        map.put("since_id", since_id);
-//        map.put("max_id", max_id);
-//        map.put("count", count);
-//        map.put("page", page);
-//        map.put("base_app", base_app);
-//        map.put("feature", feature);
-//        map.put("trim_user", trim_user);
+        map.put("since_id", since_id);
+        map.put("max_id", max_id);
+        map.put("count", count);
+        map.put("page", page);
+        map.put("base_app", base_app);
+        map.put("feature", feature);
+        map.put("trim_user", trim_user);
 
         String jsonData = HttpUtility.getInstance().execute(HttpMethod.Get, url, map);
 

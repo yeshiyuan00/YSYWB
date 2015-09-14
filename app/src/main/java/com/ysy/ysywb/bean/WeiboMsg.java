@@ -2,14 +2,13 @@ package com.ysy.ysywb.bean;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * User: ysy
  * Date: 2015/9/9
  * Time: 16:14
  */
-public class WeiboMsg{
+public class WeiboMsg {
     public String getCreated_at() {
         SimpleDateFormat format = new SimpleDateFormat("hh:mm:ss a");
         return format.format(new Date(created_at));
@@ -83,11 +82,11 @@ public class WeiboMsg{
         this.in_reply_to_screen_name = in_reply_to_screen_name;
     }
 
-    public String getGeo() {
+    public Geo getGeo() {
         return geo;
     }
 
-    public void setGeo(String geo) {
+    public void setGeo(Geo geo) {
         this.geo = geo;
     }
 
@@ -115,13 +114,13 @@ public class WeiboMsg{
         this.comments_count = comments_count;
     }
 
-    public List getAnnotations() {
-        return annotations;
-    }
-
-    public void setAnnotations(List annotations) {
-        this.annotations = annotations;
-    }
+//    public List getAnnotations() {
+//        return annotations;
+//    }
+//
+//    public void setAnnotations(List annotations) {
+//        this.annotations = annotations;
+//    }
 
     public WeiboUser getUser() {
         return user;
@@ -129,6 +128,14 @@ public class WeiboMsg{
 
     public void setUser(WeiboUser user) {
         this.user = user;
+    }
+
+    public WeiboMsg getRetweeted_status() {
+        return retweeted_status;
+    }
+
+    public void setRetweeted_status(WeiboMsg retweeted_status) {
+        this.retweeted_status = retweeted_status;
     }
 
     private String created_at;
@@ -140,10 +147,11 @@ public class WeiboMsg{
     private String in_reply_to_status_id;
     private String in_reply_to_user_id;
     private String in_reply_to_screen_name;
-    private String geo;
     private String mid;
     private String reposts_count;
     private String comments_count;
-    private List annotations;
+    // private List annotations;
     private WeiboUser user;
+    private WeiboMsg retweeted_status;
+    private Geo geo;
 }
