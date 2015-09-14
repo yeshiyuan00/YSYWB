@@ -137,7 +137,7 @@ public class OAuthActivity extends Activity {
         }
     }
 
-    class OAuthTask extends AsyncTask<String, WeiboUser, Void> {
+    class OAuthTask extends AsyncTask<String, WeiboUser, DBResult> {
         ProgressFragment progressFragment = ProgressFragment.newInstance();
 
         @Override
@@ -148,7 +148,7 @@ public class OAuthActivity extends Activity {
         }
 
         @Override
-        protected Void doInBackground(String... params) {
+        protected DBResult doInBackground(String... params) {
             String token = params[0];
             WeiboUser weiboUser = new OAuthDao(token).getOAuthUserInfo();
             WeiboAccount weiboAccount = new WeiboAccount();
@@ -157,14 +157,22 @@ public class OAuthActivity extends Activity {
             weiboAccount.setUid(weiboUser.getId());
             weiboAccount.setUsernick(weiboUser.getScreen_name());
 
-            long result = DatabaseManager.getInstance().addAccount(weiboAccount);
-            return null;
+            return DatabaseManager.getInstance().addAccount(weiboAccount);
+
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
+        protected void onPostExecute(DBResult weiboUser) {
             if (progressFragment.isVisible()) {
                 progressFragment.dismissAllowingStateLoss();
+            }
+            switch (weiboUser) {
+                case add_successfuly:
+                    Toast.makeText(OAuthActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
+                    break;
+                case update_successfully:
+                    Toast.makeText(OAuthActivity.this, getString(R.string.update_account_success), Toast.LENGTH_SHORT).show();
+                    break;
             }
             Toast.makeText(OAuthActivity.this, getString(R.string.login_success), Toast.LENGTH_SHORT).show();
             finish();
@@ -175,7 +183,7 @@ public class OAuthActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(isFinishing())
+        if (isFinishing())
             webView.stopLoading();
     }
 
@@ -216,5 +224,9 @@ public class OAuthActivity extends Activity {
         void setAsyncTask(AsyncTask task) {
             asyncTask = task;
         }
+    }
+
+    public static enum DBResult {
+        add_successfuly, update_successfully
     }
 }
