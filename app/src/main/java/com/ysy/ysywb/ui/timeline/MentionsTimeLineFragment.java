@@ -62,7 +62,12 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
-    protected void downloadPic(ImageView view, String url) {
+    protected void downloadAvatar(ImageView view, String url) {
+
+    }
+
+    @Override
+    protected void downContentPic(ImageView view, String url) {
 
     }
 

@@ -1,10 +1,13 @@
 package com.ysy.ysywb.ui.main;
 
 import android.app.ActionBar;
+import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -12,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.LruCache;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,7 +25,6 @@ import android.widget.Toast;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
-import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.ui.AbstractMainActivity;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
@@ -33,7 +36,9 @@ import com.ysy.ysywb.ui.timeline.MentionsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MyInfoTimeLineFragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: ysy
@@ -65,6 +70,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
     private int commentList_position = 0;
     private int mailList_position = 0;
 
+    private LruCache<String, Bitmap> avatarCache;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +83,22 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         token = intent.getStringExtra("token");
         screen_name = intent.getStringExtra("screen_name");
 
-        homeList = DatabaseManager.getInstance().getHomeLineMsgList();
+        // homeList = DatabaseManager.getInstance().getHomeLineMsgList();
 
+        buildCache();
         buildViewPager();
         buildActionBarAndViewPagerTitles();
 
 
+    }
+
+    private void buildCache() {
+        final int memClass = ((ActivityManager) getSystemService(
+                Context.ACTIVITY_SERVICE)).getMemoryClass();
+
+        final int cacheSize = 1024 * 1024 * memClass / 8;
+
+        avatarCache = new LruCache<String, Bitmap>(cacheSize);
     }
 
     private void buildViewPager() {
@@ -145,13 +162,39 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         }
     };
 
+    private Bitmap getBitmapFromMemCache(String key) {
+        return avatarCache.get(key);
+    }
 
     FriendsTimeLineFragment.Commander frinedsTimeLineMsgCommand = new FriendsTimeLineFragment.Commander() {
 
+        Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = new HashMap<String, AvatarBitmapWorkerTask>();
+        Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = new HashMap<String, PictureBitmapWorkerTask>();
+
         @Override
-        public void downloadPic(ImageView view, String url) {
-            BitmapWorkerTask task = new BitmapWorkerTask(view);
-            task.execute(url);
+        public void downloadAvatar(ImageView view, String urlKey) {
+            Bitmap bitmap = getBitmapFromMemCache(urlKey);
+            if (bitmap != null) {
+                view.setImageBitmap(bitmap);
+                avatarBitmapWorkerTaskHashMap.remove(urlKey);
+            } else {
+                view.setImageDrawable(getResources().getDrawable(R.drawable.app));
+                if (avatarBitmapWorkerTaskHashMap.get(urlKey) == null) {
+                    AvatarBitmapWorkerTask avatarTask = new AvatarBitmapWorkerTask(avatarCache);
+                    avatarTask.execute(urlKey);
+                    avatarBitmapWorkerTaskHashMap.put(urlKey, avatarTask);
+                }
+            }
+        }
+
+        @Override
+        public void downContentPic(ImageView view, String urlKey) {
+            view.setImageDrawable(getResources().getDrawable(R.drawable.app));
+            if(pictureBitmapWorkerTaskMap.get(urlKey)==null){
+                PictureBitmapWorkerTask avatarTask=new PictureBitmapWorkerTask();
+                avatarTask.execute(urlKey);
+                pictureBitmapWorkerTaskMap.put(urlKey, avatarTask);
+            }
         }
 
         @Override

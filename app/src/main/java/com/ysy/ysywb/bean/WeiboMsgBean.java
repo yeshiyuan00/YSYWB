@@ -1,5 +1,7 @@
 package com.ysy.ysywb.bean;
 
+import android.text.TextUtils;
+
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -11,8 +13,11 @@ import java.util.Date;
  */
 public class WeiboMsgBean implements Serializable {
     public String getCreated_at() {
-        SimpleDateFormat format = new SimpleDateFormat("kk:mm");
-        return format.format(new Date(created_at));
+        if (!TextUtils.isEmpty(created_at)) {
+            SimpleDateFormat format = new SimpleDateFormat("kk:mm");
+            return format.format(new Date(created_at));
+        }
+        return "";
     }
 
     public void setCreated_at(String created_at) {
@@ -163,6 +168,35 @@ public class WeiboMsgBean implements Serializable {
     private WeiboUserBean user;
     private WeiboMsgBean retweeted_status;
     private GeoBean geo;
+
+    private String thumbnail_pic;
+    private String bmiddle_pic;
+    private String original_pic;
+
+    public String getThumbnail_pic() {
+        return thumbnail_pic;
+    }
+
+    public void setThumbnail_pic(String thumbnail_pic) {
+        this.thumbnail_pic = thumbnail_pic;
+    }
+
+    public String getBmiddle_pic() {
+        return bmiddle_pic;
+    }
+
+    public void setBmiddle_pic(String bmiddle_pic) {
+        this.bmiddle_pic = bmiddle_pic;
+    }
+
+    public String getOriginal_pic() {
+        return original_pic;
+    }
+
+    public void setOriginal_pic(String original_pic) {
+        this.original_pic = original_pic;
+    }
+
 
     private String listviewItemShowTime;
 }

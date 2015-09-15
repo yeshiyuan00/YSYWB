@@ -8,6 +8,7 @@ import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.utils.ActivityUtils;
+import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.support.utils.AppLogger;
 
 import java.util.HashMap;
@@ -68,6 +69,7 @@ public class FriendsTimeLineMsgDao {
         if (TextUtils.isEmpty(access_token))
             throw new IllegalArgumentException();
         this.access_token = access_token;
+        this.count= String.valueOf(AppConfig.DEFAULT_MSG_NUMBERS);
     }
 
     public FriendsTimeLineMsgDao setSince_id(String since_id) {

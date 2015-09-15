@@ -6,5 +6,5 @@ package com.ysy.ysywb.support.utils;
  * Time: 9:39
  */
 public class AppConfig {
-    public static final String DEFAULT_MSG_NUMBERS = "20";
+    public static final int DEFAULT_MSG_NUMBERS=50;
 }

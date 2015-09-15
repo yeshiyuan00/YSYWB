@@ -1,8 +1,9 @@
-package com.ysy.ysywb.support.picturetool;
+package com.ysy.ysywb.support.imagetool;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.ysy.ysywb.support.file.FileLocationMethod;
 import com.ysy.ysywb.support.file.FileManager;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
@@ -21,16 +22,12 @@ public class ImageTool {
                                                  int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        String absoluteFilePath = FileManager.getFileAbsolutePathFromRelativePath(
-                FileManager.getFileRelativePathFromUrl(url));
+        String absoluteFilePath = FileManager.getFileAbsolutePathFromUrl(url, FileLocationMethod.picture);
 
         absoluteFilePath = absoluteFilePath + ".jpg";
 
-        File file = new File(absoluteFilePath);
 
-        boolean is = file.exists();
-
-        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        Bitmap bitmap = BitmapFactory.decodeFile(absoluteFilePath);
 
         if (bitmap != null) {
             options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
@@ -41,8 +38,26 @@ public class ImageTool {
         }
     }
 
-    public static Bitmap getBitmapFromSDCardOrNetWork(String url,
-                                                      int reqWidth, int reqHeight) {
+    private static Bitmap decodeBitmapFromSDCard(String url) {
+
+        String absoluteFilePath = FileManager.getFileAbsolutePathFromUrl(url, FileLocationMethod.avatar);
+
+        absoluteFilePath = absoluteFilePath + ".jpg";
+
+        File file = new File(absoluteFilePath);
+
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        if (bitmap != null) {
+
+            return bitmap;
+        } else {
+
+            return null;
+        }
+    }
+
+    public static Bitmap getPictureBitmapFromSDCardOrNetWork(String url,
+                                                             int reqWidth, int reqHeight) {
         Bitmap bitmap = decodeBitmapFromSDCard(url, reqWidth, reqHeight);
 
         if (bitmap != null) {
@@ -52,11 +67,28 @@ public class ImageTool {
         }
     }
 
+    public static Bitmap getAvatarBitmapFromSDCardOrNetWork(String url) {
+
+        Bitmap bitmap = decodeBitmapFromSDCard(url);
+
+        if (bitmap != null) {
+            return bitmap;
+        } else {
+            return getBitmapFromNetWork(url);
+        }
+    }
+
     private static Bitmap getBitmapFromNetWork(String url,
                                                int reqWidth, int reqHeight) {
-        Map<String, String> parms = new HashMap<String, String>();
-        String relativeFilePaht = HttpUtility.getInstance().execute(HttpMethod.Get_File, url, parms);
+        Map<String, String> parm = new HashMap<String, String>();
+        HttpUtility.getInstance().execute(HttpMethod.Get_AVATAR_File, url, parm);
         return decodeBitmapFromSDCard(url, reqWidth, reqHeight);
+    }
+
+    private static Bitmap getBitmapFromNetWork(String url) {
+        Map<String, String> parm = new HashMap<String, String>();
+        HttpUtility.getInstance().execute(HttpMethod.Get_AVATAR_File, url, parm);
+        return decodeBitmapFromSDCard(url);
     }
 
     private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {

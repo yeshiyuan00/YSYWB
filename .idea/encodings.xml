@@ -3,7 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/libs/fastjson-1.1.22.jar" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/ysy/ysywb/dao/CommentsTimeLineMsgDao.java" charset="GBK" />
-    <file url="file://$PROJECT_DIR$/app/src/main/java/com/ysy/ysywb/ui/main/BitmapWorkerTask.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/ysy/ysywb/support/file/FileLocationMethod.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/ysy/ysywb/ui/main/AvatarBitmapWorkerTask.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-ldpi/listitem_background_pressed.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/app.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/friendstimelinefragment_search.png" charset="GBK" />

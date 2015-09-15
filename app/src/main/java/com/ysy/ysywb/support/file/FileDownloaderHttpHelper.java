@@ -1,5 +1,7 @@
 package com.ysy.ysywb.support.file;
 
+import com.ysy.ysywb.support.utils.AppLogger;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -10,6 +12,7 @@ import ch.boye.httpclientandroidlib.HttpEntity;
 import ch.boye.httpclientandroidlib.HttpResponse;
 import ch.boye.httpclientandroidlib.HttpStatus;
 import ch.boye.httpclientandroidlib.StatusLine;
+import ch.boye.httpclientandroidlib.util.EntityUtils;
 
 /**
  * User: ysy
@@ -18,7 +21,7 @@ import ch.boye.httpclientandroidlib.StatusLine;
  */
 public class FileDownloaderHttpHelper {
 
-    public static String saveFile(String url, HttpResponse response) {
+    public static String saveFile(String url, HttpResponse response,FileLocationMethod method) {
         StatusLine status = response.getStatusLine();
         int statusCode = status.getStatusCode();
 
@@ -26,7 +29,7 @@ public class FileDownloaderHttpHelper {
             return dealWithError(response);
         }
 
-        return saveFileAndGetFileRelativePath(response, url);
+        return saveFileAndGetFileRelativePath(response, url,method);
     }
 
     private static String dealWithError(HttpResponse response) {
@@ -34,10 +37,10 @@ public class FileDownloaderHttpHelper {
         return "";
     }
 
-    private static String saveFileAndGetFileRelativePath(HttpResponse response, String url) {
+    private static String saveFileAndGetFileRelativePath(HttpResponse response, String url,FileLocationMethod method) {
         HttpEntity entity = response.getEntity();
-        String imageRelativePath = FileManager.getFileRelativePathFromUrl(url);
-        File file = FileManager.creatNewFileInSdcard(imageRelativePath);
+        String imageAbsolutePath = FileManager.getFileAbsolutePathFromUrl(url, method);
+        File file = FileManager.createNewFileInSDCard(imageAbsolutePath);
         FileOutputStream out = null;
         InputStream in = null;
         String result = "";
@@ -51,7 +54,7 @@ public class FileDownloaderHttpHelper {
                 bytesum += byteread;
                 out.write(buffer, 0, byteread);
             }
-            result = imageRelativePath;
+            result = imageAbsolutePath;
 
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
@@ -72,6 +75,12 @@ public class FileDownloaderHttpHelper {
                 }
             }
         }
+        try {
+            EntityUtils.consume(response.getEntity());
+        } catch (IOException e) {
+            AppLogger.e(e.getMessage());
+        }
+
         return result;
     }
 }
