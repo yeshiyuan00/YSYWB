@@ -2,6 +2,7 @@ package com.ysy.ysywb.ui.timeline;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
 
@@ -49,6 +50,11 @@ public class CommentsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
     protected void listViewFooterViewClick(View view) {
+
+    }
+
+    @Override
+    protected void downloadPic(ImageView view, String url) {
 
     }
 }

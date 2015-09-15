@@ -7,6 +7,7 @@ import com.ysy.ysywb.support.file.FileManager;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,9 +21,16 @@ public class ImageTool {
                                                  int reqWidth, int reqHeight) {
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
-        String absoluteFilePath = FileManager.getFileAbsolutePathFromRelativePath(url);
+        String absoluteFilePath = FileManager.getFileAbsolutePathFromRelativePath(
+                FileManager.getFileRelativePathFromUrl(url));
 
-        Bitmap bitmap = BitmapFactory.decodeFile(absoluteFilePath, options);
+        absoluteFilePath = absoluteFilePath + ".jpg";
+
+        File file = new File(absoluteFilePath);
+
+        boolean is = file.exists();
+
+        Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
 
         if (bitmap != null) {
             options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);

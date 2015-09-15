@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.bean.WeiboMsgBean;
-import com.ysy.ysywb.ui.MainTimeLineActivity;
+import com.ysy.ysywb.ui.main.MainTimeLineActivity;
 
 /**
  * User: ysy
@@ -44,6 +44,8 @@ public abstract class AbstractTimeLineFragment extends Fragment {
     protected abstract void rememberListViewPosition(int position);
 
     protected abstract void listViewFooterViewClick(View view);
+
+    protected abstract void downloadPic(ImageView view, String url);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -175,6 +177,10 @@ public abstract class AbstractTimeLineFragment extends Fragment {
             }
 
             holder.pic.setImageDrawable(getResources().getDrawable(R.drawable.app));
+            String image_url = msg.getUser().getProfile_image_url();
+            if (!TextUtils.isEmpty(image_url))
+                downloadPic(holder.pic, msg.getUser().getProfile_image_url());
+
             WeiboMsgBean recontent = msg.getRetweeted_status();
             if (recontent != null) {
                 holder.recontent.setVisibility(View.VISIBLE);

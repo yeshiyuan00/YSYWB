@@ -1,4 +1,4 @@
-package com.ysy.ysywb.ui;
+package com.ysy.ysywb.ui.main;
 
 import android.app.ActionBar;
 import android.app.Dialog;
@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,7 @@ import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
 import com.ysy.ysywb.support.database.DatabaseManager;
+import com.ysy.ysywb.ui.AbstractMainActivity;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
 import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
@@ -147,6 +149,12 @@ public class MainTimeLineActivity extends AbstractMainActivity {
     FriendsTimeLineFragment.Commander frinedsTimeLineMsgCommand = new FriendsTimeLineFragment.Commander() {
 
         @Override
+        public void downloadPic(ImageView view, String url) {
+            BitmapWorkerTask task = new BitmapWorkerTask(view);
+            task.execute(url);
+        }
+
+        @Override
         public void listViewFooterViewClick(View view) {
             if (!isBusying) {
                 new FriendsTimeLineGetOlderMsgListTask(view).execute();
@@ -246,8 +254,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
                 dao.setSince_id(homeList.getStatuses().get(0).getId());
             }
             TimeLineMsgListBean result = dao.getGSONMsgList();
-            if (result != null)
-                DatabaseManager.getInstance().addHomeLineMsg(result);
+//            if (result != null)
+//                DatabaseManager.getInstance().addHomeLineMsg(result);
             return result;
         }
 

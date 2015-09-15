@@ -26,7 +26,7 @@ import android.widget.Toast;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.WeiboAccountBean;
 import com.ysy.ysywb.support.database.DatabaseManager;
-import com.ysy.ysywb.ui.MainTimeLineActivity;
+import com.ysy.ysywb.ui.main.MainTimeLineActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.ysy.ysywb.R;
@@ -57,6 +58,11 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
     protected void listViewFooterViewClick(View view) {
+
+    }
+
+    @Override
+    protected void downloadPic(ImageView view, String url) {
 
     }
 

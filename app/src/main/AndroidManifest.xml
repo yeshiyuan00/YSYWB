@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.MainTimeLineActivity"
+            android:name=".ui.main.MainTimeLineActivity"
             android:uiOptions="splitActionBarWhenNarrow" />
         <activity
             android:name=".ui.send.StatusNewActivity"

@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
@@ -43,6 +44,10 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
         }
 
         public void listViewFooterViewClick(View view) {
+
+        }
+
+        public void downloadPic(ImageView view, String url) {
 
         }
     }
@@ -82,6 +87,12 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     protected void listViewFooterViewClick(View view) {
         commander.listViewFooterViewClick(view);
     }
+
+    @Override
+    protected void downloadPic(ImageView view, String url) {
+        commander.downloadPic(view, url);
+    }
+
 
     public void refresh() {
         timeLineAdapter.notifyDataSetChanged();
