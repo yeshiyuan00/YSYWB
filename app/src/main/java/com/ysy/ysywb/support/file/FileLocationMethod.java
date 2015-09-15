@@ -6,5 +6,5 @@ package com.ysy.ysywb.support.file;
  * Time: 9:54
  */
 public enum FileLocationMethod {
-    avatar,picture
+    avatar, picture_thumbnail
 }

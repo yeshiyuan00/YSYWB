@@ -51,7 +51,7 @@ public class BrowserWeiboMsgActivity extends AbstractMainActivity {
     private void buildView() {
         username = (TextView) findViewById(R.id.username);
         content = (TextView) findViewById(R.id.content);
-        recontent = (TextView) findViewById(R.id.repost_content);
+        recontent = (TextView) findViewById(R.id.recontent);
         time = (TextView) findViewById(R.id.time);
 
         comment_number = (Button) findViewById(R.id.comment_number);

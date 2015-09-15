@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,7 +69,7 @@ public class HttpUtility {
         return httpUtility;
     }
 
-    public String execute(HttpMethod httpMethod, String url, Map<String, String> param) {
+    public String executeNormalTask(HttpMethod httpMethod, String url, Map<String, String> param) {
         switch (httpMethod) {
             case Post:
                 return doPost(url, param);
@@ -76,10 +77,12 @@ public class HttpUtility {
             case Get:
 
                 return doGet(url, param);
-            case Get_AVATAR_File:
-                return doGetAvatarFile(url, param);
         }
         return "";
+    }
+
+    public String executeDownloadTask(String url, String path) {
+        return doGetSaveFile(url, path);
     }
 
 
@@ -114,11 +117,11 @@ public class HttpUtility {
         return dealWithResponse(response);
     }
 
-    public String doGetAvatarFile(String url, Map<String, String> param) {
-        HttpResponse response = getDoGetHttpResponse(url, param);
+    public String doGetSaveFile(String url, String path) {
+        HttpResponse response = getDoGetHttpResponse(url, new HashMap<String, String>());
 
         if (response != null) {
-            return FileDownloaderHttpHelper.saveFile(url, response, FileLocationMethod.avatar);
+            return FileDownloaderHttpHelper.saveFile(response, path);
 
         } else {
             return "";
@@ -135,7 +138,7 @@ public class HttpUtility {
     }
 
     private HttpResponse getDoGetHttpResponse(String url, Map<String, String> param) {
-        URIBuilder uriBuilder ;
+        URIBuilder uriBuilder;
         try {
             uriBuilder = new URIBuilder(url);
 

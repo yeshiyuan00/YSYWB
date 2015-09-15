@@ -146,7 +146,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            ViewHolder holder = null;
+            ViewHolder holder;
             if (convertView == null) {
                 holder = new ViewHolder();
                 convertView = inflater.inflate(R.layout.fragment_listview_item_layout, parent, false);
@@ -199,6 +199,8 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
         private void buildRepostContent(WeiboMsgBean repost_msg, ViewHolder holder, int position) {
             holder.repost_content.setVisibility(View.VISIBLE);
+//            AppLogger.e(repost_msg.getUser().getScreen_name());
+//            AppLogger.e(repost_msg.getText());
             holder.repost_content.setText(repost_msg.getUser().getScreen_name() + "：" + repost_msg.getText());
             if (!TextUtils.isEmpty(repost_msg.getThumbnail_pic())) {
                 holder.repost_content_pic.setVisibility(View.VISIBLE);

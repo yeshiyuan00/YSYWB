@@ -27,7 +27,7 @@ public class TimeLineMentionsMsg {
 
         Map<String, String> map = new HashMap<String, String>();
 
-        msg = HttpUtility.getInstance().execute(HttpMethod.Get, url, map);
+        msg = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
 
         return msg;
     }

@@ -21,7 +21,7 @@ import ch.boye.httpclientandroidlib.util.EntityUtils;
  */
 public class FileDownloaderHttpHelper {
 
-    public static String saveFile(String url, HttpResponse response,FileLocationMethod method) {
+    public static String saveFile(HttpResponse response, String path) {
         StatusLine status = response.getStatusLine();
         int statusCode = status.getStatusCode();
 
@@ -29,7 +29,7 @@ public class FileDownloaderHttpHelper {
             return dealWithError(response);
         }
 
-        return saveFileAndGetFileRelativePath(response, url,method);
+        return saveFileAndGetFileAbsolutePath(response, path);
     }
 
     private static String dealWithError(HttpResponse response) {
@@ -37,10 +37,9 @@ public class FileDownloaderHttpHelper {
         return "";
     }
 
-    private static String saveFileAndGetFileRelativePath(HttpResponse response, String url,FileLocationMethod method) {
+    private static String saveFileAndGetFileAbsolutePath(HttpResponse response, String path) {
         HttpEntity entity = response.getEntity();
-        String imageAbsolutePath = FileManager.getFileAbsolutePathFromUrl(url, method);
-        File file = FileManager.createNewFileInSDCard(imageAbsolutePath);
+        File file = FileManager.createNewFileInSDCard(path);
         FileOutputStream out = null;
         InputStream in = null;
         String result = "";
@@ -54,7 +53,7 @@ public class FileDownloaderHttpHelper {
                 bytesum += byteread;
                 out.write(buffer, 0, byteread);
             }
-            result = imageAbsolutePath;
+            result = path;
 
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
@@ -80,7 +79,6 @@ public class FileDownloaderHttpHelper {
         } catch (IOException e) {
             AppLogger.e(e.getMessage());
         }
-
         return result;
     }
 }

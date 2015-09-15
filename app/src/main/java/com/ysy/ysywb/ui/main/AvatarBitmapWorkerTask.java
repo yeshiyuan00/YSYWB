@@ -26,7 +26,7 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
     private Map<String, AvatarBitmapWorkerTask> taskMap;
 
-    public AvatarBitmapWorkerTask(LruCache<String, Bitmap> cache,
+    public AvatarBitmapWorkerTask(LruCache<String, Bitmap> lruCache,
                                   Map<String, AvatarBitmapWorkerTask> taskMap,
                                   ImageView view,
                                   ListView listView,
@@ -52,7 +52,7 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... url) {
         data = url[0];
-        return ImageTool.getAvatarBitmapFromSDCardOrNetWork(data);
+        return ImageTool.getAvatarBitmap(data);
     }
 
     @Override
@@ -70,7 +70,6 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     protected void onPostExecute(Bitmap bitmap) {
         if (bitmap != null) {
             lruCache.put(data, bitmap);
-
             if (position >= listView.getFirstVisiblePosition() &&
                     position <= listView.getLastVisiblePosition()) {
                 view.setImageBitmap(bitmap);

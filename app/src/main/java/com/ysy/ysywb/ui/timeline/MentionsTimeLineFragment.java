@@ -93,7 +93,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
 //                timeLineAdapter.notifyDataSetChanged();
 //                super.onPostExecute(o);
 //            }
-//        }.execute();
+//        }.executeNormalTask();
         return view;
     }
 

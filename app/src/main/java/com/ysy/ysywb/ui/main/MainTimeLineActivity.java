@@ -193,12 +193,20 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
         @Override
         public void downContentPic(ImageView view, String urlKey, int position, ListView listView) {
-            view.setImageDrawable(getResources().getDrawable(R.drawable.app));
-            if (pictureBitmapWorkerTaskMap.get(urlKey) == null) {
-                PictureBitmapWorkerTask avatarTask = new PictureBitmapWorkerTask();
-                avatarTask.execute(urlKey);
-                pictureBitmapWorkerTaskMap.put(urlKey, avatarTask);
+            Bitmap bitmap = getBitmapFromMemCache(urlKey);
+            if (bitmap != null) {
+                view.setImageBitmap(bitmap);
+                pictureBitmapWorkerTaskMap.remove(urlKey);
+            } else {
+                view.setImageDrawable(getResources().getDrawable(R.drawable.app));
+                if (pictureBitmapWorkerTaskMap.get(urlKey) == null) {
+                    PictureBitmapWorkerTask avatarTask = new PictureBitmapWorkerTask(avatarCache,
+                            pictureBitmapWorkerTaskMap, view, listView, position);
+                    avatarTask.execute(urlKey);
+                    pictureBitmapWorkerTaskMap.put(urlKey, avatarTask);
+                }
             }
+
         }
 
         @Override
@@ -222,7 +230,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         @Override
         public void getOlderFriendsTimeLineMsgList() {
 //            if (!isBusying) {
-//                new FriendsTimeLineGetOlderMsgListTask().execute();
+//                new FriendsTimeLineGetOlderMsgListTask().executeNormalTask();
 //
 //            }
 
