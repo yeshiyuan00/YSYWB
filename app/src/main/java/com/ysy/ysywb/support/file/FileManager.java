@@ -54,6 +54,7 @@ public class FileManager {
     }
 
     private static String getFileRelativePathFromUrl(String url) {
+        AppLogger.d(url);
         //  String url = "http://tp2.sinaimg.cn/2500453793/50/5617547700/0";
 
         int index = url.indexOf("//");

@@ -60,7 +60,7 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
         if (bitmap != null) {
             lruCache.put(data, bitmap);
         }
-        if (taskMap.get(data) != null) {
+        if (taskMap!=null&&taskMap.get(data) != null) {
             taskMap.remove(data);
         }
         super.onCancelled(bitmap);
@@ -74,6 +74,9 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
                     position <= listView.getLastVisiblePosition()) {
                 view.setImageBitmap(bitmap);
             }
+        }
+        if (taskMap != null && taskMap.get(data) != null) {
+            taskMap.remove(data);
         }
     }
 

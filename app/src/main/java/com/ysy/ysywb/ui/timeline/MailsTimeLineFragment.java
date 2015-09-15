@@ -5,8 +5,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.ysy.ysywb.bean.TimeLineMsgListBean;
-
 /**
  * User: ysy
  * Date: 2015/9/10
@@ -22,11 +20,6 @@ public class MailsTimeLineFragment extends AbstractTimeLineFragment {
     @Override
     public void refresh() {
 
-    }
-
-    @Override
-    protected TimeLineMsgListBean getList() {
-        return null;
     }
 
     @Override

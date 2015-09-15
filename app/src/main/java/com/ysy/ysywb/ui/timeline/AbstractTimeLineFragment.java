@@ -29,11 +29,19 @@ public abstract class AbstractTimeLineFragment extends Fragment {
     protected TimeLineAdapter timeLineAdapter;
     protected MainTimeLineActivity activity;
 
+    protected TimeLineMsgListBean bean;
+
     public abstract void refreshAndScrollTo(int positon);
 
     public abstract void refresh();
 
-    protected abstract TimeLineMsgListBean getList();
+    public void setBean(TimeLineMsgListBean bean) {
+        this.bean = bean;
+    }
+
+    protected final TimeLineMsgListBean getList() {
+        return bean;
+    }
 
     protected abstract void scrollToBottom();
 
@@ -171,7 +179,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         private void bindViewData(ViewHolder holder, int position) {
             WeiboMsgBean msg = getList().getStatuses().get(position);
             WeiboMsgBean repost_msg = msg.getRetweeted_status();
-
 
             holder.username.setText(msg.getUser().getScreen_name());
             holder.content.setText(msg.getText());

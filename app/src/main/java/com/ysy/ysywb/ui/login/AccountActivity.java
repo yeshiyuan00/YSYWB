@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +27,8 @@ import android.widget.Toast;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.WeiboAccountBean;
 import com.ysy.ysywb.support.database.DatabaseManager;
+import com.ysy.ysywb.support.utils.GlobalContext;
+import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
 import com.ysy.ysywb.ui.main.MainTimeLineActivity;
 
 import java.util.ArrayList;
@@ -249,10 +252,15 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
                 linearLayout.addView(cb, 0);
 
             }
-            TextView textView = (TextView) mView.findViewById(R.id.textView);
+            TextView textView = (TextView) mView.findViewById(R.id.account_name);
 
             textView.setText(weiboAccountList.get(i).getUsernick());
 
+            ImageView imageView = (ImageView) mView.findViewById(R.id.imageView_avatar);
+            if (!TextUtils.isEmpty(weiboAccountList.get(i).getAvatar_url())) {
+                AvatarBitmapWorkerTask avatarTask = new AvatarBitmapWorkerTask(GlobalContext.getInstance().getAvatarCache(), null, imageView, listView, i);
+                avatarTask.execute(weiboAccountList.get(i).getAvatar_url());
+            }
             return mView;
         }
 

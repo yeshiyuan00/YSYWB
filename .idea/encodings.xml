@@ -13,10 +13,12 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/browsercommentlistactivity_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/browserrepostlistactivity_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/browserweibomsgactivity_layout.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_info_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_listview_footer_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/menu/browserweibomsgactivity_menu.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/menu/myinfofragment_menu.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/raw/spec.txt" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/values/arrays.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>

@@ -5,8 +5,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.ysy.ysywb.bean.TimeLineMsgListBean;
-
 /**
  * User: ysy
  * Date: 2015/9/9
@@ -24,10 +22,6 @@ public class CommentsTimeLineFragment extends AbstractTimeLineFragment {
 
     }
 
-    @Override
-    protected TimeLineMsgListBean getList() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     @Override
     protected void scrollToBottom() {

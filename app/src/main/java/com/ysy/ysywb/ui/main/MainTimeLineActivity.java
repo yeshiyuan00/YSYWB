@@ -1,11 +1,9 @@
 package com.ysy.ysywb.ui.main;
 
 import android.app.ActionBar;
-import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -15,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.LruCache;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
@@ -27,6 +24,7 @@ import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
 import com.ysy.ysywb.support.utils.AppConfig;
+import com.ysy.ysywb.support.utils.GlobalContext;
 import com.ysy.ysywb.ui.AbstractMainActivity;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
@@ -73,8 +71,6 @@ public class MainTimeLineActivity extends AbstractMainActivity {
     private int commentList_position = 0;
     private int mailList_position = 0;
 
-    private LruCache<String, Bitmap> avatarCache;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,21 +84,12 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
         // homeList = DatabaseManager.getInstance().getHomeLineMsgList();
 
-        buildCache();
         buildViewPager();
         buildActionBarAndViewPagerTitles();
 
 
     }
 
-    private void buildCache() {
-        final int memClass = ((ActivityManager) getSystemService(
-                Context.ACTIVITY_SERVICE)).getMemoryClass();
-
-        final int cacheSize = 1024 * 1024 * memClass / 8;
-
-        avatarCache = new LruCache<String, Bitmap>(cacheSize);
-    }
 
     private void buildViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -123,13 +110,13 @@ public class MainTimeLineActivity extends AbstractMainActivity {
                 .setText(getString(R.string.mentions))
                 .setTabListener(tabListener));
 
-//        actionBar.addTab(actionBar.newTab()
-//                .setText(getString(R.string.comments))
-//                .setTabListener(tabListener));
-//
-//        actionBar.addTab(actionBar.newTab()
-//                .setText(getString(R.string.mail))
-//                .setTabListener(tabListener));
+        actionBar.addTab(actionBar.newTab()
+                .setText(getString(R.string.comments))
+                .setTabListener(tabListener));
+
+        actionBar.addTab(actionBar.newTab()
+                .setText(getString(R.string.mail))
+                .setTabListener(tabListener));
 
         actionBar.addTab(actionBar.newTab()
                 .setText(getString(R.string.info))
@@ -166,7 +153,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
     };
 
     private Bitmap getBitmapFromMemCache(String key) {
-        return avatarCache.get(key);
+        return GlobalContext.getInstance().getAvatarCache().get(key);
     }
 
     FriendsTimeLineFragment.Commander frinedsTimeLineMsgCommand = new FriendsTimeLineFragment.Commander() {
@@ -183,7 +170,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             } else {
                 view.setImageDrawable(getResources().getDrawable(R.drawable.app));
                 if (avatarBitmapWorkerTaskHashMap.get(urlKey) == null) {
-                    AvatarBitmapWorkerTask avatarTask = new AvatarBitmapWorkerTask(avatarCache,
+                    AvatarBitmapWorkerTask avatarTask = new AvatarBitmapWorkerTask(
+                            GlobalContext.getInstance().getAvatarCache(),
                             avatarBitmapWorkerTaskHashMap, view, listView, position);
                     avatarTask.execute(urlKey);
                     avatarBitmapWorkerTaskHashMap.put(urlKey, avatarTask);
@@ -200,7 +188,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             } else {
                 view.setImageDrawable(getResources().getDrawable(R.drawable.app));
                 if (pictureBitmapWorkerTaskMap.get(urlKey) == null) {
-                    PictureBitmapWorkerTask avatarTask = new PictureBitmapWorkerTask(avatarCache,
+                    PictureBitmapWorkerTask avatarTask = new PictureBitmapWorkerTask(
+                            GlobalContext.getInstance().getAvatarCache(),
                             pictureBitmapWorkerTaskMap, view, listView, position);
                     avatarTask.execute(urlKey);
                     pictureBitmapWorkerTaskMap.put(urlKey, avatarTask);
@@ -224,6 +213,11 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             for (String key : keys) {
                 avatarBitmapWorkerTaskHashMap.get(key).cancel(true);
                 avatarBitmapWorkerTaskHashMap.remove(key);
+            }
+            Set<String> pKeys = pictureBitmapWorkerTaskMap.keySet();
+            for (String pkey : pKeys) {
+                pictureBitmapWorkerTaskMap.get(pkey).cancel(true);
+                pictureBitmapWorkerTaskMap.remove(pkey);
             }
         }
 
@@ -274,7 +268,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             info = new MyInfoTimeLineFragment();
 //            home.setToken(token);
 //            mentions.setToken(token);
-
+            home.setBean(homeList);
             list.add(home);
             list.add(mentions);
             list.add(comments);
@@ -321,22 +315,26 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         @Override
         protected void onPostExecute(TimeLineMsgListBean newValue) {
             if (newValue != null) {
-                Toast.makeText(MainTimeLineActivity.this, "total " +
-                                newValue.getStatuses().size() + " new messages",
-                        Toast.LENGTH_SHORT).show();
-                if (newValue.getStatuses().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
-                    if (homelist_position > 0)
-                        homelist_position += newValue.getStatuses().size();
-                    newValue.getStatuses().addAll(getHomeList().getStatuses());
+                if (newValue.getStatuses().size() == 0) {
+                    Toast.makeText(MainTimeLineActivity.this, "no new message", Toast.LENGTH_SHORT).show();
                 } else {
-                    homelist_position = 0;
+                    Toast.makeText(MainTimeLineActivity.this, "total " +
+                                    newValue.getStatuses().size() + " new messages",
+                            Toast.LENGTH_SHORT).show();
+                    if (newValue.getStatuses().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
+                        if (homelist_position > 0)
+                            homelist_position += newValue.getStatuses().size();
+                        newValue.getStatuses().addAll(getHomeList().getStatuses());
+                    } else {
+                        homelist_position = 0;
+                    }
+
+                    homeList = newValue;
+                    home.setBean(homeList);
+
+                    home.refresh();
                 }
-
-                setHomeList(newValue);
-
-                home.refreshAndScrollTo(homelist_position);
                 //   listView.smoothScrollToPosition(activity.getHomelist_position());
-
             }
             dialogFragment.dismissAllowingStateLoss();
             super.onPostExecute(newValue);
@@ -354,7 +352,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         protected void onPreExecute() {
             frinedsTimeLineMsgCommand.isBusying = true;
 
-            ((TextView) footerView.findViewById(R.id.textView)).setText("loading");
+            ((TextView) footerView.findViewById(R.id.account_name)).setText("loading");
         }
 
         @Override
@@ -381,7 +379,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             //  dialogFragment.dismissAllowingStateLoss();
             frinedsTimeLineMsgCommand.isBusying = false;
             home.refresh();
-            ((TextView) footerView.findViewById(R.id.textView)).setText("click to load older message");
+            ((TextView) footerView.findViewById(R.id.account_name)).setText("click to load older message");
 
             super.onPostExecute(newValue);
         }
