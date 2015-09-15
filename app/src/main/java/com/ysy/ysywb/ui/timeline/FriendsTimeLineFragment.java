@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
@@ -47,10 +48,11 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
 
         }
 
-        public void downloadAvatar(ImageView view, String url) {
+        public void downloadAvatar(ImageView view, String url,int position,ListView listView) {
 
         }
-        public void downContentPic(ImageView view, String url) {
+
+        public void downContentPic(ImageView view, String url,int position,ListView listView) {
 
         }
     }
@@ -92,13 +94,13 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
-    protected void downloadAvatar(ImageView view, String url) {
-        commander.downloadAvatar(view, url);
+    protected void downloadAvatar(ImageView view, String url,int position,ListView listView) {
+        commander.downloadAvatar(view, url,position,listView);
     }
 
     @Override
-    protected void downContentPic(ImageView view, String url) {
-        commander.downContentPic(view, url);
+    protected void downContentPic(ImageView view, String url,int position,ListView listView) {
+        commander.downContentPic(view, url,position,listView);
     }
 
 

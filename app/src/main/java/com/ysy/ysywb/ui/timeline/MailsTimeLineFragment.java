@@ -3,6 +3,7 @@ package com.ysy.ysywb.ui.timeline;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
 
@@ -54,12 +55,13 @@ public class MailsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
-    protected void downloadAvatar(ImageView view, String url) {
+    protected void downloadAvatar(ImageView view, String url, int position, ListView listView) {
 
     }
 
     @Override
-    protected void downContentPic(ImageView view, String url) {
+    protected void downContentPic(ImageView view, String url, int position, ListView listView) {
 
     }
+
 }

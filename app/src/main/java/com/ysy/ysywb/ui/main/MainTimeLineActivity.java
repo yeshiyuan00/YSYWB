@@ -19,12 +19,14 @@ import android.util.LruCache;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
+import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.ui.AbstractMainActivity;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
 import com.ysy.ysywb.ui.send.StatusNewActivity;
@@ -39,6 +41,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * User: ysy
@@ -172,7 +175,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = new HashMap<String, PictureBitmapWorkerTask>();
 
         @Override
-        public void downloadAvatar(ImageView view, String urlKey) {
+        public void downloadAvatar(ImageView view, String urlKey, int position, ListView listView) {
             Bitmap bitmap = getBitmapFromMemCache(urlKey);
             if (bitmap != null) {
                 view.setImageBitmap(bitmap);
@@ -180,7 +183,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             } else {
                 view.setImageDrawable(getResources().getDrawable(R.drawable.app));
                 if (avatarBitmapWorkerTaskHashMap.get(urlKey) == null) {
-                    AvatarBitmapWorkerTask avatarTask = new AvatarBitmapWorkerTask(avatarCache);
+                    AvatarBitmapWorkerTask avatarTask = new AvatarBitmapWorkerTask(avatarCache,
+                            avatarBitmapWorkerTaskHashMap, view, listView, position);
                     avatarTask.execute(urlKey);
                     avatarBitmapWorkerTaskHashMap.put(urlKey, avatarTask);
                 }
@@ -188,10 +192,10 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         }
 
         @Override
-        public void downContentPic(ImageView view, String urlKey) {
+        public void downContentPic(ImageView view, String urlKey, int position, ListView listView) {
             view.setImageDrawable(getResources().getDrawable(R.drawable.app));
-            if(pictureBitmapWorkerTaskMap.get(urlKey)==null){
-                PictureBitmapWorkerTask avatarTask=new PictureBitmapWorkerTask();
+            if (pictureBitmapWorkerTaskMap.get(urlKey) == null) {
+                PictureBitmapWorkerTask avatarTask = new PictureBitmapWorkerTask();
                 avatarTask.execute(urlKey);
                 pictureBitmapWorkerTaskMap.put(urlKey, avatarTask);
             }
@@ -208,7 +212,11 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         public void getNewFriendsTimeLineMsgList() {
 
             new FriendsTimeLineGetNewMsgListTask().execute();
-
+            Set<String> keys = avatarBitmapWorkerTaskHashMap.keySet();
+            for (String key : keys) {
+                avatarBitmapWorkerTaskHashMap.get(key).cancel(true);
+                avatarBitmapWorkerTaskHashMap.remove(key);
+            }
         }
 
         @Override
@@ -308,10 +316,14 @@ public class MainTimeLineActivity extends AbstractMainActivity {
                 Toast.makeText(MainTimeLineActivity.this, "total " +
                                 newValue.getStatuses().size() + " new messages",
                         Toast.LENGTH_SHORT).show();
+                if (newValue.getStatuses().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
+                    if (homelist_position > 0)
+                        homelist_position += newValue.getStatuses().size();
+                    newValue.getStatuses().addAll(getHomeList().getStatuses());
+                } else {
+                    homelist_position = 0;
+                }
 
-                if (homelist_position > 0)
-                    homelist_position += newValue.getStatuses().size();
-                newValue.getStatuses().addAll(getHomeList().getStatuses());
                 setHomeList(newValue);
 
                 home.refreshAndScrollTo(homelist_position);

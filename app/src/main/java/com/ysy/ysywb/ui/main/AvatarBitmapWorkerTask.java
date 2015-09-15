@@ -3,9 +3,12 @@ package com.ysy.ysywb.ui.main;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.util.LruCache;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.ysy.ysywb.support.imagetool.ImageTool;
+
+import java.util.Map;
 
 /**
  * User: Jiang Qi
@@ -14,13 +17,25 @@ import com.ysy.ysywb.support.imagetool.ImageTool;
  */
 public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 
-    private String position;
+    private int position;
     private ListView listView;
     private LruCache<String, Bitmap> lruCache;
     private String data = "";
 
-    public AvatarBitmapWorkerTask(LruCache<String, Bitmap> cache) {
-        lruCache = cache;
+    private ImageView view;
+
+    private Map<String, AvatarBitmapWorkerTask> taskMap;
+
+    public AvatarBitmapWorkerTask(LruCache<String, Bitmap> cache,
+                                  Map<String, AvatarBitmapWorkerTask> taskMap,
+                                  ImageView view,
+                                  ListView listView,
+                                  int position) {
+        this.lruCache = lruCache;
+        this.taskMap = taskMap;
+        this.view = view;
+        this.position = position;
+        this.listView = listView;
     }
 
 //    @Override
@@ -43,9 +58,10 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected void onCancelled(Bitmap bitmap) {
         if (bitmap != null) {
-
             lruCache.put(data, bitmap);
-
+        }
+        if (taskMap.get(data) != null) {
+            taskMap.remove(data);
         }
         super.onCancelled(bitmap);
     }
@@ -54,6 +70,11 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     protected void onPostExecute(Bitmap bitmap) {
         if (bitmap != null) {
             lruCache.put(data, bitmap);
+
+            if (position >= listView.getFirstVisiblePosition() &&
+                    position <= listView.getLastVisiblePosition()) {
+                view.setImageBitmap(bitmap);
+            }
         }
     }
 
