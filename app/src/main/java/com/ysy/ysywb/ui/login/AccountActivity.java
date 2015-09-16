@@ -1,6 +1,5 @@
 package com.ysy.ysywb.ui.login;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -28,6 +27,7 @@ import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.WeiboAccountBean;
 import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.support.utils.GlobalContext;
+import com.ysy.ysywb.ui.AbstractMainActivity;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
 import com.ysy.ysywb.ui.main.MainTimeLineActivity;
 
@@ -41,7 +41,7 @@ import java.util.Set;
  * Date: 2015/9/10
  * Time: 10:47
  */
-public class AccountActivity extends Activity implements AdapterView.OnItemClickListener {
+public class AccountActivity extends AbstractMainActivity implements AdapterView.OnItemClickListener {
 
     /**
      * Called when the activity is first created.

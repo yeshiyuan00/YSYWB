@@ -1,7 +1,6 @@
 package com.ysy.ysywb.ui.login;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
@@ -19,10 +18,11 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.dao.OAuthDao;
 import com.ysy.ysywb.bean.WeiboAccountBean;
 import com.ysy.ysywb.bean.WeiboUserBean;
+import com.ysy.ysywb.dao.OAuthDao;
 import com.ysy.ysywb.support.database.DatabaseManager;
+import com.ysy.ysywb.ui.AbstractMainActivity;
 import com.ysy.ysywb.weibo.Utility;
 import com.ysy.ysywb.weibo.WeiboParameters;
 
@@ -31,7 +31,7 @@ import com.ysy.ysywb.weibo.WeiboParameters;
  * Date: 2015/9/8
  * Time: 9:34
  */
-public class OAuthActivity extends Activity {
+public class OAuthActivity extends AbstractMainActivity {
 
     public static String URL_OAUTH2_ACCESS_AUTHORIZE = "https://api.weibo.com/oauth2/authorize";
     public static final String APP_KEY = "1065511513";// 替换为开发者的appkey，例如"1646212960";//468987987
