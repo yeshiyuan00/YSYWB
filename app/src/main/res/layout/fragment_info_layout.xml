@@ -16,7 +16,7 @@
             <ImageView
                 android:layout_width="90dp"
                 android:layout_height="90dp"
-                android:background="@drawable/app"
+                android:background="@drawable/ic_launcher"
                 android:id="@+id/avatar"/>
             <TextView
                 android:layout_marginLeft="5dp"

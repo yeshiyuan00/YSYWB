@@ -43,7 +43,7 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
 //        if (imageViewReference != null  ) {
 //            final ImageView imageView = imageViewReference.get();
 //            if (imageView != null) {
-//                imageView.setImageDrawable(GlobalContext.getInstance().getResources().getDrawable(R.drawable.app));
+//                imageView.setImageDrawable(GlobalContext.getInstance().getResources().getDrawable(R.drawable.ic_launcher));
 //            }
 //        }
 //        super.onPreExecute();
