@@ -17,7 +17,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -122,8 +121,41 @@ public class HttpUtility {
         }
     }
 
+
+    /**
+     * don't need error message to show
+     *
+     * @param url
+     * @param path
+     * @return
+     */
     public String doGetSaveFile(String url, String path) {
-        HttpResponse response = getDoGetHttpResponse(url, new HashMap<String, String>());
+
+        URIBuilder uriBuilder;
+
+        try {
+            uriBuilder = new URIBuilder(url);
+            httpGet.setURI(uriBuilder.build());
+
+            AppLogger.d(uriBuilder.build().toString());
+        } catch (URISyntaxException e) {
+            AppLogger.d(e.getMessage());
+        }
+
+        HttpResponse response = null;
+
+        try {
+            response = httpClient.execute(httpGet);
+        } catch (ConnectTimeoutException ignored) {
+
+            AppLogger.e(ignored.getMessage());
+
+        } catch (ClientProtocolException ignored) {
+            AppLogger.e(ignored.getMessage());
+
+        } catch (IOException ignored) {
+            AppLogger.e(ignored.getMessage());
+        }
 
         if (response != null) {
             return FileDownloaderHttpHelper.saveFile(response, path);
@@ -134,15 +166,7 @@ public class HttpUtility {
     }
 
     private String doGet(String url, Map<String, String> param) {
-        HttpResponse response = getDoGetHttpResponse(url, param);
-        if (response != null) {
-            return dealWithResponse(response);
-        } else {
-            return "";
-        }
-    }
 
-    private HttpResponse getDoGetHttpResponse(String url, Map<String, String> param) {
         URIBuilder uriBuilder;
         try {
             uriBuilder = new URIBuilder(url);
@@ -167,7 +191,11 @@ public class HttpUtility {
 
         HttpResponse response = getHttpResponse(httpGet, localContext);
 
-        return response;
+        if (response != null) {
+            return dealWithResponse(response);
+        } else {
+            return "";
+        }
     }
 
     private HttpResponse getHttpResponse(HttpRequestBase httpRequest, HttpContext localContext) {

@@ -66,7 +66,12 @@ public class GlobalContext extends Application {
                 getSystemService(Context.ACTIVITY_SERVICE)).getMemoryClass();
         final int cacheSize = 1024 * 1024 * memClass / 8;
 
-        avatarCache = new LruCache<>(cacheSize);
+        avatarCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount();
+            }
+        };
     }
 
 }
