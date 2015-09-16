@@ -193,8 +193,9 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 //            AbstractTimeLineFragment comments = new CommentsTimeLineFragment();
 //            AbstractTimeLineFragment mails = new MailsTimeLineFragment();
             MyInfoTimeLineFragment info = new MyInfoTimeLineFragment();
-//            home.setToken(token);
-//            mentions.setToken(token);
+
+            info.setAccountBean(weiboAccountBean);
+
             list.add(home);
             list.add(mentions);
             list.add(new MentionsTimeLineFragment());
