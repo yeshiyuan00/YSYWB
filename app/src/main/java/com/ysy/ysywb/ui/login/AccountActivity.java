@@ -253,7 +253,7 @@ public class AccountActivity extends Activity implements AdapterView.OnItemClick
                 linearLayout.addView(cb, 0);
 
             }
-            TextView textView = (TextView) mView.findViewById(R.id.account_name);
+            TextView textView = (TextView) mView.findViewById(R.id.listview_footer);
 
             textView.setText(weiboAccountList.get(i).getUsernick());
 
