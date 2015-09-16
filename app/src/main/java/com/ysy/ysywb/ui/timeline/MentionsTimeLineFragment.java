@@ -122,7 +122,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         switch (item.getItemId()) {
 
             case R.id.mentionstimelinefragment_refresh:
-
+                refresh();
                 break;
         }
         return super.onOptionsItemSelected(item);

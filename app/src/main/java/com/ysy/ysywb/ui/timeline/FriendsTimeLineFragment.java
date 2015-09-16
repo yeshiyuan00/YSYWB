@@ -227,6 +227,7 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
         @Override
         protected void onPreExecute() {
             isBusying = true;
+            footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
             headerView.findViewById(R.id.header_progress).setVisibility(View.VISIBLE);
             headerView.findViewById(R.id.header_text).setVisibility(View.VISIBLE);
             Animation rotateAnimation = new RotateAnimation(0f, 360f,
@@ -237,7 +238,6 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
             rotateAnimation.setInterpolator(new LinearInterpolator());
             headerView.findViewById(R.id.header_progress).startAnimation(rotateAnimation);
             listView.setSelection(0);
-            //dialogFragment.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override
@@ -285,7 +285,11 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
             headerView.findViewById(R.id.header_progress).setVisibility(View.GONE);
             headerView.findViewById(R.id.header_text).setVisibility(View.GONE);
             isBusying =false;
-            //dialogFragment.dismissAllowingStateLoss();
+            if (bean.getStatuses().size() == 0) {
+                footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
+            } else {
+                footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
+            }
             super.onPostExecute(newValue);
         }
     }

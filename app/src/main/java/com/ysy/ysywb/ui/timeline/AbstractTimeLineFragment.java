@@ -34,6 +34,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
     protected int position = 0;
 
     View headerView;
+    View footerView;
 
     public abstract void refresh();
 
@@ -73,8 +74,13 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         listView.addHeaderView(headerView);
         listView.setHeaderDividersEnabled(false);
 
-        View footerView = inflater.inflate(R.layout.fragment_listview_footer_layout, null);
+        footerView = inflater.inflate(R.layout.fragment_listview_footer_layout, null);
         listView.addFooterView(footerView);
+
+        if(bean.getStatuses().size()==0){
+            footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
+        }
+
 
         timeLineAdapter = new TimeLineAdapter();
         listView.setAdapter(timeLineAdapter);

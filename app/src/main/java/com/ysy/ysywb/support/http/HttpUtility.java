@@ -183,8 +183,10 @@ public class HttpUtility {
             ActivityUtils.showTips(R.string.timeout);
         } catch (ClientProtocolException e) {
             AppLogger.e(e.getMessage());
+            ActivityUtils.showTips(R.string.timeout);
         } catch (IOException e) {
             AppLogger.e(e.getMessage());
+            ActivityUtils.showTips(R.string.timeout);
         }
         return response;
     }
@@ -209,6 +211,7 @@ public class HttpUtility {
             result = EntityUtils.toString(entity);
         } catch (IOException e) {
             AppLogger.e(e.getMessage());
+            ActivityUtils.showTips(R.string.timeout);
         }
 
         AppLogger.d(result);
