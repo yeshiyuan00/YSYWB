@@ -111,6 +111,8 @@ public class DatabaseManager {
             cv.put(HomeTable.UID, user.getId());
             cv.put(HomeTable.CONTENT, msg.getText());
             cv.put(HomeTable.TIME, msg.getCreated_at());
+            cv.put(HomeTable.PIC, msg.getThumbnail_pic());
+            cv.put(HomeTable.AVATAR, msg.getUser().getProfile_image_url());
             long result = wsd.insert(HomeTable.TABLE_NAME, HomeTable.MBLOGID, cv);
         }
     }
@@ -130,9 +132,12 @@ public class DatabaseManager {
 
             msg.setListviewItemShowTime(c.getString(c.getColumnIndex(HomeTable.TIME)));
 
+            msg.setThumbnail_pic(c.getString(c.getColumnIndex(HomeTable.PIC)));
+
             WeiboUserBean user = new WeiboUserBean();
 
             user.setScreen_name(c.getString(c.getColumnIndex(HomeTable.NICK)));
+            user.setProfile_image_url(c.getString(c.getColumnIndex(HomeTable.AVATAR)));
 
             msg.setUser(user);
 

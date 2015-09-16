@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
+import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
@@ -41,6 +42,13 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     public volatile boolean isBusying = false;
 
     private Commander commander;
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        bean = DatabaseManager.getInstance().getHomeLineMsgList();
+        timeLineAdapter.notifyDataSetChanged();
+    }
 
     public static abstract class Commander {
 
@@ -227,8 +235,8 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
                 dao.setSince_id(getList().getStatuses().get(0).getId());
             }
             TimeLineMsgListBean result = dao.getGSONMsgList();
-            //            if (result != null)
-            //DatabaseManager.getInstance().addHomeLineMsg(result);
+            if (result != null)
+                DatabaseManager.getInstance().addHomeLineMsg(result);
             return result;
 
         }
