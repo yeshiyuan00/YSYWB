@@ -37,6 +37,7 @@ import ch.boye.httpclientandroidlib.client.protocol.ClientContext;
 import ch.boye.httpclientandroidlib.client.utils.URIBuilder;
 import ch.boye.httpclientandroidlib.impl.client.BasicCookieStore;
 import ch.boye.httpclientandroidlib.impl.client.DefaultHttpClient;
+import ch.boye.httpclientandroidlib.impl.conn.PoolingClientConnectionManager;
 import ch.boye.httpclientandroidlib.message.BasicNameValuePair;
 import ch.boye.httpclientandroidlib.params.BasicHttpParams;
 import ch.boye.httpclientandroidlib.params.CoreProtocolPNames;
@@ -60,7 +61,9 @@ public class HttpUtility {
     private HttpUtility() {
         HttpParams params = new BasicHttpParams();
         params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION, HttpVersion.HTTP_1_1);
-        httpClient = new DefaultHttpClient(params);
+
+        //default 2 connections
+        httpClient = new DefaultHttpClient(new PoolingClientConnectionManager());
         HttpConnectionParams.setConnectionTimeout(httpClient.getParams(), 4000);
         HttpConnectionParams.setSoTimeout(httpClient.getParams(), 4000);
     }
