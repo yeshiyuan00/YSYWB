@@ -98,10 +98,6 @@ public class MainTimeLineActivity extends AbstractMainActivity {
                 .setTabListener(tabListener));
 
         actionBar.addTab(actionBar.newTab()
-                .setText(getString(R.string.mail))
-                .setTabListener(tabListener));
-
-        actionBar.addTab(actionBar.newTab()
                 .setText(getString(R.string.info))
                 .setTabListener(tabListener));
     }
@@ -191,10 +187,9 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
             AbstractTimeLineFragment home = new FriendsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
             AbstractTimeLineFragment mentions = new MentionsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
-            ;
-//            AbstractTimeLineFragment comments = new CommentsTimeLineFragment();
+
             Fragment comments = new CommentsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
-//            AbstractTimeLineFragment mails = new MailsTimeLineFragment();
+
             MyInfoTimeLineFragment info = new MyInfoTimeLineFragment();
 
             info.setAccountBean(weiboAccountBean);
@@ -202,7 +197,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             list.add(home);
             list.add(mentions);
             list.add(comments);
-            list.add(new MentionsTimeLineFragment());
+
             list.add(info);
         }
 
