@@ -1,6 +1,7 @@
 package com.ysy.ysywb.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  * Time: 14:46
  */
 public class CommentListBean implements Serializable {
-    private List<CommentBean> comments;
+    private List<CommentBean> comments=new ArrayList<CommentBean>();
     private String previous_cursor;
     private String next_cursor;
     private String total_number;

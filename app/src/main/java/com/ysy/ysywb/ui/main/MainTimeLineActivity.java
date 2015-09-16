@@ -18,6 +18,7 @@ import com.ysy.ysywb.bean.WeiboAccountBean;
 import com.ysy.ysywb.support.utils.GlobalContext;
 import com.ysy.ysywb.ui.AbstractMainActivity;
 import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
+import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.FriendsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MentionsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MyInfoTimeLineFragment;
@@ -189,8 +190,10 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             super(fm);
 
             AbstractTimeLineFragment home = new FriendsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
-            AbstractTimeLineFragment mentions = new MentionsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);;
+            AbstractTimeLineFragment mentions = new MentionsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
+            ;
 //            AbstractTimeLineFragment comments = new CommentsTimeLineFragment();
+            Fragment comments = new CommentsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
 //            AbstractTimeLineFragment mails = new MailsTimeLineFragment();
             MyInfoTimeLineFragment info = new MyInfoTimeLineFragment();
 
@@ -198,7 +201,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
             list.add(home);
             list.add(mentions);
-            list.add(new MentionsTimeLineFragment());
+            list.add(comments);
             list.add(new MentionsTimeLineFragment());
             list.add(info);
         }
