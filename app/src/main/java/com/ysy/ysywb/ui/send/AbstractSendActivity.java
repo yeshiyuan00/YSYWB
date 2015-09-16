@@ -106,7 +106,7 @@ public abstract class AbstractSendActivity extends AbstractMainActivity implemen
         return true;
     }
 
-    class ProgressFragment extends DialogFragment {
+    public class ProgressFragment extends DialogFragment {
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
