@@ -37,6 +37,7 @@ public class StatusesShowMsgDao {
         WeiboMsgBean value = null;
         try {
             value = gson.fromJson(json, WeiboMsgBean.class);
+            System.out.println("token="+access_token+"json="+json);
         } catch (JsonSyntaxException e) {
 
             AppLogger.e(e.getMessage().toString());

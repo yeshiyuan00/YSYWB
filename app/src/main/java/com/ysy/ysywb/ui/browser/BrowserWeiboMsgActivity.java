@@ -56,7 +56,8 @@ public class BrowserWeiboMsgActivity extends AbstractMainActivity {
         buildView();
         buildViewData();
 
-        new UpdateMsgTask().execute();
+        //TODO 新浪微博禁用了根据ID获取单条微博的接口，只可以获取授权用户所发的微博
+        //new UpdateMsgTask().execute();
     }
 
     private void buildView() {
