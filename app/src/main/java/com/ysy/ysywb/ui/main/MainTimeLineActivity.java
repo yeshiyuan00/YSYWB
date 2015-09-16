@@ -47,6 +47,16 @@ public class MainTimeLineActivity extends AbstractMainActivity {
     }
 
     private ListView homeListView = null;
+    private ListView mentionsListView = null;
+    private ListView commentsListView = null;
+
+    public void setMentionsListView(ListView mentionsListView) {
+        this.mentionsListView = mentionsListView;
+    }
+
+    public void setCommentsListView(ListView commentsListView) {
+        this.commentsListView = commentsListView;
+    }
 
     Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = new ConcurrentHashMap<String, AvatarBitmapWorkerTask>();
     Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = new ConcurrentHashMap<String, PictureBitmapWorkerTask>();
@@ -122,6 +132,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     ActionBar.TabListener tabListener = new ActionBar.TabListener() {
         boolean home = false;
+        boolean mentions = false;
+        boolean comments = false;
 
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
@@ -131,8 +143,10 @@ public class MainTimeLineActivity extends AbstractMainActivity {
                     home = true;
                     break;
                 case 1:
+                    mentions = true;
                     break;
                 case 2:
+                    comments = true;
                     break;
                 case 3:
                     break;
@@ -146,8 +160,10 @@ public class MainTimeLineActivity extends AbstractMainActivity {
                     home = false;
                     break;
                 case 1:
+                    mentions = false;
                     break;
                 case 2:
+                    comments = false;
                     break;
                 case 3:
                     break;
@@ -161,8 +177,10 @@ public class MainTimeLineActivity extends AbstractMainActivity {
                     if (home) homeListView.smoothScrollToPosition(0);
                     break;
                 case 1:
+                    if (mentions) mentionsListView.smoothScrollToPosition(0);
                     break;
                 case 2:
+                    if (comments) mentionsListView.smoothScrollToPosition(0);
                     break;
                 case 3:
                     break;
@@ -174,11 +192,11 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         return GlobalContext.getInstance().getAvatarCache().get(key);
     }
 
-    public FriendsTimeLineFragment.Commander getFrinedsTimeLineMsgCommand() {
-        return frinedsTimeLineMsgCommand;
+    public FriendsTimeLineFragment.Commander getCommander() {
+        return commander;
     }
 
-    FriendsTimeLineFragment.Commander frinedsTimeLineMsgCommand = new FriendsTimeLineFragment.Commander() {
+    FriendsTimeLineFragment.Commander commander = new FriendsTimeLineFragment.Commander() {
 
 
         @Override
@@ -229,9 +247,9 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             super(fm);
 
             AbstractTimeLineFragment home = new FriendsTimeLineFragment();
-            AbstractTimeLineFragment mentions = new MentionsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
+            AbstractTimeLineFragment mentions = new MentionsTimeLineFragment();
 
-            Fragment comments = new CommentsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
+            Fragment comments = new CommentsTimeLineFragment();
 
             MyInfoTimeLineFragment info = new MyInfoTimeLineFragment();
 

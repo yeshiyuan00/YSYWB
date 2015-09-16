@@ -53,6 +53,13 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        commander = ((MainTimeLineActivity) getActivity()).getCommander();
+        ((MainTimeLineActivity) getActivity()).setMentionsListView(listView);
+    }
+
+    @Override
     protected void scrollToBottom() {
 
     }
@@ -158,6 +165,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
 
             return builder.create();
         }
+
         DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
 
             @Override

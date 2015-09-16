@@ -58,6 +58,13 @@ public class CommentsTimeLineFragment extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        commander = ((MainTimeLineActivity) getActivity()).getCommander();
+        ((MainTimeLineActivity) getActivity()).setCommentsListView(listView);
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = (MainTimeLineActivity) getActivity();
