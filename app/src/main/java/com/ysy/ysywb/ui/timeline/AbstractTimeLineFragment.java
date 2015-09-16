@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.TimeLineMsgListBean;
+import com.ysy.ysywb.bean.MessageListBean;
 import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.ui.main.MainTimeLineActivity;
 
@@ -29,7 +29,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
     protected TimeLineAdapter timeLineAdapter;
     protected MainTimeLineActivity activity;
 
-    protected TimeLineMsgListBean bean = new TimeLineMsgListBean();
+    protected MessageListBean bean = new MessageListBean();
 
     protected int position = 0;
 
@@ -38,7 +38,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
     public abstract void refresh();
 
-    public TimeLineMsgListBean getList() {
+    public MessageListBean getList() {
         return bean;
     }
 

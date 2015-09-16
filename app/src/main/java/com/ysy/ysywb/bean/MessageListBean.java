@@ -1,26 +1,20 @@
 package com.ysy.ysywb.bean;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * User: ysy
- * Date: 2015/9/14
- * Time: 14:46
+ * Date: 2015/9/9
+ * Time: 16:13
  */
-public class CommentListBean implements Serializable {
-    private List<CommentBean> comments = new ArrayList<CommentBean>();
-    private String previous_cursor = "";
-    private String next_cursor = "0";
-    private String total_number = "";
-
-    public List<CommentBean> getComments() {
-        return comments;
+public class MessageListBean {
+    public List<WeiboMsgBean> getStatuses() {
+        return statuses;
     }
 
-    public void setComments(List<CommentBean> comments) {
-        this.comments = comments;
+    public void setStatuses(List<WeiboMsgBean> statuses) {
+        this.statuses = statuses;
     }
 
     public String getPrevious_cursor() {
@@ -46,4 +40,9 @@ public class CommentListBean implements Serializable {
     public void setTotal_number(String total_number) {
         this.total_number = total_number;
     }
+
+    private List<WeiboMsgBean> statuses=new ArrayList<WeiboMsgBean>();
+    private String previous_cursor="";
+    private String next_cursor="0";
+    private String total_number="";
 }

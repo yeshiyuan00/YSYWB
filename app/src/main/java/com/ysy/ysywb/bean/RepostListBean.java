@@ -5,16 +5,21 @@ import java.util.List;
 
 /**
  * User: ysy
- * Date: 2015/9/9
- * Time: 16:13
+ * Date: 2015/9/16
+ * Time: 16:33
  */
-public class TimeLineMsgListBean {
-    public List<WeiboMsgBean> getStatuses() {
-        return statuses;
+public class RepostListBean {
+    private List<WeiboMsgBean> reposts = new ArrayList<WeiboMsgBean>();
+    private String previous_cursor = "";
+    private String next_cursor = "0";
+    private String total_number = "";
+
+    public List<WeiboMsgBean> getReposts() {
+        return reposts;
     }
 
-    public void setStatuses(List<WeiboMsgBean> statuses) {
-        this.statuses = statuses;
+    public void setReposts(List<WeiboMsgBean> reposts) {
+        this.reposts = reposts;
     }
 
     public String getPrevious_cursor() {
@@ -40,9 +45,4 @@ public class TimeLineMsgListBean {
     public void setTotal_number(String total_number) {
         this.total_number = total_number;
     }
-
-    private List<WeiboMsgBean> statuses=new ArrayList<WeiboMsgBean>();
-    private String previous_cursor="";
-    private String next_cursor="0";
-    private String total_number="";
 }

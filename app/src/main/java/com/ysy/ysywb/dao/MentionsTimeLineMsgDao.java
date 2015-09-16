@@ -2,7 +2,7 @@ package com.ysy.ysywb.dao;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.ysy.ysywb.bean.TimeLineMsgListBean;
+import com.ysy.ysywb.bean.MessageListBean;
 import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
@@ -39,15 +39,15 @@ public class MentionsTimeLineMsgDao {
         return jsonData;
     }
 
-    public TimeLineMsgListBean getGSONMsgList() {
+    public MessageListBean getGSONMsgList() {
 
         String json = getMsgListJson();
         Gson gson = new Gson();
 
-        TimeLineMsgListBean value = null;
+        MessageListBean value = null;
 
         try {
-            value = gson.fromJson(json, TimeLineMsgListBean.class);
+            value = gson.fromJson(json, MessageListBean.class);
         } catch (JsonSyntaxException e) {
             ActivityUtils.showTips("发生错误，请重刷");
             AppLogger.e(e.getMessage().toString());

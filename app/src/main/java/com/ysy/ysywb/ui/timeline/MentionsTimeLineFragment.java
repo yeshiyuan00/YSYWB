@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.TimeLineMsgListBean;
+import com.ysy.ysywb.bean.MessageListBean;
 import com.ysy.ysywb.dao.MentionsTimeLineMsgDao;
 import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
@@ -175,7 +175,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         };
     }
 
-    class FriendsTimeLineGetNewMsgListTask extends AsyncTask<Void, TimeLineMsgListBean, TimeLineMsgListBean> {
+    class FriendsTimeLineGetNewMsgListTask extends AsyncTask<Void, MessageListBean, MessageListBean> {
 
         DialogFragment dialogFragment = new ProgressFragment();
 
@@ -186,12 +186,12 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         }
 
         @Override
-        protected TimeLineMsgListBean doInBackground(Void... params) {
+        protected MessageListBean doInBackground(Void... params) {
             MentionsTimeLineMsgDao dao = new MentionsTimeLineMsgDao(((MainTimeLineActivity) getActivity()).getToken());
             if (getList().getStatuses().size() > 0) {
                 dao.setSince_id(getList().getStatuses().get(0).getId());
             }
-            TimeLineMsgListBean result = dao.getGSONMsgList();
+            MessageListBean result = dao.getGSONMsgList();
             if (result != null) {
                 if (result.getStatuses().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
 //                    DatabaseManager.getInstance().addHomeLineMsg(result);
@@ -204,7 +204,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         }
 
         @Override
-        protected void onPostExecute(TimeLineMsgListBean newValue) {
+        protected void onPostExecute(MessageListBean newValue) {
             if (newValue != null) {
                 if (newValue.getStatuses().size() == 0) {
                     Toast.makeText(getActivity(), "no new message", Toast.LENGTH_SHORT).show();
@@ -232,7 +232,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
 
-    class FriendsTimeLineGetOlderMsgListTask extends AsyncTask<Void, TimeLineMsgListBean, TimeLineMsgListBean> {
+    class FriendsTimeLineGetOlderMsgListTask extends AsyncTask<Void, MessageListBean, MessageListBean> {
         View footerView;
 
         public FriendsTimeLineGetOlderMsgListTask(View view) {
@@ -248,20 +248,20 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         }
 
         @Override
-        protected TimeLineMsgListBean doInBackground(Void... params) {
+        protected MessageListBean doInBackground(Void... params) {
 
             MentionsTimeLineMsgDao dao = new MentionsTimeLineMsgDao(((MainTimeLineActivity) getActivity()).getToken());
             if (getList().getStatuses().size() > 0) {
                 dao.setMax_id(getList().getStatuses().get(getList().getStatuses().size() - 1).getId());
             }
-            TimeLineMsgListBean result = dao.getGSONMsgList();
+            MessageListBean result = dao.getGSONMsgList();
 
             return result;
 
         }
 
         @Override
-        protected void onPostExecute(TimeLineMsgListBean newValue) {
+        protected void onPostExecute(MessageListBean newValue) {
             if (newValue != null) {
                 Toast.makeText(getActivity(), "total " + newValue.getStatuses().size() + " old messages", Toast.LENGTH_SHORT).show();
 
