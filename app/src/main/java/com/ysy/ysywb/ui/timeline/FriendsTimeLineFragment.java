@@ -141,7 +141,9 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
                 startActivity(intent);
                 break;
             case R.id.friendstimelinefragment_refresh:
-                refresh();
+                if (!isBusying) {
+                    refresh();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -224,8 +226,18 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
 
         @Override
         protected void onPreExecute() {
-
-            dialogFragment.show(getActivity().getSupportFragmentManager(), "");
+            isBusying = true;
+            headerView.findViewById(R.id.header_progress).setVisibility(View.VISIBLE);
+            headerView.findViewById(R.id.header_text).setVisibility(View.VISIBLE);
+            Animation rotateAnimation = new RotateAnimation(0f, 360f,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setDuration(1000);
+            rotateAnimation.setRepeatCount(-1);
+            rotateAnimation.setRepeatMode(Animation.RESTART);
+            rotateAnimation.setInterpolator(new LinearInterpolator());
+            headerView.findViewById(R.id.header_progress).startAnimation(rotateAnimation);
+            listView.setSelection(0);
+            //dialogFragment.show(getActivity().getSupportFragmentManager(), "");
         }
 
         @Override
@@ -266,10 +278,14 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
                     bean = newValue;
                     timeLineAdapter.notifyDataSetChanged();
                     listView.setSelectionAfterHeaderView();
+                    headerView.findViewById(R.id.header_progress).clearAnimation();
 
                 }
             }
-            dialogFragment.dismissAllowingStateLoss();
+            headerView.findViewById(R.id.header_progress).setVisibility(View.GONE);
+            headerView.findViewById(R.id.header_text).setVisibility(View.GONE);
+            isBusying =false;
+            //dialogFragment.dismissAllowingStateLoss();
             super.onPostExecute(newValue);
         }
     }

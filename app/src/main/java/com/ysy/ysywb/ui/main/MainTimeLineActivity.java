@@ -24,9 +24,9 @@ import com.ysy.ysywb.ui.timeline.MentionsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MyInfoTimeLineFragment;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: ysy
@@ -42,8 +42,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     private WeiboAccountBean weiboAccountBean = null;
 
-    Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = new HashMap<String, AvatarBitmapWorkerTask>();
-    Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = new HashMap<String, PictureBitmapWorkerTask>();
+    Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = new ConcurrentHashMap<String, AvatarBitmapWorkerTask>();
+    Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = new ConcurrentHashMap<String, PictureBitmapWorkerTask>();
 
     public Map<String, AvatarBitmapWorkerTask> getAvatarBitmapWorkerTaskHashMap() {
         return avatarBitmapWorkerTaskHashMap;
