@@ -42,6 +42,12 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     private WeiboAccountBean weiboAccountBean = null;
 
+    public void setHomeListView(ListView homeListView) {
+        this.homeListView = homeListView;
+    }
+
+    private ListView homeListView = null;
+
     Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = new ConcurrentHashMap<String, AvatarBitmapWorkerTask>();
     Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = new ConcurrentHashMap<String, PictureBitmapWorkerTask>();
 
@@ -115,19 +121,52 @@ public class MainTimeLineActivity extends AbstractMainActivity {
     };
 
     ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+        boolean home = false;
+
         @Override
         public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
             mViewPager.setCurrentItem(tab.getPosition());
+            switch (tab.getPosition()) {
+                case 0:
+                    home = true;
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
         }
 
         @Override
         public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
+            switch (tab.getPosition()) {
+                case 0:
+                    home = false;
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
         }
 
         @Override
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
+            switch (tab.getPosition()) {
+                case 0:
+                    if (home) homeListView.setSelection(0);
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+            }
         }
     };
 
