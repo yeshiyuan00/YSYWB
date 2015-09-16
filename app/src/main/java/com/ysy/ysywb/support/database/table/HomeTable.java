@@ -19,6 +19,10 @@ public class HomeTable {
     public static final String VIP = "vip";
     public static final String CONTENT = "content";
     public static final String RTROOTUID = "rtrootuid";
+    public static final String RTAVATAR = "rtavatar";
+    public static final String RTCONTENT = "rtcontent";
+    public static final String RTPIC = "rtpic";
+    public static final String RTID="rtid";
     public static final String RTROTNICK = "rtrootnick";
     public static final String RTROOTVIP = "rtrootvip";
     public static final String RTREASON = "rtreason";
