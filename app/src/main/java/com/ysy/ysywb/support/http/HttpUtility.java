@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.support.file.FileDownloaderHttpHelper;
-import com.ysy.ysywb.support.file.FileLocationMethod;
 import com.ysy.ysywb.support.utils.ActivityUtils;
 import com.ysy.ysywb.support.utils.AppLogger;
 
@@ -15,6 +14,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +33,7 @@ import ch.boye.httpclientandroidlib.client.HttpClient;
 import ch.boye.httpclientandroidlib.client.entity.UrlEncodedFormEntity;
 import ch.boye.httpclientandroidlib.client.methods.HttpGet;
 import ch.boye.httpclientandroidlib.client.methods.HttpPost;
+import ch.boye.httpclientandroidlib.client.methods.HttpRequestBase;
 import ch.boye.httpclientandroidlib.client.protocol.ClientContext;
 import ch.boye.httpclientandroidlib.client.utils.URIBuilder;
 import ch.boye.httpclientandroidlib.impl.client.BasicCookieStore;
@@ -93,28 +94,32 @@ public class HttpUtility {
         for (String key : keys) {
             String value = param.get(key);
             if (!TextUtils.isEmpty(value)) {
-                nameValuePairs.add(new BasicNameValuePair(key, param.get(key)));
+                nameValuePairs.add(new BasicNameValuePair(key, value));
             }
         }
         UrlEncodedFormEntity entity = null;
 
         try {
-            entity = new UrlEncodedFormEntity(nameValuePairs);
+            entity = new UrlEncodedFormEntity(nameValuePairs, "UTF-8");
         } catch (UnsupportedEncodingException ignored) {
 
         }
 
-        HttpPost httpPost = new HttpPost(url);
+        try {
+            httpPost.setURI(new URI(url));
+        } catch (URISyntaxException e) {
+            AppLogger.e(e.getMessage());
+        }
         httpPost.setEntity(entity);
 
-        HttpResponse response = null;
+        HttpResponse response = getHttpResponse(httpGet, null);
 
-        try {
-            response = httpClient.execute(httpPost);
-        } catch (IOException ignored) {
+        if (response != null) {
 
+            return dealWithResponse(response);
+        } else {
+            return "";
         }
-        return dealWithResponse(response);
     }
 
     public String doGetSaveFile(String url, String path) {
@@ -159,9 +164,20 @@ public class HttpUtility {
         ch.boye.httpclientandroidlib.client.CookieStore cookieStore = new BasicCookieStore();
         HttpContext localContext = new BasicHttpContext();
         localContext.setAttribute(ClientContext.COOKIE_STORE, cookieStore);
+
+        HttpResponse response = getHttpResponse(httpGet, localContext);
+
+        return response;
+    }
+
+    private HttpResponse getHttpResponse(HttpRequestBase httpRequest, HttpContext localContext) {
         HttpResponse response = null;
         try {
-            response = httpClient.execute(httpGet, localContext);
+            if (localContext != null) {
+                response = httpClient.execute(httpRequest, localContext);
+            } else {
+                response = httpClient.execute(httpRequest);
+            }
         } catch (ConnectTimeoutException e) {
             AppLogger.e(e.getMessage());
             ActivityUtils.showTips(R.string.timeout);

@@ -49,12 +49,12 @@ public class FileManager {
                 break;
         }
         String absolutePath = getFileAbsolutePathFromRelativePath(newRelativePath);
-        AppLogger.d(absolutePath);
+        //AppLogger.d(absolutePath);
         return absolutePath;
     }
 
     private static String getFileRelativePathFromUrl(String url) {
-        AppLogger.d(url);
+       // AppLogger.d(url);
         //  String url = "http://tp2.sinaimg.cn/2500453793/50/5617547700/0";
 
         int index = url.indexOf("//");
