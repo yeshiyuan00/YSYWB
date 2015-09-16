@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ysy.ysywb.R;
+import com.ysy.ysywb.bean.WeiboUserBean;
 import com.ysy.ysywb.ui.login.AccountActivity;
 
 /**
@@ -19,6 +20,12 @@ import com.ysy.ysywb.ui.login.AccountActivity;
  * Time: 14:56
  */
 public class MyInfoTimeLineFragment extends Fragment {
+
+    private WeiboUserBean bean;
+
+    public void setBean(WeiboUserBean bean) {
+        this.bean = bean;
+    }
 
     public MyInfoTimeLineFragment() {
         super();
@@ -43,6 +50,11 @@ public class MyInfoTimeLineFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.myinfofragment_menu, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override

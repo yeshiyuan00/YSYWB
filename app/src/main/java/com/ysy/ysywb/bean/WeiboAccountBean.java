@@ -1,11 +1,13 @@
 package com.ysy.ysywb.bean;
 
+import java.io.Serializable;
+
 /**
  * User: ysy
  * Date: 2015/9/10
  * Time: 9:08
  */
-public class WeiboAccountBean {
+public class WeiboAccountBean implements Serializable{
 
     public String getUid() {
         return uid;

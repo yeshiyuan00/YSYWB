@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.TimeLineMsgListBean;
+import com.ysy.ysywb.bean.WeiboAccountBean;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
 import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.support.utils.GlobalContext;
@@ -53,7 +54,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     private String token = "";
 
-    private String screen_name = "";
+    private WeiboAccountBean weiboAccountBean = null;
+
     private AbstractTimeLineFragment home = null;
     private AbstractTimeLineFragment mentions = null;
     private AbstractTimeLineFragment comments = null;
@@ -79,8 +81,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
         Intent intent = getIntent();
 
-        token = intent.getStringExtra("token");
-        screen_name = intent.getStringExtra("screen_name");
+        weiboAccountBean = (WeiboAccountBean) intent.getSerializableExtra("account");
+        token = weiboAccountBean.getAccess_token();
 
         // homeList = DatabaseManager.getInstance().getHomeLineMsgList();
 

@@ -47,11 +47,11 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
 
         }
 
-        public void downloadAvatar(ImageView view, String url,int position,ListView listView) {
+        public void downloadAvatar(ImageView view, String url, int position, ListView listView) {
 
         }
 
-        public void downContentPic(ImageView view, String url,int position,ListView listView) {
+        public void downContentPic(ImageView view, String url, int position, ListView listView) {
 
         }
     }
@@ -88,13 +88,13 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
     @Override
-    protected void downloadAvatar(ImageView view, String url,int position,ListView listView) {
-        commander.downloadAvatar(view, url,position,listView);
+    protected void downloadAvatar(ImageView view, String url, int position, ListView listView) {
+        commander.downloadAvatar(view, url, position, listView);
     }
 
     @Override
-    protected void downContentPic(ImageView view, String url,int position,ListView listView) {
-        commander.downContentPic(view, url,position,listView);
+    protected void downContentPic(ImageView view, String url, int position, ListView listView) {
+        commander.downContentPic(view, url, position, listView);
     }
 
 
@@ -115,16 +115,7 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.friendstimelinefragment_menu, menu);
-        menu.addSubMenu("home");
-        menu.addSubMenu("my weibo");
-        menu.add("it");
-        menu.addSubMenu("acg");
-        menu.add("hangzhou");
-        menu.addSubMenu("acg");
-        menu.add("it");
-        menu.addSubMenu("acg");
-        menu.add("it");
-        menu.addSubMenu("acg");
+        menu.add("weibo dont have messages group api");
     }
 
     @Override
