@@ -81,16 +81,32 @@ public class BrowserWeiboMsgActivity extends AbstractMainActivity {
 
         if (retweetMsg != null) {
             recontent.setVisibility(View.VISIBLE);
-            recontent.setText(retweetMsg.getUser().getScreen_name() + ":" + retweetMsg.getText());
-            if (!TextUtils.isEmpty(retweetMsg.getThumbnail_pic())) {
+            if (retweetMsg.getUser() != null) {
+                recontent.setText(retweetMsg.getUser().getScreen_name() + "：" + retweetMsg.getText());
+            } else {
+                recontent.setText(retweetMsg.getText());
+
+            }
+            if (!TextUtils.isEmpty(retweetMsg.getBmiddle_pic())) {
                 repost_pic.setVisibility(View.VISIBLE);
                 SimpleBitmapWorkerTask task = new SimpleBitmapWorkerTask(repost_pic);
                 task.execute(retweetMsg.getBmiddle_pic());
+            } else if (!TextUtils.isEmpty(retweetMsg.getThumbnail_pic())) {
+                repost_pic.setVisibility(View.VISIBLE);
+                SimpleBitmapWorkerTask task = new SimpleBitmapWorkerTask(repost_pic);
+                task.execute(retweetMsg.getThumbnail_pic());
             }
-        } else if (!TextUtils.isEmpty(msg.getThumbnail_pic())) {
+
+        }
+        if (!TextUtils.isEmpty(msg.getBmiddle_pic())) {
             content_pic.setVisibility(View.VISIBLE);
             SimpleBitmapWorkerTask task = new SimpleBitmapWorkerTask(content_pic);
             task.execute(msg.getBmiddle_pic());
+        } else if (!TextUtils.isEmpty(msg.getThumbnail_pic())) {
+            content_pic.setVisibility(View.VISIBLE);
+            SimpleBitmapWorkerTask task = new SimpleBitmapWorkerTask(content_pic);
+            task.execute(msg.getThumbnail_pic());
+
         }
 
     }

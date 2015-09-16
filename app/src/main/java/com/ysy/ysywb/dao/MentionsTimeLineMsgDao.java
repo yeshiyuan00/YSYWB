@@ -1,13 +1,14 @@
 package com.ysy.ysywb.dao;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.ysy.ysywb.bean.TimeLineMsgListBean;
+import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
+import com.ysy.ysywb.support.utils.ActivityUtils;
+import com.ysy.ysywb.support.utils.AppLogger;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -19,50 +20,53 @@ import java.util.Map;
  * Time: 15:08
  */
 public class MentionsTimeLineMsgDao {
-    private String getMsgs() {
-        String msg = "";
+    private String getMsgListJson() {
 
         String url = URLHelper.getMentionsTimeLine();
 
         Map<String, String> map = new HashMap<String, String>();
+        map.put("access_token", access_token);
+        map.put("since_id", since_id);
+        map.put("max_id", max_id);
+        map.put("count", count);
+        map.put("page", page);
+        map.put("filter_by_author", filter_by_author);
+        map.put("filter_by_source", filter_by_source);
+        map.put("trim_user", trim_user);
 
-        msg = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        String jsonData = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
 
-        return msg;
+        return jsonData;
     }
 
-    public List<Map<String, String>> getMsgList() {
-        List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-        String msg = getMsgs();
+    public TimeLineMsgListBean getGSONMsgList() {
+
+        String json = getMsgListJson();
+        Gson gson = new Gson();
+
+        TimeLineMsgListBean value = null;
 
         try {
-            JSONObject jsonObject = new JSONObject(msg);
-            JSONArray statuses = jsonObject.getJSONArray("statuses");
-            int length = statuses.length();
-            for (int i = 0; i < length; i++) {
-                JSONObject object = statuses.getJSONObject(i);
-                Map<String, String> map = new HashMap<String, String>();
-                map.put("id", object.optString("id"));
-                map.put("text", object.optString("text"));
-                Iterator iterator = object.keys();
-                String key;
-                while (iterator.hasNext()) {
-                    key = (String) iterator.next();
-                    Object value = object.opt(key);
-                    if (value instanceof String) {
-                        map.put(key, value.toString());
-                    } else if (value instanceof JSONObject) {
-                        map.put("screen_name", ((JSONObject) value).optString("screen_name"));
-                    }
-                }
-                list.add(map);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            value = gson.fromJson(json, TimeLineMsgListBean.class);
+        } catch (JsonSyntaxException e) {
+            ActivityUtils.showTips("发生错误，请重刷");
+            AppLogger.e(e.getMessage().toString());
         }
 
-        return list;
+        List<WeiboMsgBean> msgList = value.getStatuses();
+
+        Iterator<WeiboMsgBean> iterator = msgList.iterator();
+
+        while (iterator.hasNext()) {
+
+            WeiboMsgBean msg = iterator.next();
+            if (msg.getUser() == null) {
+                iterator.remove();
+            }
+        }
+
+        return value;
+
     }
 
     public String access_token;
