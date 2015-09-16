@@ -43,7 +43,10 @@ public class PictureBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... url) {
         data = url[0];
-        return ImageTool.getPictureThumbnailBitmap(data);
+        if (!isCancelled()) {
+            return ImageTool.getPictureThumbnailBitmap(data);
+        }
+        return null;
     }
 
     @Override

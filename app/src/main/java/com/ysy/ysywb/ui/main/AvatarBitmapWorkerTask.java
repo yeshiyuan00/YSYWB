@@ -52,7 +52,10 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
     @Override
     protected Bitmap doInBackground(String... url) {
         data = url[0];
-        return ImageTool.getAvatarBitmap(data);
+        if (!isCancelled()) {
+            return ImageTool.getAvatarBitmap(data);
+        }
+        return null;
     }
 
     @Override
@@ -60,7 +63,7 @@ public class AvatarBitmapWorkerTask extends AsyncTask<String, Void, Bitmap> {
         if (bitmap != null) {
             lruCache.put(data, bitmap);
         }
-        if (taskMap!=null&&taskMap.get(data) != null) {
+        if (taskMap != null && taskMap.get(data) != null) {
             taskMap.remove(data);
         }
         super.onCancelled(bitmap);
