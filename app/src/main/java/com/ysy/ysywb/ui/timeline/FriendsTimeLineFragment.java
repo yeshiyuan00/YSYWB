@@ -61,9 +61,10 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
         }
     }
 
-    public FriendsTimeLineFragment setCommander(Commander commander) {
-        this.commander = commander;
-        return this;
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        commander=((MainTimeLineActivity)getActivity()).getFrinedsTimeLineMsgCommand();
     }
 
     @Override

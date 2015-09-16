@@ -135,6 +135,10 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         return GlobalContext.getInstance().getAvatarCache().get(key);
     }
 
+    public FriendsTimeLineFragment.Commander getFrinedsTimeLineMsgCommand() {
+        return frinedsTimeLineMsgCommand;
+    }
+
     FriendsTimeLineFragment.Commander frinedsTimeLineMsgCommand = new FriendsTimeLineFragment.Commander() {
 
 
@@ -185,7 +189,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         public TimeLinePagerAdapter(FragmentManager fm) {
             super(fm);
 
-            AbstractTimeLineFragment home = new FriendsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
+            AbstractTimeLineFragment home = new FriendsTimeLineFragment();
             AbstractTimeLineFragment mentions = new MentionsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
 
             Fragment comments = new CommentsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);

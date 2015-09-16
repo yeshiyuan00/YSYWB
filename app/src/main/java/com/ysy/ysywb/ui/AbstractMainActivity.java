@@ -17,5 +17,5 @@ public class AbstractMainActivity extends FragmentActivity {
         super.onResume();
         GlobalContext.getInstance().setActivity(this);
     }
-    
+
 }
