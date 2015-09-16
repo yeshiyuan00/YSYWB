@@ -43,7 +43,7 @@ public class BrowserWeiboMsgActivity extends AbstractMainActivity {
         setContentView(R.layout.browserweibomsgactivity_layout);
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle("detail");
+        actionBar.setTitle(getString(R.string.detail));
 
 
         Intent intent = getIntent();
@@ -87,9 +87,9 @@ public class BrowserWeiboMsgActivity extends AbstractMainActivity {
                 SimpleBitmapWorkerTask task = new SimpleBitmapWorkerTask(repost_pic);
                 task.execute(retweetMsg.getBmiddle_pic());
             }
-        }else if(!TextUtils.isEmpty(msg.getThumbnail_pic())){
+        } else if (!TextUtils.isEmpty(msg.getThumbnail_pic())) {
             content_pic.setVisibility(View.VISIBLE);
-            SimpleBitmapWorkerTask task=new SimpleBitmapWorkerTask(content_pic);
+            SimpleBitmapWorkerTask task = new SimpleBitmapWorkerTask(content_pic);
             task.execute(msg.getBmiddle_pic());
         }
 
