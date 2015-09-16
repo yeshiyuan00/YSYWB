@@ -29,17 +29,13 @@ public abstract class AbstractTimeLineFragment extends Fragment {
     protected TimeLineAdapter timeLineAdapter;
     protected MainTimeLineActivity activity;
 
-    protected TimeLineMsgListBean bean;
+    protected TimeLineMsgListBean bean = new TimeLineMsgListBean();
 
-    public abstract void refreshAndScrollTo(int positon);
+    protected int position = 0;
 
     public abstract void refresh();
 
-    public void setBean(TimeLineMsgListBean bean) {
-        this.bean = bean;
-    }
-
-    protected final TimeLineMsgListBean getList() {
+    public TimeLineMsgListBean getList() {
         return bean;
     }
 
@@ -48,8 +44,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
     protected abstract void listViewItemLongClick(AdapterView parent, View view, int position, long id);
 
     protected abstract void listViewItemClick(AdapterView parent, View view, int position, long id);
-
-    protected abstract void rememberListViewPosition(int position);
 
     protected abstract void listViewFooterViewClick(View view);
 
@@ -65,9 +59,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public ListView getListView() {
-        return listView;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +81,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
                         if (view.getLastVisiblePosition() == (view.getCount() - 1)) {
                             scrollToBottom();
                         }
-                        rememberListViewPosition(view.getFirstVisiblePosition());
+                        position = view.getFirstVisiblePosition();
 
                         break;
                     case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
@@ -206,8 +197,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
         private void buildRepostContent(WeiboMsgBean repost_msg, ViewHolder holder, int position) {
             holder.repost_content.setVisibility(View.VISIBLE);
-//            AppLogger.e(repost_msg.getUser().getScreen_name());
-//            AppLogger.e(repost_msg.getText());
             holder.repost_content.setText(repost_msg.getUser().getScreen_name() + "：" + repost_msg.getText());
             if (!TextUtils.isEmpty(repost_msg.getThumbnail_pic())) {
                 holder.repost_content_pic.setVisibility(View.VISIBLE);

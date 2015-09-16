@@ -1,38 +1,24 @@
 package com.ysy.ysywb.ui.main;
 
 import android.app.ActionBar;
-import android.app.Dialog;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.TimeLineMsgListBean;
 import com.ysy.ysywb.bean.WeiboAccountBean;
-import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
-import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.support.utils.GlobalContext;
 import com.ysy.ysywb.ui.AbstractMainActivity;
-import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
-import com.ysy.ysywb.ui.send.StatusNewActivity;
 import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
-import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.FriendsTimeLineFragment;
-import com.ysy.ysywb.ui.timeline.MailsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MentionsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MyInfoTimeLineFragment;
 
@@ -40,7 +26,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * User: ysy
@@ -56,22 +41,16 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     private WeiboAccountBean weiboAccountBean = null;
 
-    private AbstractTimeLineFragment home = null;
-    private AbstractTimeLineFragment mentions = null;
-    private AbstractTimeLineFragment comments = null;
-    private AbstractTimeLineFragment mails = null;
-    private Fragment info = null;
+    Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = new HashMap<String, AvatarBitmapWorkerTask>();
+    Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = new HashMap<String, PictureBitmapWorkerTask>();
 
-    private TimeLineMsgListBean homeList = new TimeLineMsgListBean();
-    private TimeLineMsgListBean mentionList = new TimeLineMsgListBean();
-    private TimeLineMsgListBean commentList = new TimeLineMsgListBean();
-    private TimeLineMsgListBean mailList = new TimeLineMsgListBean();
+    public Map<String, AvatarBitmapWorkerTask> getAvatarBitmapWorkerTaskHashMap() {
+        return avatarBitmapWorkerTaskHashMap;
+    }
 
-
-    private int homelist_position = 0;
-    private int mentionList_position = 0;
-    private int commentList_position = 0;
-    private int mailList_position = 0;
+    public Map<String, PictureBitmapWorkerTask> getPictureBitmapWorkerTaskMap() {
+        return pictureBitmapWorkerTaskMap;
+    }
 
 
     @Override
@@ -161,8 +140,6 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     FriendsTimeLineFragment.Commander frinedsTimeLineMsgCommand = new FriendsTimeLineFragment.Commander() {
 
-        Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = new HashMap<String, AvatarBitmapWorkerTask>();
-        Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = new HashMap<String, PictureBitmapWorkerTask>();
 
         @Override
         public void downloadAvatar(ImageView view, String urlKey, int position, ListView listView) {
@@ -201,59 +178,6 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
         }
 
-        @Override
-        public void listViewFooterViewClick(View view) {
-            if (!isBusying) {
-                new FriendsTimeLineGetOlderMsgListTask(view).execute();
-            }
-        }
-
-        @Override
-        public void getNewFriendsTimeLineMsgList() {
-
-            new FriendsTimeLineGetNewMsgListTask().execute();
-            Set<String> keys = avatarBitmapWorkerTaskHashMap.keySet();
-            for (String key : keys) {
-                avatarBitmapWorkerTaskHashMap.get(key).cancel(true);
-                avatarBitmapWorkerTaskHashMap.remove(key);
-            }
-            Set<String> pKeys = pictureBitmapWorkerTaskMap.keySet();
-            for (String pkey : pKeys) {
-                pictureBitmapWorkerTaskMap.get(pkey).cancel(true);
-                pictureBitmapWorkerTaskMap.remove(pkey);
-            }
-        }
-
-        @Override
-        public void getOlderFriendsTimeLineMsgList() {
-//            if (!isBusying) {
-//                new FriendsTimeLineGetOlderMsgListTask().executeNormalTask();
-//
-//            }
-
-        }
-
-        @Override
-        public void replayTo(int position, View view) {
-            Intent intent = new Intent(MainTimeLineActivity.this, BrowserWeiboMsgActivity.class);
-            intent.putExtra("msg", homeList.getStatuses().get(position));
-            startActivity(intent);
-            view.setSelected(false);
-        }
-
-        @Override
-        public void newWeibo() {
-            Intent intent = new Intent(MainTimeLineActivity.this, StatusNewActivity.class);
-            intent.putExtra("token", token);
-            startActivity(intent);
-        }
-
-        @Override
-        public void onItemClick(int position) {
-            Intent intent = new Intent(MainTimeLineActivity.this, BrowserWeiboMsgActivity.class);
-            intent.putExtra("msg", homeList.getStatuses().get(position));
-            startActivity(intent);
-        }
     };
 
     class TimeLinePagerAdapter extends
@@ -264,18 +188,17 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         public TimeLinePagerAdapter(FragmentManager fm) {
             super(fm);
 
-            home = new FriendsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
-            mentions = new MentionsTimeLineFragment();
-            comments = new CommentsTimeLineFragment();
-            mails = new MailsTimeLineFragment();
-            info = new MyInfoTimeLineFragment();
+            AbstractTimeLineFragment home = new FriendsTimeLineFragment().setCommander(frinedsTimeLineMsgCommand);
+            AbstractTimeLineFragment mentions = new MentionsTimeLineFragment();
+//            AbstractTimeLineFragment comments = new CommentsTimeLineFragment();
+//            AbstractTimeLineFragment mails = new MailsTimeLineFragment();
+            MyInfoTimeLineFragment info = new MyInfoTimeLineFragment();
 //            home.setToken(token);
 //            mentions.setToken(token);
-            home.setBean(homeList);
             list.add(home);
             list.add(mentions);
-            list.add(comments);
-            list.add(mails);
+            list.add(new MentionsTimeLineFragment());
+            list.add(new MentionsTimeLineFragment());
             list.add(info);
         }
 
@@ -292,130 +215,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     }
 
-    class FriendsTimeLineGetNewMsgListTask extends AsyncTask<Void, TimeLineMsgListBean, TimeLineMsgListBean> {
-
-        DialogFragment dialogFragment = new ProgressFragment();
-
-        @Override
-        protected void onPreExecute() {
-            dialogFragment.show(getSupportFragmentManager(), "");
-        }
-
-        @Override
-        protected TimeLineMsgListBean doInBackground(Void... params) {
-
-            FriendsTimeLineMsgDao dao = new FriendsTimeLineMsgDao(token);
-
-            if (homeList.getStatuses().size() > 0) {
-                dao.setSince_id(homeList.getStatuses().get(0).getId());
-            }
-            TimeLineMsgListBean result = dao.getGSONMsgList();
-//            if (result != null)
-//                DatabaseManager.getInstance().addHomeLineMsg(result);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(TimeLineMsgListBean newValue) {
-            if (newValue != null) {
-                if (newValue.getStatuses().size() == 0) {
-                    Toast.makeText(MainTimeLineActivity.this, "no new message", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(MainTimeLineActivity.this, "total " +
-                                    newValue.getStatuses().size() + " new messages",
-                            Toast.LENGTH_SHORT).show();
-                    if (newValue.getStatuses().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
-                        if (homelist_position > 0)
-                            homelist_position += newValue.getStatuses().size();
-                        newValue.getStatuses().addAll(getHomeList().getStatuses());
-                    } else {
-                        homelist_position = 0;
-                    }
-
-                    homeList = newValue;
-                    home.setBean(homeList);
-
-                    home.refresh();
-                }
-                //   listView.smoothScrollToPosition(activity.getHomelist_position());
-            }
-            dialogFragment.dismissAllowingStateLoss();
-            super.onPostExecute(newValue);
-        }
-    }
-
-    class FriendsTimeLineGetOlderMsgListTask extends AsyncTask<Void, TimeLineMsgListBean, TimeLineMsgListBean> {
-        View footerView;
-
-        public FriendsTimeLineGetOlderMsgListTask(View view) {
-            footerView = view;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            frinedsTimeLineMsgCommand.isBusying = true;
-
-            ((TextView) footerView.findViewById(R.id.listview_footer)).setText("loading");
-        }
-
-        @Override
-        protected TimeLineMsgListBean doInBackground(Void... params) {
-
-            FriendsTimeLineMsgDao dao = new FriendsTimeLineMsgDao(token);
-            if (homeList.getStatuses().size() > 0) {
-                dao.setMax_id(homeList.getStatuses().get(homeList.getStatuses().size() - 1).getId());
-            }
-            TimeLineMsgListBean result = dao.getGSONMsgList();
-
-            return result;
-
-        }
-
-        @Override
-        protected void onPostExecute(TimeLineMsgListBean newValue) {
-            if (newValue != null) {
-                Toast.makeText(MainTimeLineActivity.this, "" + newValue.getStatuses().size(), Toast.LENGTH_SHORT).show();
-
-                homeList.getStatuses().addAll(newValue.getStatuses().subList(1, newValue.getStatuses().size() - 1));
-
-            }
-            //  dialogFragment.dismissAllowingStateLoss();
-            frinedsTimeLineMsgCommand.isBusying = false;
-            home.refresh();
-            ((TextView) footerView.findViewById(R.id.listview_footer)).setText("click to load older message");
-
-            super.onPostExecute(newValue);
-        }
-    }
-
-    static class ProgressFragment extends DialogFragment {
-
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-            ProgressDialog dialog = new ProgressDialog(getActivity());
-            dialog.setMessage("刷新中");
-            dialog.setIndeterminate(false);
-            dialog.setCancelable(true);
-
-            return dialog;
-        }
-    }
-
-
-    public void setHomelist_position(int homelist_position) {
-        this.homelist_position = homelist_position;
-    }
-
     public String getToken() {
         return token;
     }
 
-    public TimeLineMsgListBean getHomeList() {
-        return homeList;
-    }
-
-    public void setHomeList(TimeLineMsgListBean homeList) {
-        this.homeList = homeList;
-    }
 }

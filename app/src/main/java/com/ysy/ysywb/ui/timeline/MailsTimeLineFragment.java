@@ -12,10 +12,7 @@ import android.widget.ListView;
  */
 public class MailsTimeLineFragment extends AbstractTimeLineFragment {
 
-    @Override
-    public void refreshAndScrollTo(int positon) {
 
-    }
 
     @Override
     public void refresh() {
@@ -37,10 +34,7 @@ public class MailsTimeLineFragment extends AbstractTimeLineFragment {
 
     }
 
-    @Override
-    protected void rememberListViewPosition(int position) {
 
-    }
 
     @Override
     protected void listViewFooterViewClick(View view) {

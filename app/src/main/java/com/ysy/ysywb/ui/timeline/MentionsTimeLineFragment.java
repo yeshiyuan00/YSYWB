@@ -1,12 +1,9 @@
 package com.ysy.ysywb.ui.timeline;
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,76 +17,21 @@ import com.ysy.ysywb.R;
  */
 public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
 
-    @Override
-    public void refreshAndScrollTo(int positon) {
-
-    }
-
-    @Override
-    public void refresh() {
-
-    }
 
 
-    @Override
-    protected void scrollToBottom() {
-
-    }
-
-    @Override
-    protected void listViewItemLongClick(AdapterView parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    protected void rememberListViewPosition(int position) {
-
-    }
-
-    @Override
-    protected void listViewFooterViewClick(View view) {
-
-    }
-
-    @Override
-    protected void downloadAvatar(ImageView view, String url, int position, ListView listView) {
-
-    }
-
-    @Override
-    protected void downContentPic(ImageView view, String url, int position, ListView listView) {
-
-    }
+    private Commander commander;
 
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Bundle args = getArguments();
-        View view = inflater.inflate(R.layout.fragment_listview_layout, container, false);
-        listView = (ListView) view.findViewById(R.id.listView);
-        timeLineAdapter = new TimeLineAdapter();
-        listView.setAdapter(timeLineAdapter);
+    public static abstract class Commander {
 
-//        new AsyncTask<Void, List<Map<String, String>>, List<Map<String, String>>>() {
-//
-//            @Override
-//            protected List<Map<String, String>> doInBackground(Void... params) {
-//                return new TimeLineMentionsMsg().getMsgList();
-//            }
-//
-//            @Override
-//            protected void onPostExecute(List<Map<String, String>> o) {
-//                list = o;
-//                timeLineAdapter.notifyDataSetChanged();
-//                super.onPostExecute(o);
-//            }
-//        }.executeNormalTask();
-        return view;
+        public volatile boolean isBusying = false;
+
+        public void getNewFriendsTimeLineMsgList() {
+        }
+
+        public void getOlderFriendsTimeLineMsgList() {
+        }
+
     }
 
 
@@ -108,6 +50,45 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void refresh() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
+
+    @Override
+    protected void scrollToBottom() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void listViewItemLongClick(AdapterView parent, View view, int position, long id) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
+
+    @Override
+    protected void listViewFooterViewClick(View view) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void downloadAvatar(ImageView view, String url, int position, ListView listView) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void downContentPic(ImageView view, String url, int position, ListView listView) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
 }
