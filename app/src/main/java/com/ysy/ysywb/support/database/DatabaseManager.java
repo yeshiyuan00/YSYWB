@@ -6,9 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 import com.ysy.ysywb.bean.MessageListBean;
-import com.ysy.ysywb.bean.WeiboAccountBean;
+import com.ysy.ysywb.bean.AccountBean;
 import com.ysy.ysywb.bean.WeiboMsgBean;
-import com.ysy.ysywb.bean.WeiboUserBean;
+import com.ysy.ysywb.bean.UserBean;
 import com.ysy.ysywb.support.database.table.AccountTable;
 import com.ysy.ysywb.support.database.table.HomeTable;
 import com.ysy.ysywb.ui.login.OAuthActivity;
@@ -48,7 +48,7 @@ public class DatabaseManager {
         return singleton;
     }
 
-    public OAuthActivity.DBResult addOrUpdateAccount(WeiboAccountBean account) {
+    public OAuthActivity.DBResult addOrUpdateAccount(AccountBean account) {
         ContentValues cv = new ContentValues();
         cv.put(AccountTable.UID, account.getUid());
         cv.put(AccountTable.OAUTH_TOKEN, account.getAccess_token());
@@ -71,13 +71,13 @@ public class DatabaseManager {
     }
 
 
-    public List<WeiboAccountBean> getAccountList() {
-        List<WeiboAccountBean> weiboAccountList = new ArrayList<WeiboAccountBean>();
+    public List<AccountBean> getAccountList() {
+        List<AccountBean> weiboAccountList = new ArrayList<AccountBean>();
         String sql = "select * from " + AccountTable.TABLE_NAME;
         Cursor c = rsd.rawQuery(sql, null);
 
         while (c.moveToNext()) {
-            WeiboAccountBean account = new WeiboAccountBean();
+            AccountBean account = new AccountBean();
             int colid = c.getColumnIndex(AccountTable.OAUTH_TOKEN);
             account.setAccess_token(c.getString(colid));
             colid = c.getColumnIndex(AccountTable.USERNICK);
@@ -93,7 +93,7 @@ public class DatabaseManager {
         return weiboAccountList;
     }
 
-    public List<WeiboAccountBean> removeAndGetNewAccountList(Set<String> checkedItemPosition) {
+    public List<AccountBean> removeAndGetNewAccountList(Set<String> checkedItemPosition) {
         String[] args = checkedItemPosition.toArray(new String[0]);
         String column = AccountTable.UID;
         long result = wsd.delete(AccountTable.TABLE_NAME, column + "=?", args);
@@ -105,7 +105,7 @@ public class DatabaseManager {
         int size = msgList.size();
         for (int i = 0; i < size; i++) {
             WeiboMsgBean msg = msgList.get(i);
-            WeiboUserBean user = msg.getUser();
+            UserBean user = msg.getUser();
             ContentValues cv = new ContentValues();
             cv.put(HomeTable.MBLOGID, msg.getId());
             cv.put(HomeTable.NICK, user.getScreen_name());
@@ -117,7 +117,7 @@ public class DatabaseManager {
 
             WeiboMsgBean rt = msg.getRetweeted_status();
             if (rt != null) {
-                WeiboUserBean rtUser = rt.getUser();
+                UserBean rtUser = rt.getUser();
                 cv.put(HomeTable.RTAVATAR, rtUser.getProfile_image_url());
                 cv.put(HomeTable.RTCONTENT, rt.getText());
                 cv.put(HomeTable.RTID, rt.getId());
@@ -159,7 +159,7 @@ public class DatabaseManager {
 
             msg.setThumbnail_pic(c.getString(c.getColumnIndex(HomeTable.PIC)));
 
-            WeiboUserBean user = new WeiboUserBean();
+            UserBean user = new UserBean();
 
             user.setScreen_name(c.getString(c.getColumnIndex(HomeTable.NICK)));
             user.setProfile_image_url(c.getString(c.getColumnIndex(HomeTable.AVATAR)));
@@ -170,7 +170,7 @@ public class DatabaseManager {
             String rtContent = c.getString(colid);
             if (!TextUtils.isEmpty((rtContent))) {
                 WeiboMsgBean bean = new WeiboMsgBean();
-                WeiboUserBean userBean = new WeiboUserBean();
+                UserBean userBean = new UserBean();
                 bean.setId(c.getString(c.getColumnIndex(HomeTable.RTID)));
                 bean.setText(c.getString(c.getColumnIndex(HomeTable.RTCONTENT)));
                 bean.setThumbnail_pic(c.getString(c.getColumnIndex(HomeTable.RTPIC)));

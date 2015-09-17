@@ -27,6 +27,7 @@ import com.ysy.ysywb.bean.MessageListBean;
 import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
 import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.support.utils.AppConfig;
+import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
 import com.ysy.ysywb.ui.main.MainTimeLineActivity;
@@ -50,21 +51,11 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
         bean = DatabaseManager.getInstance().getHomeLineMsgList();
     }
 
-    public static abstract class Commander {
-
-        public void downloadAvatar(ImageView view, String url, int position, ListView listView) {
-
-        }
-
-        public void downContentPic(ImageView view, String url, int position, ListView listView) {
-
-        }
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        commander=((MainTimeLineActivity)getActivity()).getCommander();
+        commander=((AbstractAppActivity)getActivity()).getCommander();
         ((MainTimeLineActivity) getActivity()).setHomeListView(listView);
     }
 

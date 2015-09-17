@@ -17,14 +17,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.ui.AbstractMainActivity;
+import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 
 /**
  * User: ysy
  * Date: 2015/9/14
  * Time: 16:00
  */
-public abstract class AbstractSendActivity extends AbstractMainActivity implements DialogInterface.OnClickListener {
+public abstract class AbstractSendActivity extends AbstractAppActivity implements DialogInterface.OnClickListener {
     private static final int CAMERA_RESULT = 0;
     private static final int PIC_RESULT = 1;
     protected String token = "";

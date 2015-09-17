@@ -3,21 +3,18 @@ package com.ysy.ysywb.ui.main;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.WeiboAccountBean;
-import com.ysy.ysywb.support.utils.GlobalContext;
-import com.ysy.ysywb.ui.AbstractMainActivity;
-import com.ysy.ysywb.ui.timeline.AbstractTimeLineFragment;
+import com.ysy.ysywb.bean.AccountBean;
+import com.ysy.ysywb.bean.UserBean;
+import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.FriendsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MentionsTimeLineFragment;
@@ -25,30 +22,28 @@ import com.ysy.ysywb.ui.timeline.MyInfoTimeLineFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * User: ysy
  * Date: 2015/9/8
  * Time: 15:04
  */
-public class MainTimeLineActivity extends AbstractMainActivity {
+public class MainTimeLineActivity extends AbstractAppActivity implements MyInfoTimeLineFragment.IUserInfo {
 
     private ViewPager mViewPager = null;
-    private TimeLinePagerAdapter timeLinePagerAdapter = null;
 
     private String token = "";
 
-    private WeiboAccountBean weiboAccountBean = null;
+    private AccountBean accountBean = null;
 
-    public void setHomeListView(ListView homeListView) {
-        this.homeListView = homeListView;
-    }
 
     private ListView homeListView = null;
     private ListView mentionsListView = null;
     private ListView commentsListView = null;
+
+    public void setHomeListView(ListView homeListView) {
+        this.homeListView = homeListView;
+    }
 
     public void setMentionsListView(ListView mentionsListView) {
         this.mentionsListView = mentionsListView;
@@ -58,15 +53,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         this.commentsListView = commentsListView;
     }
 
-    Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = new ConcurrentHashMap<String, AvatarBitmapWorkerTask>();
-    Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = new ConcurrentHashMap<String, PictureBitmapWorkerTask>();
-
-    public Map<String, AvatarBitmapWorkerTask> getAvatarBitmapWorkerTaskHashMap() {
-        return avatarBitmapWorkerTaskHashMap;
-    }
-
-    public Map<String, PictureBitmapWorkerTask> getPictureBitmapWorkerTaskMap() {
-        return pictureBitmapWorkerTaskMap;
+    public String getToken() {
+        return token;
     }
 
 
@@ -77,10 +65,8 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
         Intent intent = getIntent();
 
-        weiboAccountBean = (WeiboAccountBean) intent.getSerializableExtra("account");
-        token = weiboAccountBean.getAccess_token();
-
-        // homeList = DatabaseManager.getInstance().getHomeLineMsgList();
+        accountBean = (AccountBean) intent.getSerializableExtra("account");
+        token = accountBean.getAccess_token();
 
         buildViewPager();
         buildActionBarAndViewPagerTitles();
@@ -91,8 +77,7 @@ public class MainTimeLineActivity extends AbstractMainActivity {
 
     private void buildViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        timeLinePagerAdapter = new TimeLinePagerAdapter(getSupportFragmentManager());
-        mViewPager.setAdapter(timeLinePagerAdapter);
+        mViewPager.setAdapter(new TimeLinePagerAdapter(getSupportFragmentManager()));
         mViewPager.setOnPageChangeListener(onPageChangeListener);
     }
 
@@ -188,55 +173,14 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         }
     };
 
-    private Bitmap getBitmapFromMemCache(String key) {
-        return GlobalContext.getInstance().getAvatarCache().get(key);
+    @Override
+    public UserBean getUser() {
+        UserBean bean = new UserBean();
+        bean.setScreen_name(accountBean.getUsernick());
+        bean.setId(accountBean.getUid());
+        return bean;
     }
 
-    public FriendsTimeLineFragment.Commander getCommander() {
-        return commander;
-    }
-
-    FriendsTimeLineFragment.Commander commander = new FriendsTimeLineFragment.Commander() {
-
-
-        @Override
-        public void downloadAvatar(ImageView view, String urlKey, int position, ListView listView) {
-            Bitmap bitmap = getBitmapFromMemCache(urlKey);
-            if (bitmap != null) {
-                view.setImageBitmap(bitmap);
-                avatarBitmapWorkerTaskHashMap.remove(urlKey);
-            } else {
-                view.setImageDrawable(getResources().getDrawable(R.drawable.account));
-                if (avatarBitmapWorkerTaskHashMap.get(urlKey) == null) {
-                    AvatarBitmapWorkerTask avatarTask = new AvatarBitmapWorkerTask(
-                            GlobalContext.getInstance().getAvatarCache(),
-                            avatarBitmapWorkerTaskHashMap, view, listView, position);
-                    avatarTask.execute(urlKey);
-                    avatarBitmapWorkerTaskHashMap.put(urlKey, avatarTask);
-                }
-            }
-        }
-
-        @Override
-        public void downContentPic(ImageView view, String urlKey, int position, ListView listView) {
-            Bitmap bitmap = getBitmapFromMemCache(urlKey);
-            if (bitmap != null) {
-                view.setImageBitmap(bitmap);
-                pictureBitmapWorkerTaskMap.remove(urlKey);
-            } else {
-                view.setImageDrawable(getResources().getDrawable(R.drawable.picture));
-                if (pictureBitmapWorkerTaskMap.get(urlKey) == null) {
-                    PictureBitmapWorkerTask avatarTask = new PictureBitmapWorkerTask(
-                            GlobalContext.getInstance().getAvatarCache(),
-                            pictureBitmapWorkerTaskMap, view, listView, position);
-                    avatarTask.execute(urlKey);
-                    pictureBitmapWorkerTaskMap.put(urlKey, avatarTask);
-                }
-            }
-
-        }
-
-    };
 
     class TimeLinePagerAdapter extends
             FragmentStatePagerAdapter {
@@ -246,20 +190,11 @@ public class MainTimeLineActivity extends AbstractMainActivity {
         public TimeLinePagerAdapter(FragmentManager fm) {
             super(fm);
 
-            AbstractTimeLineFragment home = new FriendsTimeLineFragment();
-            AbstractTimeLineFragment mentions = new MentionsTimeLineFragment();
+            list.add(new FriendsTimeLineFragment());
+            list.add(new MentionsTimeLineFragment());
+            list.add(new CommentsTimeLineFragment());
 
-            Fragment comments = new CommentsTimeLineFragment();
-
-            MyInfoTimeLineFragment info = new MyInfoTimeLineFragment();
-
-            info.setAccountBean(weiboAccountBean);
-
-            list.add(home);
-            list.add(mentions);
-            list.add(comments);
-
-            list.add(info);
+            list.add(new MyInfoTimeLineFragment());
         }
 
         @Override
@@ -273,10 +208,6 @@ public class MainTimeLineActivity extends AbstractMainActivity {
             return list.size();
         }
 
-    }
-
-    public String getToken() {
-        return token;
     }
 
 }

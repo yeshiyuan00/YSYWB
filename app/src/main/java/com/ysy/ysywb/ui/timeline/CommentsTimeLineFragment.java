@@ -212,17 +212,13 @@ public class CommentsTimeLineFragment extends Fragment {
 
     public volatile boolean isBusying = false;
 
-    private FriendsTimeLineFragment.Commander commander;
+    private Commander commander;
 
     public CommentsTimeLineFragment() {
 //        bean = DatabaseManager.getInstance().getHomeLineMsgList();
     }
 
 
-    public CommentsTimeLineFragment setCommander(FriendsTimeLineFragment.Commander commander) {
-        this.commander = commander;
-        return this;
-    }
 
     protected void scrollToBottom() {
 

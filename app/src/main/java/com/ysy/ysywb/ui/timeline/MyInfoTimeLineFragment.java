@@ -1,5 +1,6 @@
 package com.ysy.ysywb.ui.timeline;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,8 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.WeiboAccountBean;
-import com.ysy.ysywb.bean.WeiboUserBean;
+import com.ysy.ysywb.bean.UserBean;
 import com.ysy.ysywb.ui.login.AccountActivity;
 import com.ysy.ysywb.ui.preference.SettingActivity;
 
@@ -25,17 +25,13 @@ import com.ysy.ysywb.ui.preference.SettingActivity;
  * Time: 14:56
  */
 public class MyInfoTimeLineFragment extends Fragment {
-    private WeiboAccountBean accountBean;
 
-    private WeiboUserBean bean;
-
-    public void setBean(WeiboUserBean bean) {
-        this.bean = bean;
+    public static interface IUserInfo {
+        public UserBean getUser();
     }
 
-    public void setAccountBean(WeiboAccountBean accountBean) {
-        this.accountBean = accountBean;
-    }
+    private UserBean bean;
+
 
     public MyInfoTimeLineFragment() {
         super();
@@ -49,10 +45,21 @@ public class MyInfoTimeLineFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_info_layout, container, false);
-
+        bean = ((IUserInfo) getActivity()).getUser();
         ImageView avatar = (ImageView) view.findViewById(R.id.avatar);
         TextView username = (TextView) view.findViewById(R.id.username);
         TextView jshao = (TextView) view.findViewById(R.id.textView_info);
@@ -60,7 +67,7 @@ public class MyInfoTimeLineFragment extends Fragment {
         Button following_number = (Button) view.findViewById(R.id.following_number);
         Button fans_number = (Button) view.findViewById(R.id.fans_number);
 
-        username.setText(accountBean.getUsernick());
+        username.setText(bean.getScreen_name());
         return view;
     }
 

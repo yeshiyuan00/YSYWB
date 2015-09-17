@@ -4,7 +4,7 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import com.ysy.ysywb.bean.WeiboUserBean;
+import com.ysy.ysywb.bean.UserBean;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.http.URLManager;
@@ -31,7 +31,7 @@ public class OAuthDao {
         this.access_token = access_token;
     }
 
-    public WeiboUserBean getOAuthUserInfo() {
+    public UserBean getOAuthUserInfo() {
 
         String uidJson = getOAuthUserUIDJsonData();
         ;
@@ -53,9 +53,9 @@ public class OAuthDao {
 
         Gson gson = new Gson();
 
-        WeiboUserBean user = new WeiboUserBean();
+        UserBean user = new UserBean();
         try {
-            user = gson.fromJson(result, WeiboUserBean.class);
+            user = gson.fromJson(result, UserBean.class);
         } catch (JsonSyntaxException e) {
             AppLogger.e(result);
         }

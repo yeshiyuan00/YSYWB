@@ -14,14 +14,14 @@ import android.widget.TextView;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.dao.StatusesShowMsgDao;
-import com.ysy.ysywb.ui.AbstractMainActivity;
+import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 
 /**
  * User: ysy
  * Date: 2015/9/14
  * Time: 9:40
  */
-public class BrowserWeiboMsgActivity extends AbstractMainActivity {
+public class BrowserWeiboMsgActivity extends AbstractAppActivity {
     private WeiboMsgBean msg;
     private WeiboMsgBean retweetMsg;
     private String token;

@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.MessageListBean;
 import com.ysy.ysywb.bean.WeiboMsgBean;
-import com.ysy.ysywb.ui.main.MainTimeLineActivity;
 
 /**
  * User: ysy
@@ -27,7 +26,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
     protected ListView listView;
 
     protected TimeLineAdapter timeLineAdapter;
-    protected MainTimeLineActivity activity;
 
     protected MessageListBean bean = new MessageListBean();
 
@@ -57,7 +55,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = (MainTimeLineActivity) getActivity();
         setHasOptionsMenu(true);
         setRetainInstance(true);
     }
