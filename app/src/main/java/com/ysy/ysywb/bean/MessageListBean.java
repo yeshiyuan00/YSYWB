@@ -1,5 +1,6 @@
 package com.ysy.ysywb.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Date: 2015/9/9
  * Time: 16:13
  */
-public class MessageListBean {
+public class MessageListBean implements Serializable {
     public List<WeiboMsgBean> getStatuses() {
         return statuses;
     }
@@ -41,8 +42,8 @@ public class MessageListBean {
         this.total_number = total_number;
     }
 
-    private List<WeiboMsgBean> statuses=new ArrayList<WeiboMsgBean>();
-    private String previous_cursor="";
-    private String next_cursor="0";
-    private String total_number="";
+    private List<WeiboMsgBean> statuses = new ArrayList<WeiboMsgBean>();
+    private String previous_cursor = "";
+    private String next_cursor = "0";
+    private String total_number = "";
 }
