@@ -20,7 +20,9 @@ import android.widget.Toast;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.MessageListBean;
 import com.ysy.ysywb.dao.MentionsTimeLineMsgDao;
+import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.support.utils.AppConfig;
+import com.ysy.ysywb.ui.Abstract.IAccountInfo;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
 import com.ysy.ysywb.ui.main.MainTimeLineActivity;
@@ -57,6 +59,9 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         super.onActivityCreated(savedInstanceState);
         commander = ((MainTimeLineActivity) getActivity()).getCommander();
         ((MainTimeLineActivity) getActivity()).setMentionsListView(listView);
+        bean = DatabaseManager.getInstance().getRepostLineMsgList(
+                ((IAccountInfo) getActivity()).getAccount().getUid());
+        timeLineAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -202,9 +207,11 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
             MessageListBean result = dao.getGSONMsgList();
             if (result != null) {
                 if (result.getStatuses().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
-//                    DatabaseManager.getInstance().addHomeLineMsg(result);
+                    DatabaseManager.getInstance().addRepostLineMsg(result,
+                            ((IAccountInfo) getActivity()).getAccount().getUid());
                 } else {
-//                    DatabaseManager.getInstance().replaceHomeLineMsg(result);
+                   DatabaseManager.getInstance().replaceRepostLineMsg(result,
+                           ((IAccountInfo) getActivity()).getAccount().getUid());
                 }
             }
             return result;
