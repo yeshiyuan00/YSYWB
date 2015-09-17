@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -34,7 +33,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
     protected ListView listView;
     protected TimeLineAdapter timeLineAdapter;
     protected MessageListBean bean = new MessageListBean();
-    protected int position = 0;
     protected View headerView;
     protected View footerView;
     public volatile boolean isBusying = false;
@@ -44,8 +42,6 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         return bean;
     }
 
-
-    protected abstract void listViewItemLongClick(AdapterView parent, View view, int position, long id);
 
     protected abstract void listViewItemClick(AdapterView parent, View view, int position, long id);
 
@@ -94,39 +90,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         timeLineAdapter = new TimeLineAdapter();
         listView.setAdapter(timeLineAdapter);
 
-        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                switch ((scrollState)) {
-                    case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
-                        if (view.getLastVisiblePosition() == (view.getCount() - 1)) {
 
-                        }
-                        position = view.getFirstVisiblePosition();
-
-                        break;
-                    case AbsListView.OnScrollListener.SCROLL_STATE_FLING:
-
-                        break;
-                    case AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL:
-
-                        break;
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });
-
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                listViewItemLongClick(parent, view, position, id);
-                return true;
-            }
-        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -285,12 +249,8 @@ public abstract class AbstractTimeLineFragment extends Fragment {
                     Toast.makeText(getActivity(), "total " + newValue.getStatuses().size()
                             + " new messages", Toast.LENGTH_SHORT).show();
                     if (newValue.getStatuses().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
-                        if (position > 0) {
-                            position += newValue.getStatuses().size();
-                        }
+
                         newValue.getStatuses().addAll(getList().getStatuses());
-                    } else {
-                        position = 0;
                     }
 
                     bean = newValue;

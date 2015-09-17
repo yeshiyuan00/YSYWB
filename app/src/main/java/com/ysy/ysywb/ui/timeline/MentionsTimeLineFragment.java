@@ -44,10 +44,6 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
 
-    @Override
-    public void listViewItemLongClick(AdapterView parent, View view, int position, long id) {
-
-    }
 
     @Override
     protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
@@ -105,7 +101,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         return super.onOptionsItemSelected(item);
     }
 
-    
+
     @Override
     protected MessageListBean getDoInBackgroundNewData() {
         MentionsTimeLineMsgDao dao = new MentionsTimeLineMsgDao(((MainTimeLineActivity) getActivity()).getToken());

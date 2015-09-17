@@ -55,10 +55,6 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
 
-    @Override
-    protected void listViewItemLongClick(AdapterView parent, View view, int position, long id) {
-
-    }
 
     @Override
     protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
@@ -103,7 +99,6 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.friendstimelinefragment_menu, menu);
-        menu.add("weibo dont have messages group api");
     }
 
     @Override
