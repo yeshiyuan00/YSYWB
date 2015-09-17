@@ -146,7 +146,7 @@ public class DatabaseManager {
         MessageListBean result = new MessageListBean();
         List<WeiboMsgBean> msgList = new ArrayList<WeiboMsgBean>();
         String sql = "select * from " + HomeTable.TABLE_NAME
-                + " where" + HomeTable.ACCOUNTID + " = " + accountId +
+                + " where " + HomeTable.ACCOUNTID + " = " + accountId +
                 " order by " + HomeTable.MBLOGID + " desc";
         Cursor c = rsd.rawQuery(sql, null);
         while (c.moveToNext()) {

@@ -5,8 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ysy.ysywb.support.database.table.AccountTable;
+import com.ysy.ysywb.support.database.table.CommentsTable;
 import com.ysy.ysywb.support.database.table.GroupTable;
 import com.ysy.ysywb.support.database.table.HomeTable;
+import com.ysy.ysywb.support.database.table.RepostsTable;
 import com.ysy.ysywb.support.utils.AppLogger;
 import com.ysy.ysywb.support.utils.GlobalContext;
 
@@ -68,6 +70,63 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + HomeTable.SRC + " text"
             + ");";
 
+    static final String CREATE_COMMENTS_TABLE_SQL = "create table " + CommentsTable.TABLE_NAME
+            + "("
+            + CommentsTable.ID + " integer primary key autoincrement,"
+            + CommentsTable.ACCOUNTID + " text,"
+            + CommentsTable.MBLOGID + " text,"
+            + CommentsTable.FEEDID + " text,"
+            + CommentsTable.AVATAR + " text,"
+            + CommentsTable.MBLOGIDNUM + " text,"
+            + CommentsTable.GID + " text,"
+            + CommentsTable.GSID + " text,"
+            + CommentsTable.UID + " text,"
+            + CommentsTable.NICK + " text,"
+            + CommentsTable.PORTRAIT + " text,"
+            + CommentsTable.VIP + " text,"
+            + CommentsTable.CONTENT + " text,"
+            + CommentsTable.RTROOTUID + " text,"
+            + CommentsTable.RTROTNICK + " text,"
+            + CommentsTable.RTROOTVIP + " text,"
+            + CommentsTable.RTREASON + " text,"
+            + CommentsTable.RTAVATAR + " text,"
+            + CommentsTable.RTPIC + " text,"
+            + CommentsTable.RTCONTENT + " text,"
+            + CommentsTable.RTID + " text,"
+            + CommentsTable.TIME + " text,"
+            + CommentsTable.PIC + " text,"
+            + CommentsTable.SRC + " text"
+            + ");";
+
+
+    static final String CREATE_REPOSTS_TABLE_SQL = "create table " + RepostsTable.TABLE_NAME
+            + "("
+            + RepostsTable.ID + " integer primary key autoincrement,"
+            + RepostsTable.ACCOUNTID + " text,"
+            + RepostsTable.MBLOGID + " text,"
+            + RepostsTable.FEEDID + " text,"
+            + RepostsTable.AVATAR + " text,"
+            + RepostsTable.MBLOGIDNUM + " text,"
+            + RepostsTable.GID + " text,"
+            + RepostsTable.GSID + " text,"
+            + RepostsTable.UID + " text,"
+            + RepostsTable.NICK + " text,"
+            + RepostsTable.PORTRAIT + " text,"
+            + RepostsTable.VIP + " text,"
+            + RepostsTable.CONTENT + " text,"
+            + RepostsTable.RTROOTUID + " text,"
+            + RepostsTable.RTROTNICK + " text,"
+            + RepostsTable.RTROOTVIP + " text,"
+            + RepostsTable.RTREASON + " text,"
+            + RepostsTable.RTAVATAR + " text,"
+            + RepostsTable.RTPIC + " text,"
+            + RepostsTable.RTCONTENT + " text,"
+            + RepostsTable.RTID + " text,"
+            + RepostsTable.TIME + " text,"
+            + RepostsTable.PIC + " text,"
+            + RepostsTable.SRC + " text"
+            + ");";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -78,6 +137,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_ACCOUNT_TABLE_SQL);
         db.execSQL(CREATE_GROUP_TABLE_SQL);
         db.execSQL(CREATE_HOME_TABLE_SQL);
+        db.execSQL(CREATE_COMMENTS_TABLE_SQL);
+        db.execSQL(CREATE_REPOSTS_TABLE_SQL);
     }
 
     @Override
@@ -88,6 +149,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + AccountTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + GroupTable.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + HomeTable.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + CommentsTable.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + RepostsTable.TABLE_NAME);
         onCreate(db);
     }
 
