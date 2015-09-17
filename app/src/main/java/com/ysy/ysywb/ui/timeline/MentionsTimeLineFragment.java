@@ -44,15 +44,6 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
 
     private Commander commander;
 
-    public MentionsTimeLineFragment() {
-//        bean = DatabaseManager.getInstance().getHomeLineMsgList();
-    }
-
-
-    public MentionsTimeLineFragment setCommander(Commander commander) {
-        this.commander = commander;
-        return this;
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {

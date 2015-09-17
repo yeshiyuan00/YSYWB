@@ -48,10 +48,6 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
 
     private Commander commander;
 
-    public FriendsTimeLineFragment() {
-
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
