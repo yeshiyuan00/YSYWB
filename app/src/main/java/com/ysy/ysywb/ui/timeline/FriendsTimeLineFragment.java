@@ -59,10 +59,6 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
         }
     }
 
-    @Override
-    protected void scrollToBottom() {
-
-    }
 
     @Override
     protected void listViewItemLongClick(AdapterView parent, View view, int position, long id) {

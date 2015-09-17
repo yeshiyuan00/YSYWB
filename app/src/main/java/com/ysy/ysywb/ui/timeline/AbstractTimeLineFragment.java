@@ -30,26 +30,20 @@ import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
  * Time: 10:17
  */
 public abstract class AbstractTimeLineFragment extends Fragment {
+
     protected ListView listView;
-
     protected TimeLineAdapter timeLineAdapter;
-
     protected MessageListBean bean = new MessageListBean();
-
     protected int position = 0;
-
-    View headerView;
-    View footerView;
-    protected volatile boolean isBusying = false;
+    protected View headerView;
+    protected View footerView;
+    public volatile boolean isBusying = false;
     protected Commander commander;
-
-    public abstract void refresh();
 
     public MessageListBean getList() {
         return bean;
     }
 
-    protected abstract void scrollToBottom();
 
     protected abstract void listViewItemLongClick(AdapterView parent, View view, int position, long id);
 
@@ -106,7 +100,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
                 switch ((scrollState)) {
                     case AbsListView.OnScrollListener.SCROLL_STATE_IDLE:
                         if (view.getLastVisiblePosition() == (view.getCount() - 1)) {
-                            scrollToBottom();
+
                         }
                         position = view.getFirstVisiblePosition();
 
