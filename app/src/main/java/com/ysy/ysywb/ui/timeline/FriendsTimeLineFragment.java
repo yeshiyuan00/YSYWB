@@ -1,12 +1,7 @@
 package com.ysy.ysywb.ui.timeline;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -62,8 +57,7 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
 
     @Override
     protected void listViewItemLongClick(AdapterView parent, View view, int position, long id) {
-        view.setSelected(true);
-        new MyAlertDialogFragment().setView(view).setPosition(position).show(getFragmentManager(), "");
+
     }
 
     @Override
@@ -130,54 +124,6 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
     }
 
 
-    class MyAlertDialogFragment extends DialogFragment {
-        View view;
-
-        int position;
-
-        @Override
-        public void onCancel(DialogInterface dialog) {
-            view.setSelected(false);
-        }
-
-        public MyAlertDialogFragment setView(View view) {
-            this.view = view;
-            return this;
-        }
-
-        public MyAlertDialogFragment setPosition(int position) {
-            this.position = position;
-            return this;
-        }
-
-        @NonNull
-        @Override
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            String[] items = {"刷新", "回复"};
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                    .setTitle(getString(R.string.select))
-                    .setItems(items, onClickListener);
-
-            return builder.create();
-        }
-
-        DialogInterface.OnClickListener onClickListener = new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-                switch (which) {
-                    case 0:
-
-                        break;
-                    case 1:
-
-                        break;
-                }
-            }
-        };
-    }
 
     @Override
     protected MessageListBean getDoInBackgroundNewData() {
