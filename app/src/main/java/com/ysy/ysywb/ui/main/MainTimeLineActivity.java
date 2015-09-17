@@ -161,13 +161,13 @@ public class MainTimeLineActivity extends AbstractAppActivity implements
         public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
             switch (tab.getPosition()) {
                 case 0:
-                    if (home) homeListView.smoothScrollToPosition(0);
+                    if (home) homeListView.setSelection(0);
                     break;
                 case 1:
-                    if (mentions) mentionsListView.smoothScrollToPosition(0);
+                    if (mentions) mentionsListView.setSelection(0);
                     break;
                 case 2:
-                    if (comments) mentionsListView.smoothScrollToPosition(0);
+                    if (comments) mentionsListView.setSelection(0);
                     break;
                 case 3:
                     break;
