@@ -53,18 +53,19 @@ public class MentionsTimeLineMsgDao {
             AppLogger.e(e.getMessage().toString());
         }
 
-        List<WeiboMsgBean> msgList = value.getStatuses();
+        if (value != null) {
+            List<WeiboMsgBean> msgList = value.getStatuses();
 
-        Iterator<WeiboMsgBean> iterator = msgList.iterator();
+            Iterator<WeiboMsgBean> iterator = msgList.iterator();
 
-        while (iterator.hasNext()) {
+            while (iterator.hasNext()) {
 
-            WeiboMsgBean msg = iterator.next();
-            if (msg.getUser() == null) {
-                iterator.remove();
+                WeiboMsgBean msg = iterator.next();
+                if (msg.getUser() == null) {
+                    iterator.remove();
+                }
             }
         }
-
         return value;
 
     }
