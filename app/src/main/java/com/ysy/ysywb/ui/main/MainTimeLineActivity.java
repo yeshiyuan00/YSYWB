@@ -15,6 +15,7 @@ import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.AccountBean;
 import com.ysy.ysywb.bean.UserBean;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
+import com.ysy.ysywb.ui.Abstract.IAccountInfo;
 import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.FriendsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MentionsTimeLineFragment;
@@ -28,7 +29,8 @@ import java.util.List;
  * Date: 2015/9/8
  * Time: 15:04
  */
-public class MainTimeLineActivity extends AbstractAppActivity implements MyInfoTimeLineFragment.IUserInfo {
+public class MainTimeLineActivity extends AbstractAppActivity implements
+        MyInfoTimeLineFragment.IUserInfo, IAccountInfo {
 
     private ViewPager mViewPager = null;
 
@@ -181,7 +183,15 @@ public class MainTimeLineActivity extends AbstractAppActivity implements MyInfoT
         return bean;
     }
 
-    public MainTimeLineActivity(){};
+    @Override
+    public AccountBean getAccount() {
+        return accountBean;
+    }
+
+    public MainTimeLineActivity() {
+    }
+
+    ;
 
 
     class TimeLinePagerAdapter extends

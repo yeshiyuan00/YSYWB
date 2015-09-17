@@ -7,7 +7,12 @@ package com.ysy.ysywb.support.database.table;
  */
 public class HomeTable {
     public static final String TABLE_NAME = "home_table";
+    //support multi user,so primary key can't be message id
+    public static final String ID = "_id";
+    //support mulit user
+    public static final String ACCOUNTID="accountid";
     public static final String MBLOGID = "mblogid";
+    //message author avatar url
     public static final String AVATAR="avatar";
     public static final String FEEDID = "feedid";
     public static final String MBLOGIDNUM = "mblogidnum";

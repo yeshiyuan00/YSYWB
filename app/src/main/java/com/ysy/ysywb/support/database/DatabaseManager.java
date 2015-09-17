@@ -100,7 +100,7 @@ public class DatabaseManager {
         return getAccountList();
     }
 
-    public void addHomeLineMsg(MessageListBean list) {
+    public void addHomeLineMsg(MessageListBean list, String accountId) {
         List<WeiboMsgBean> msgList = list.getStatuses();
         int size = msgList.size();
         for (int i = 0; i < size; i++) {
@@ -108,6 +108,7 @@ public class DatabaseManager {
             UserBean user = msg.getUser();
             ContentValues cv = new ContentValues();
             cv.put(HomeTable.MBLOGID, msg.getId());
+            cv.put(HomeTable.ACCOUNTID, accountId);
             cv.put(HomeTable.NICK, user.getScreen_name());
             cv.put(HomeTable.UID, user.getId());
             cv.put(HomeTable.CONTENT, msg.getText());
@@ -121,7 +122,7 @@ public class DatabaseManager {
                 cv.put(HomeTable.RTAVATAR, rtUser.getProfile_image_url());
                 cv.put(HomeTable.RTCONTENT, rt.getText());
                 cv.put(HomeTable.RTID, rt.getId());
-                cv.put(HomeTable.RTROTNICK,rtUser.getScreen_name());
+                cv.put(HomeTable.RTROTNICK, rtUser.getScreen_name());
                 cv.put(HomeTable.RTROOTUID, rtUser.getId());
                 if (!TextUtils.isEmpty(rt.getThumbnail_pic())) {
                     cv.put(HomeTable.RTPIC, rt.getThumbnail_pic());
@@ -132,19 +133,20 @@ public class DatabaseManager {
         }
     }
 
-    public void replaceHomeLineMsg(MessageListBean list) {
+    public void replaceHomeLineMsg(MessageListBean list, String accountId) {
 
 
         wsd.execSQL("DROP TABLE IF EXISTS " + HomeTable.TABLE_NAME);
         wsd.execSQL(DatabaseHelper.CREATE_HOME_TABLE_SQL);
 
-        addHomeLineMsg(list);
+        addHomeLineMsg(list, accountId);
     }
 
-    public MessageListBean getHomeLineMsgList() {
+    public MessageListBean getHomeLineMsgList(String accountId) {
         MessageListBean result = new MessageListBean();
         List<WeiboMsgBean> msgList = new ArrayList<WeiboMsgBean>();
-        String sql = "select * from " + HomeTable.TABLE_NAME +
+        String sql = "select * from " + HomeTable.TABLE_NAME
+                + " where" + HomeTable.ACCOUNTID + " = " + accountId +
                 " order by " + HomeTable.MBLOGID + " desc";
         Cursor c = rsd.rawQuery(sql, null);
         while (c.moveToNext()) {

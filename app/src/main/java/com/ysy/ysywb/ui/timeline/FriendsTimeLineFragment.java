@@ -28,6 +28,7 @@ import com.ysy.ysywb.dao.FriendsTimeLineMsgDao;
 import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
+import com.ysy.ysywb.ui.Abstract.IAccountInfo;
 import com.ysy.ysywb.ui.browser.BrowserWeiboMsgActivity;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
 import com.ysy.ysywb.ui.main.MainTimeLineActivity;
@@ -66,7 +67,8 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
         if (savedInstanceState != null) {
             bean = (MessageListBean) savedInstanceState.getSerializable("bean");
         } else {
-            bean = DatabaseManager.getInstance().getHomeLineMsgList();
+            bean = DatabaseManager.getInstance().getHomeLineMsgList(
+                    ((MyInfoTimeLineFragment.IUserInfo) getActivity()).getUser().getId());
         }
 
         timeLineAdapter.notifyDataSetChanged();
@@ -256,9 +258,11 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
             MessageListBean result = dao.getGSONMsgList();
             if (result != null) {
                 if (result.getStatuses().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
-                    DatabaseManager.getInstance().addHomeLineMsg(result);
+                    DatabaseManager.getInstance().addHomeLineMsg(result,
+                            ((IAccountInfo) getActivity()).getAccount().getUid());
                 } else {
-                    DatabaseManager.getInstance().replaceHomeLineMsg(result);
+                    DatabaseManager.getInstance().replaceHomeLineMsg(result,
+                            ((IAccountInfo) getActivity()).getAccount().getUid());
                 }
             }
             return result;
