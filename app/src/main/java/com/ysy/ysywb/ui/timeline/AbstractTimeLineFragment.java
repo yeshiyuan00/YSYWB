@@ -1,21 +1,28 @@
 package com.ysy.ysywb.ui.timeline;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.MessageListBean;
 import com.ysy.ysywb.bean.WeiboMsgBean;
+import com.ysy.ysywb.support.utils.AppConfig;
+import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 
 /**
  * User: ysy
@@ -33,6 +40,8 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
     View headerView;
     View footerView;
+    protected volatile boolean isBusying = false;
+    protected Commander commander;
 
     public abstract void refresh();
 
@@ -48,9 +57,13 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
     protected abstract void listViewFooterViewClick(View view);
 
-    protected abstract void downloadAvatar(ImageView view, String url, int position, ListView listView);
+    protected void downloadAvatar(ImageView view, String url, int position, ListView listView) {
+        commander.downloadAvatar(view, url, position, listView);
+    }
 
-    protected abstract void downContentPic(ImageView view, String url, int position, ListView listView);
+    protected void downContentPic(ImageView view, String url, int position, ListView listView) {
+        commander.downContentPic(view, url, position, listView);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +72,11 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         setRetainInstance(true);
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        commander = ((AbstractAppActivity) getActivity()).getCommander();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +92,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         footerView = inflater.inflate(R.layout.fragment_listview_footer_layout, null);
         listView.addFooterView(footerView);
 
-        if(bean.getStatuses().size()==0){
+        if (bean.getStatuses().size() == 0) {
             footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
         }
 
@@ -119,8 +137,8 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position-1 < getList().getStatuses().size()) {
-                    listViewItemClick(parent, view, position-1, id);
+                if (position - 1 < getList().getStatuses().size()) {
+                    listViewItemClick(parent, view, position - 1, id);
                 } else {
                     listViewFooterViewClick(view);
                 }
@@ -237,4 +255,113 @@ public abstract class AbstractTimeLineFragment extends Fragment {
         ImageView content_pic;
         ImageView repost_content_pic;
     }
+
+    protected abstract MessageListBean getDoInBackgroundNewData();
+
+    protected class TimeLineGetNewMsgListTask extends AsyncTask<Object, MessageListBean, MessageListBean> {
+
+        @Override
+        protected void onPreExecute() {
+            isBusying = true;
+            footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
+            headerView.findViewById(R.id.header_progress).setVisibility(View.VISIBLE);
+            headerView.findViewById(R.id.header_text).setVisibility(View.VISIBLE);
+            Animation rotateAnimation = new RotateAnimation(0f, 360f,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setDuration(1000);
+            rotateAnimation.setRepeatCount(-1);
+            rotateAnimation.setRepeatMode(Animation.RESTART);
+            rotateAnimation.setInterpolator(new LinearInterpolator());
+
+            headerView.findViewById(R.id.header_progress).startAnimation(rotateAnimation);
+            listView.setSelection(0);
+        }
+
+        @Override
+        protected MessageListBean doInBackground(Object... params) {
+            return getDoInBackgroundNewData();
+        }
+
+        @Override
+        protected void onPostExecute(MessageListBean newValue) {
+            if (newValue != null) {
+                if (newValue.getStatuses().size() == 0) {
+                    Toast.makeText(getActivity(), "no new message", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "total " + newValue.getStatuses().size()
+                            + " new messages", Toast.LENGTH_SHORT).show();
+                    if (newValue.getStatuses().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
+                        if (position > 0) {
+                            position += newValue.getStatuses().size();
+                        }
+                        newValue.getStatuses().addAll(getList().getStatuses());
+                    } else {
+                        position = 0;
+                    }
+
+                    bean = newValue;
+                    timeLineAdapter.notifyDataSetChanged();
+                    listView.setSelectionAfterHeaderView();
+                    headerView.findViewById(R.id.header_progress).clearAnimation();
+                }
+            }
+
+            headerView.findViewById(R.id.header_progress).setVisibility(View.GONE);
+            headerView.findViewById(R.id.header_text).setVisibility(View.GONE);
+            isBusying = false;
+            if (bean.getStatuses().size() == 0) {
+                footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
+            } else {
+                footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
+            }
+            super.onPostExecute(newValue);
+        }
+    }
+
+    protected abstract MessageListBean getDoInBackgroundOldData();
+    class TimeLineGetOlderMsgListTask extends AsyncTask<Object, MessageListBean, MessageListBean> {
+
+        @Override
+        protected void onPreExecute() {
+            isBusying = true;
+
+            ((TextView) footerView.findViewById(R.id.listview_footer)).setText("loading");
+            View view = footerView.findViewById(R.id.refresh);
+            view.setVisibility(View.VISIBLE);
+
+            Animation rotateAnimation = new RotateAnimation(0f, 360f,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setDuration(1000);
+            rotateAnimation.setRepeatCount(-1);
+            rotateAnimation.setRepeatMode(Animation.RESTART);
+            rotateAnimation.setInterpolator(new LinearInterpolator());
+            view.startAnimation(rotateAnimation);
+
+        }
+
+        @Override
+        protected MessageListBean doInBackground(Object... params) {
+
+            return getDoInBackgroundOldData();
+
+        }
+
+        @Override
+        protected void onPostExecute(MessageListBean newValue) {
+            if (newValue != null) {
+                Toast.makeText(getActivity(), "total " + newValue.getStatuses().size() + " old messages", Toast.LENGTH_SHORT).show();
+
+                getList().getStatuses().addAll(newValue.getStatuses().subList(1, newValue.getStatuses().size() - 1));
+
+            }
+
+            isBusying = false;
+            ((TextView) footerView.findViewById(R.id.listview_footer)).setText("click to load older message");
+            footerView.findViewById(R.id.refresh).clearAnimation();
+            footerView.findViewById(R.id.refresh).setVisibility(View.GONE);
+            timeLineAdapter.notifyDataSetChanged();
+            super.onPostExecute(newValue);
+        }
+    }
+
 }
