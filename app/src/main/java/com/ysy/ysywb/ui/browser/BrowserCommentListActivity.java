@@ -12,9 +12,15 @@ import com.ysy.ysywb.R;
  */
 public class BrowserCommentListActivity extends Activity {
 
+    private String token = "";
+    private String id = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.browsercommentlistactivity_layout);
+
+        token = getIntent().getStringExtra("token");
+        id = getIntent().getStringExtra("id");
     }
 }

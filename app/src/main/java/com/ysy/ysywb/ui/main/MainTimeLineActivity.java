@@ -16,6 +16,7 @@ import com.ysy.ysywb.bean.AccountBean;
 import com.ysy.ysywb.bean.UserBean;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 import com.ysy.ysywb.ui.Abstract.IAccountInfo;
+import com.ysy.ysywb.ui.backgroundservices.FetchNewMsgService;
 import com.ysy.ysywb.ui.timeline.CommentsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.FriendsTimeLineFragment;
 import com.ysy.ysywb.ui.timeline.MentionsTimeLineFragment;
@@ -73,7 +74,7 @@ public class MainTimeLineActivity extends AbstractAppActivity implements
         buildViewPager();
         buildActionBarAndViewPagerTitles();
 
-
+        startService(new Intent(this, FetchNewMsgService.class));
     }
 
 

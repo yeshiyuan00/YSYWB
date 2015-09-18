@@ -5,9 +5,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <!--<fragment
+    <fragment
         android:id="@+id/listViewFragment"
+        android:name="com.ysy.ysywb.ui.browser.CommentsByIdTimeLineFragment"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />-->
+        android:layout_height="fill_parent" />
 
 </LinearLayout>
