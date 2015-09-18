@@ -111,9 +111,7 @@ public class CommentsTimeLineFragment extends Fragment {
         @Override
         protected void onPostExecute(Object o) {
             timeLineAdapter.notifyDataSetChanged();
-            if (bean.getComments().size() != 0) {
-                footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
-            }
+            refreshLayout(bean);
             super.onPostExecute(o);
         }
     }

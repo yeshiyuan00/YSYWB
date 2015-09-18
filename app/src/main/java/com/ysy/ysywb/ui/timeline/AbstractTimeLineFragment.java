@@ -239,7 +239,9 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            showListView();
             isBusying = true;
+
             footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
             headerView.findViewById(R.id.header_progress).setVisibility(View.VISIBLE);
             headerView.findViewById(R.id.header_text).setVisibility(View.VISIBLE);
@@ -297,6 +299,7 @@ public abstract class AbstractTimeLineFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            showListView();
             isBusying = true;
 
             ((TextView) footerView.findViewById(R.id.listview_footer)).setText("loading");
@@ -336,6 +339,12 @@ public abstract class AbstractTimeLineFragment extends Fragment {
             timeLineAdapter.notifyDataSetChanged();
             super.onPostExecute(newValue);
         }
+    }
+
+    private void showListView() {
+        empty.setVisibility(View.INVISIBLE);
+        listView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
 }
