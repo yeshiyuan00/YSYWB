@@ -3,61 +3,58 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="5dp"
-    android:background="@drawable/listview_item_background_selector">
+    android:background="@drawable/listview_item_background_selector"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/avatar"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:background="@drawable/account"
         android:layout_gravity="left|center_vertical"
-        android:layout_marginRight="5dp"/>
+        android:layout_marginRight="5dp"
+        android:background="@drawable/account" />
 
     <TextView
         android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="username"
-        android:textColor="@drawable/listview_item_text_selector"
         android:layout_toRightOf="@id/avatar"
-        />
+        android:text="username"
+        android:textColor="@drawable/listview_item_text_selector" />
 
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="12:00"
-        android:textColor="@drawable/listview_item_text_selector"
-        android:layout_alignParentRight="true"
         android:layout_alignBottom="@id/username"
-        />
+        android:layout_alignParentRight="true"
+        android:text="12:00"
+        android:textColor="@drawable/listview_item_text_selector" />
 
 
     <TextView
         android:id="@+id/content"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="content"
-        android:textColor="@drawable/listview_item_text_selector"
         android:layout_below="@id/username"
         android:layout_toRightOf="@id/avatar"
         android:layerType="software"
-        />
+        android:text="content"
+        android:textColor="@drawable/listview_item_text_selector" />
 
     <FrameLayout
 
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/content"
-        android:layout_toRightOf="@id/avatar"
-        >
+        android:layout_toRightOf="@id/avatar">
+
         <ImageView
             android:id="@+id/content_pic"
             android:layout_width="fill_parent"
             android:layout_height="80dp"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
+
         <LinearLayout
 
             android:layout_width="fill_parent"
@@ -67,22 +64,21 @@
             android:orientation="vertical"
 
             >
+
             <TextView
                 android:id="@+id/repost_content"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:layerType="software"
                 android:text="content"
                 android:textColor="@drawable/listview_item_text_selector"
-                android:visibility="gone"
-                android:layerType="software"
-                />
-            <ImageView
+                android:visibility="gone" />
 
+            <ImageView
                 android:id="@+id/repost_content_pic"
                 android:layout_width="fill_parent"
                 android:layout_height="80dp"
-                android:visibility="gone"
-                />
+                android:visibility="gone" />
         </LinearLayout>
 
     </FrameLayout>
