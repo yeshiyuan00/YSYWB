@@ -39,7 +39,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((MainTimeLineActivity) getActivity()).setHomeListView(listView);
+        ((MainTimeLineActivity) getActivity()).setMentionsListView(listView);
 
         if (savedInstanceState != null) {
             bean = (MessageListBean) savedInstanceState.getSerializable("bean");
