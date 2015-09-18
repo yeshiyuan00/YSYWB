@@ -25,7 +25,9 @@ import com.ysy.ysywb.bean.CommentBean;
 import com.ysy.ysywb.bean.CommentListBean;
 import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.dao.CommentsTimeLineMsgDao;
+import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.support.utils.AppConfig;
+import com.ysy.ysywb.ui.Abstract.IAccountInfo;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
 import com.ysy.ysywb.ui.main.MainTimeLineActivity;
 import com.ysy.ysywb.ui.main.PictureBitmapWorkerTask;
@@ -56,10 +58,27 @@ public class CommentsTimeLineFragment extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("bean", bean);
+    }
+
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         commander = ((MainTimeLineActivity) getActivity()).getCommander();
         ((MainTimeLineActivity) getActivity()).setCommentsListView(listView);
+
+        if (savedInstanceState != null) {
+            bean = (CommentListBean) savedInstanceState.getSerializable("bean");
+        } else {
+            bean = DatabaseManager.getInstance().getCommentLineMsgList(((IAccountInfo) getActivity()).getAccount().getUid());
+        }
+        timeLineAdapter.notifyDataSetChanged();
+        if (bean.getComments().size() != 0) {
+            footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -92,8 +111,8 @@ public class CommentsTimeLineFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (position-1 < getList().getComments().size()) {
-                    listViewItemClick(parent, view, position-1, id);
+                if (position - 1 < getList().getComments().size()) {
+                    listViewItemClick(parent, view, position - 1, id);
                 } else {
                     listViewFooterViewClick(view);
                 }
@@ -181,7 +200,6 @@ public class CommentsTimeLineFragment extends Fragment {
             }
         }
     }
-
 
 
     protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
@@ -282,9 +300,9 @@ public class CommentsTimeLineFragment extends Fragment {
             CommentListBean result = dao.getGSONMsgList();
             if (result != null) {
                 if (result.getComments().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
-//                    DatabaseManager.getInstance().addHomeLineMsg(result);
+                    DatabaseManager.getInstance().addCommentLineMsg(result, ((IAccountInfo) getActivity()).getAccount().getUid());
                 } else {
-//                    DatabaseManager.getInstance().replaceHomeLineMsg(result);
+                    DatabaseManager.getInstance().replaceCommentLineMsg(result, ((IAccountInfo) getActivity()).getAccount().getUid());
                 }
             }
             return result;
