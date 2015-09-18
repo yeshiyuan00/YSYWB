@@ -70,12 +70,14 @@ public class CommentsTimeLineFragment extends Fragment {
         commander = ((MainTimeLineActivity) getActivity()).getCommander();
         ((MainTimeLineActivity) getActivity()).setCommentsListView(listView);
 
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null && bean.getComments().size() == 0) {
             bean = (CommentListBean) savedInstanceState.getSerializable("bean");
-        } else {
+            timeLineAdapter.notifyDataSetChanged();
+        } else if (bean.getComments().size() == 0) {
             bean = DatabaseManager.getInstance().getCommentLineMsgList(((IAccountInfo) getActivity()).getAccount().getUid());
+            timeLineAdapter.notifyDataSetChanged();
         }
-        timeLineAdapter.notifyDataSetChanged();
+
         if (bean.getComments().size() != 0) {
             footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
         }

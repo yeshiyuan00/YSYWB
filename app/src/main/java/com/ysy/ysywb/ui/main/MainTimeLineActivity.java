@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.widget.ListView;
@@ -195,7 +195,7 @@ public class MainTimeLineActivity extends AbstractAppActivity implements
 
 
     class TimeLinePagerAdapter extends
-            FragmentStatePagerAdapter {
+            FragmentPagerAdapter {
 
         List<Fragment> list = new ArrayList<Fragment>();
 
