@@ -28,6 +28,7 @@ import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.dao.CommentsTimeLineMsgDao;
 import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.support.utils.AppConfig;
+import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 import com.ysy.ysywb.ui.Abstract.IAccountInfo;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
 import com.ysy.ysywb.ui.main.MainTimeLineActivity;
@@ -85,7 +86,7 @@ public class CommentsTimeLineFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        commander = ((MainTimeLineActivity) getActivity()).getCommander();
+        commander = ((AbstractAppActivity) getActivity()).getCommander();
         ((MainTimeLineActivity) getActivity()).setCommentsListView(listView);
 
         if (savedInstanceState != null && bean.getComments().size() == 0) {
@@ -314,6 +315,7 @@ public class CommentsTimeLineFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            showListView();
             isBusying = true;
             footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
             headerView.findViewById(R.id.header_progress).setVisibility(View.VISIBLE);
@@ -384,6 +386,7 @@ public class CommentsTimeLineFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
+            showListView();
             isBusying = true;
 
             ((TextView) footerView.findViewById(R.id.listview_footer)).setText("loading");
@@ -429,5 +432,11 @@ public class CommentsTimeLineFragment extends Fragment {
             timeLineAdapter.notifyDataSetChanged();
             super.onPostExecute(newValue);
         }
+    }
+
+    private void showListView() {
+        empty.setVisibility(View.INVISIBLE);
+        listView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 }
