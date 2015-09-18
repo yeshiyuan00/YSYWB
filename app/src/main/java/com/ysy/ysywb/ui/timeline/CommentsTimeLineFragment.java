@@ -74,12 +74,27 @@ public class CommentsTimeLineFragment extends Fragment {
             bean = (CommentListBean) savedInstanceState.getSerializable("bean");
             timeLineAdapter.notifyDataSetChanged();
         } else if (bean.getComments().size() == 0) {
-            bean = DatabaseManager.getInstance().getCommentLineMsgList(((IAccountInfo) getActivity()).getAccount().getUid());
-            timeLineAdapter.notifyDataSetChanged();
+            new SimpleTask().execute();
         }
 
         if (bean.getComments().size() != 0) {
             footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
+        }
+    }
+
+    private class SimpleTask extends AsyncTask<Object, Object, Object> {
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            bean = DatabaseManager.getInstance().getCommentLineMsgList(
+                    ((IAccountInfo) getActivity()).getAccount().getUid());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            timeLineAdapter.notifyDataSetChanged();
+            super.onPostExecute(o);
         }
     }
 

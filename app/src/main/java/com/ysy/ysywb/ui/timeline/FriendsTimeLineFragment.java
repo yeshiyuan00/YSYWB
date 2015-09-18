@@ -1,6 +1,7 @@
 package com.ysy.ysywb.ui.timeline;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,8 +45,7 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
         if (savedInstanceState != null) {
             bean = (MessageListBean) savedInstanceState.getSerializable("bean");
         } else {
-            bean = DatabaseManager.getInstance().getHomeLineMsgList(
-                    ((IAccountInfo) getActivity()).getAccount().getUid());
+            new SimpleTask().execute();
         }
 
         timeLineAdapter.notifyDataSetChanged();
@@ -54,6 +54,23 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
         }
     }
 
+    private class SimpleTask extends AsyncTask<Object, Object, Object> {
+
+        @Override
+        protected Object doInBackground(Object... params) {
+            bean = DatabaseManager.getInstance().getHomeLineMsgList(((IAccountInfo) getActivity()).getAccount().getUid());
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            timeLineAdapter.notifyDataSetChanged();
+            if (bean.getStatuses().size() != 0) {
+                footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
+            }
+            super.onPostExecute(o);
+        }
+    }
 
 
     @Override
@@ -117,7 +134,6 @@ public class FriendsTimeLineFragment extends AbstractTimeLineFragment {
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     @Override
