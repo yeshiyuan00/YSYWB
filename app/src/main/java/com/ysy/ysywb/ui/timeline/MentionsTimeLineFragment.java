@@ -24,9 +24,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * User: ysy
- * Date: 2015/9/8
- * Time: 15:19
+ * User: qii
+ * Date: 12-7-29
+ * Time: 上午12:52
  */
 public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
 
@@ -40,15 +40,16 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ((MainTimeLineActivity) getActivity()).setMentionsListView(listView);
-
         if (savedInstanceState != null) {
             bean = (MessageListBean) savedInstanceState.getSerializable("bean");
             timeLineAdapter.notifyDataSetChanged();
 
             refreshLayout(bean);
+
         } else {
             new SimpleTask().execute();
         }
+
     }
 
     private class SimpleTask extends AsyncTask<Object, Object, Object> {
@@ -67,7 +68,6 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         }
     }
 
-
     @Override
     protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
         Intent intent = new Intent(getActivity(), BrowserWeiboMsgActivity.class);
@@ -75,6 +75,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         intent.putExtra("token", ((MainTimeLineActivity) getActivity()).getToken());
         startActivity(intent);
     }
+
 
     @Override
     protected void listViewFooterViewClick(View view) {
@@ -112,6 +113,7 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.mentionstimelinefragment_menu, menu);
         menu.add("weibo dont have messages group api");
+
     }
 
     @Override
@@ -119,7 +121,9 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         switch (item.getItemId()) {
 
             case R.id.mentionstimelinefragment_refresh:
+
                 refresh();
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -155,4 +159,6 @@ public class MentionsTimeLineFragment extends AbstractTimeLineFragment {
         return result;
     }
 
+
 }
+
