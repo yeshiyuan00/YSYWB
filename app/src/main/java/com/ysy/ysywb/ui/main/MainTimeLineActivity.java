@@ -86,8 +86,12 @@ public class MainTimeLineActivity extends AbstractAppActivity implements
     private void buildActionBarAndViewPagerTitles() {
         ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
+
+        if (getResources().getBoolean(R.bool.is_phone)) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowHomeEnabled(false);
+        }
+
         actionBar.addTab(actionBar.newTab()
                 .setText(getString(R.string.home))
                 .setTabListener(tabListener));
