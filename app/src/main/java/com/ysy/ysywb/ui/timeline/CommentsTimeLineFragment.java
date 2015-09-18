@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +48,9 @@ public class CommentsTimeLineFragment extends Fragment {
     protected Commander commander;
 
     protected ListView listView;
+    protected TextView empty;
+    protected ProgressBar progressBar;
+
     protected TimeLineAdapter timeLineAdapter;
 
     protected MainTimeLineActivity activity;
@@ -63,6 +67,20 @@ public class CommentsTimeLineFragment extends Fragment {
         outState.putSerializable("bean", bean);
     }
 
+    protected void refreshLayout(CommentListBean bean) {
+        if (bean.getComments().size() > 0) {
+            footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
+            empty.setVisibility(View.INVISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.VISIBLE);
+        } else {
+            footerView.findViewById(R.id.listview_footer).setVisibility(View.INVISIBLE);
+            empty.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.INVISIBLE);
+            listView.setVisibility(View.INVISIBLE);
+        }
+    }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -73,7 +91,8 @@ public class CommentsTimeLineFragment extends Fragment {
         if (savedInstanceState != null && bean.getComments().size() == 0) {
             bean = (CommentListBean) savedInstanceState.getSerializable("bean");
             timeLineAdapter.notifyDataSetChanged();
-        } else if (bean.getComments().size() == 0) {
+            refreshLayout(bean);
+        } else {
             new SimpleTask().execute();
         }
 
@@ -110,6 +129,8 @@ public class CommentsTimeLineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listview_layout, container, false);
         listView = (ListView) view.findViewById(R.id.listView);
+        empty = (TextView) view.findViewById(R.id.empty);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
         listView.setScrollingCacheEnabled(false);
         headerView = inflater.inflate(R.layout.fragment_listview_header_layout, null);
         listView.addHeaderView(headerView);
