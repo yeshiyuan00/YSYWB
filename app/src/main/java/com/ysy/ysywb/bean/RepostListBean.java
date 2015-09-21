@@ -1,5 +1,6 @@
 package com.ysy.ysywb.bean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +9,7 @@ import java.util.List;
  * Date: 2015/9/16
  * Time: 16:33
  */
-public class RepostListBean {
+public class RepostListBean implements Serializable {
     private List<WeiboMsgBean> reposts = new ArrayList<WeiboMsgBean>();
     private String previous_cursor = "";
     private String next_cursor = "0";

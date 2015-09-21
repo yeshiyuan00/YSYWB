@@ -2,7 +2,9 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/ysy/ysywb/dao/CommentsTimeLineMsgDao.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/ysy/ysywb/dao/RepostsTimeLineMsgByIdDao.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/ysy/ysywb/support/file/FileLocationMethod.java" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/ysy/ysywb/ui/browser/RepostsByIdTimeLineFragment.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/ysy/ysywb/ui/main/AvatarBitmapWorkerTask.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-ldpi/listitem_background_pressed.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account.png" charset="GBK" />

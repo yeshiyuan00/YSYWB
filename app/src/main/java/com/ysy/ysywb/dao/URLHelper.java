@@ -44,6 +44,10 @@ public class URLHelper {
         return URLManager.getRealUrl("commentstimelinebymsgid");
     }
 
+    public static String getRepostListById() {
+        return URLManager.getRealUrl("repoststimelinebymsgid");
+    }
+
     public static String getTags() {
         return URLManager.getRealUrl("tags");
     }

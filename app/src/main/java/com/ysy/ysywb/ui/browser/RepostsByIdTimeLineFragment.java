@@ -22,9 +22,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ysy.ysywb.R;
-import com.ysy.ysywb.bean.CommentBean;
-import com.ysy.ysywb.bean.CommentListBean;
-import com.ysy.ysywb.dao.CommentsTimeLineMsgByIdDao;
+import com.ysy.ysywb.bean.RepostListBean;
+import com.ysy.ysywb.bean.WeiboMsgBean;
+import com.ysy.ysywb.dao.RepostsTimeLineMsgByIdDao;
 import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
@@ -35,31 +35,30 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * User: ysy
- * Date: 2015/9/18
- * Time: 14:41
+ * User: qii
+ * Date: 12-8-13
+ * Time: 下午10:03
  */
-public class CommentsByIdTimeLineFragment extends Fragment {
+public class RepostsByIdTimeLineFragment extends Fragment {
+
     protected View headerView;
     protected View footerView;
     public volatile boolean isBusying = false;
     protected Commander commander;
-
     protected ListView listView;
     protected TextView empty;
     protected ProgressBar progressBar;
-
     protected TimeLineAdapter timeLineAdapter;
-    protected CommentListBean bean = new CommentListBean();
+    protected RepostListBean bean = new RepostListBean();
 
-    public CommentListBean getList() {
+    public RepostListBean getList() {
         return bean;
     }
 
     private String token;
     private String id;
 
-    public CommentsByIdTimeLineFragment(String token, String id) {
+    public RepostsByIdTimeLineFragment(String token, String id) {
         this.token = token;
         this.id = id;
     }
@@ -70,8 +69,9 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         outState.putSerializable("bean", bean);
     }
 
-    protected void refreshLayout(CommentListBean bean) {
-        if (bean.getComments().size() > 0) {
+
+    protected void refreshLayout(RepostListBean bean) {
+        if (bean.getReposts().size() > 0) {
             footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
             empty.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.INVISIBLE);
@@ -88,28 +88,30 @@ public class CommentsByIdTimeLineFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         commander = ((AbstractAppActivity) getActivity()).getCommander();
-        if (savedInstanceState != null && bean.getComments().size() == 0) {
-            bean = (CommentListBean) savedInstanceState.getSerializable("bean");
+        if (savedInstanceState != null && bean.getReposts().size() == 0) {
+            bean = (RepostListBean) savedInstanceState.getSerializable("bean");
             timeLineAdapter.notifyDataSetChanged();
             refreshLayout(bean);
         } else {
             new SimpleTask().execute();
+
         }
+
     }
 
     private class SimpleTask extends AsyncTask<Object, Object, Object> {
 
         @Override
         protected Object doInBackground(Object... params) {
-            bean = new CommentsTimeLineMsgByIdDao(token, id).getGSONMsgList();
+            bean = new RepostsTimeLineMsgByIdDao(token, id).getGSONMsgList();
             return null;
         }
 
         @Override
-        protected void onPreExecute() {
+        protected void onPostExecute(Object o) {
             timeLineAdapter.notifyDataSetChanged();
             refreshLayout(bean);
-            super.onPreExecute();
+            super.onPostExecute(o);
         }
     }
 
@@ -120,12 +122,14 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         setRetainInstance(true);
     }
 
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_listview_layout, container, false);
-        listView = (ListView) view.findViewById(R.id.listView);
         empty = (TextView) view.findViewById(R.id.empty);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
+        listView = (ListView) view.findViewById(R.id.listView);
         listView.setScrollingCacheEnabled(false);
         headerView = inflater.inflate(R.layout.fragment_listview_header_layout, null);
         listView.addHeaderView(headerView);
@@ -133,16 +137,19 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         footerView = inflater.inflate(R.layout.fragment_listview_footer_layout, null);
         listView.addFooterView(footerView);
 
-        if (bean.getComments().size() == 0) {
+        if (bean.getReposts().size() == 0) {
             footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
         }
+
 
         timeLineAdapter = new TimeLineAdapter();
         listView.setAdapter(timeLineAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position - 1 < getList().getComments().size()) {
+
+                if (position - 1 < getList().getReposts().size()) {
+
                     listViewItemClick(parent, view, position - 1, id);
                 } else {
 
@@ -150,8 +157,6 @@ public class CommentsByIdTimeLineFragment extends Fragment {
                 }
             }
         });
-
-
         return view;
     }
 
@@ -161,8 +166,9 @@ public class CommentsByIdTimeLineFragment extends Fragment {
 
         @Override
         public int getCount() {
-            if (getList() != null && getList().getComments() != null) {
-                return getList().getComments().size();
+
+            if (getList() != null && getList().getReposts() != null) {
+                return getList().getReposts().size();
             } else {
                 return 0;
             }
@@ -170,7 +176,7 @@ public class CommentsByIdTimeLineFragment extends Fragment {
 
         @Override
         public Object getItem(int position) {
-            return getList().getComments().get(position);
+            return getList().getReposts().get(position);
         }
 
         @Override
@@ -180,6 +186,7 @@ public class CommentsByIdTimeLineFragment extends Fragment {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+
             ViewHolder holder;
             if (convertView == null) {
                 holder = new ViewHolder();
@@ -192,13 +199,16 @@ public class CommentsByIdTimeLineFragment extends Fragment {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
+
             bindViewData(holder, position);
+
 
             return convertView;
         }
 
         private void bindViewData(ViewHolder holder, int position) {
-            CommentBean msg = getList().getComments().get(position);
+
+            WeiboMsgBean msg = getList().getReposts().get(position);
 
 
             holder.username.setText(msg.getUser().getScreen_name());
@@ -210,20 +220,22 @@ public class CommentsByIdTimeLineFragment extends Fragment {
             holder.content.setText(msg.getText());
 
         }
+
     }
 
     static class ViewHolder {
         TextView username;
         TextView content;
-
         TextView time;
         ImageView avatar;
 
     }
 
+
     protected void listViewItemClick(AdapterView parent, View view, int position, long id) {
 
     }
+
 
     protected void listViewFooterViewClick(View view) {
         if (!isBusying) {
@@ -239,6 +251,7 @@ public class CommentsByIdTimeLineFragment extends Fragment {
     public void refresh() {
         Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = ((AbstractAppActivity) getActivity()).getAvatarBitmapWorkerTaskHashMap();
 
+
         new FriendsTimeLineGetNewMsgListTask().execute();
         Set<String> keys = avatarBitmapWorkerTaskHashMap.keySet();
         for (String key : keys) {
@@ -248,6 +261,7 @@ public class CommentsByIdTimeLineFragment extends Fragment {
 
 
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -269,7 +283,8 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    class FriendsTimeLineGetNewMsgListTask extends AsyncTask<Void, CommentListBean, CommentListBean> {
+
+    class FriendsTimeLineGetNewMsgListTask extends AsyncTask<Void, RepostListBean, RepostListBean> {
 
         @Override
         protected void onPreExecute() {
@@ -286,29 +301,33 @@ public class CommentsByIdTimeLineFragment extends Fragment {
             rotateAnimation.setInterpolator(new LinearInterpolator());
             headerView.findViewById(R.id.header_progress).startAnimation(rotateAnimation);
             listView.setSelection(0);
-
         }
 
+
         @Override
-        protected CommentListBean doInBackground(Void... params) {
-            CommentsTimeLineMsgByIdDao dao = new CommentsTimeLineMsgByIdDao(token, id);
-            if (getList().getComments().size() > 0) {
-                dao.setSince_id(getList().getComments().get(0).getId());
+        protected RepostListBean doInBackground(Void... params) {
+
+            RepostsTimeLineMsgByIdDao dao = new RepostsTimeLineMsgByIdDao(token, id);
+
+            if (getList().getReposts().size() > 0) {
+                dao.setSince_id(getList().getReposts().get(0).getId());
             }
-            CommentListBean result = dao.getGSONMsgList();
+            RepostListBean result = dao.getGSONMsgList();
+
             return result;
+
         }
 
         @Override
-        protected void onPostExecute(CommentListBean newValue) {
+        protected void onPostExecute(RepostListBean newValue) {
             if (newValue != null) {
-                if (newValue.getComments().size() == 0) {
+                if (newValue.getReposts().size() == 0) {
                     Toast.makeText(getActivity(), "no new message", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    Toast.makeText(getActivity(), "total " + newValue.getComments().size() + " new messages", Toast.LENGTH_SHORT).show();
-                    if (newValue.getComments().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
-                        newValue.getComments().addAll(getList().getComments());
+                    Toast.makeText(getActivity(), "total " + newValue.getReposts().size() + " new messages", Toast.LENGTH_SHORT).show();
+                    if (newValue.getReposts().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
+                        newValue.getReposts().addAll(getList().getReposts());
                     }
 
                     bean = newValue;
@@ -316,13 +335,12 @@ public class CommentsByIdTimeLineFragment extends Fragment {
                     listView.setSelectionAfterHeaderView();
                     headerView.findViewById(R.id.header_progress).clearAnimation();
 
-
                 }
             }
             headerView.findViewById(R.id.header_progress).setVisibility(View.GONE);
             headerView.findViewById(R.id.header_text).setVisibility(View.GONE);
             isBusying = false;
-            if (bean.getComments().size() == 0) {
+            if (bean.getReposts().size() == 0) {
                 footerView.findViewById(R.id.listview_footer).setVisibility(View.GONE);
             } else {
                 footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
@@ -332,7 +350,8 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         }
     }
 
-    class FriendsTimeLineGetOlderMsgListTask extends AsyncTask<Void, CommentListBean, CommentListBean> {
+
+    class FriendsTimeLineGetOlderMsgListTask extends AsyncTask<Void, RepostListBean, RepostListBean> {
         @Override
         protected void onPreExecute() {
             showListView();
@@ -353,22 +372,23 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         }
 
         @Override
-        protected CommentListBean doInBackground(Void... params) {
+        protected RepostListBean doInBackground(Void... params) {
 
-            CommentsTimeLineMsgByIdDao dao = new CommentsTimeLineMsgByIdDao(token, id);
-            if (getList().getComments().size() > 0) {
-                dao.setMax_id(getList().getComments().get(getList().getComments().size() - 1).getId());
+            RepostsTimeLineMsgByIdDao dao = new RepostsTimeLineMsgByIdDao(token, id);
+            if (getList().getReposts().size() > 0) {
+                dao.setMax_id(getList().getReposts().get(getList().getReposts().size() - 1).getId());
             }
-            CommentListBean result = dao.getGSONMsgList();
+            RepostListBean result = dao.getGSONMsgList();
+
             return result;
         }
 
         @Override
-        protected void onPostExecute(CommentListBean newValue) {
-            if (newValue != null && newValue.getComments().size() > 1) {
-                Toast.makeText(getActivity(), "total " + newValue.getComments().size() + " old messages", Toast.LENGTH_SHORT).show();
-                List<CommentBean> list=newValue.getComments();
-                getList().getComments().addAll(list.subList(1, list.size() - 1));
+        protected void onPostExecute(RepostListBean newValue) {
+            if (newValue != null && newValue.getReposts().size() > 1) {
+                Toast.makeText(getActivity(), "total " + newValue.getReposts().size() + " old messages", Toast.LENGTH_SHORT).show();
+                List<WeiboMsgBean> list = newValue.getReposts();
+                getList().getReposts().addAll(list.subList(1, list.size() - 1));
 
             }
 
@@ -387,3 +407,4 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         progressBar.setVisibility(View.INVISIBLE);
     }
 }
+
