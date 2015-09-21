@@ -29,10 +29,9 @@ import com.ysy.ysywb.dao.CommentsTimeLineMsgByIdDao;
 import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
-import com.ysy.ysywb.ui.main.MainTimeLineActivity;
-import com.ysy.ysywb.ui.main.PictureBitmapWorkerTask;
 import com.ysy.ysywb.ui.timeline.Commander;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -239,9 +238,7 @@ public class CommentsByIdTimeLineFragment extends Fragment {
 
 
     public void refresh() {
-        Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = ((MainTimeLineActivity) getActivity()).getAvatarBitmapWorkerTaskHashMap();
-        Map<String, PictureBitmapWorkerTask> pictureBitmapWorkerTaskMap = ((MainTimeLineActivity) getActivity()).getPictureBitmapWorkerTaskMap();
-
+        Map<String, AvatarBitmapWorkerTask> avatarBitmapWorkerTaskHashMap = ((AbstractAppActivity) getActivity()).getAvatarBitmapWorkerTaskHashMap();
 
         new FriendsTimeLineGetNewMsgListTask().execute();
         Set<String> keys = avatarBitmapWorkerTaskHashMap.keySet();
@@ -250,11 +247,6 @@ public class CommentsByIdTimeLineFragment extends Fragment {
             avatarBitmapWorkerTaskHashMap.remove(key);
         }
 
-        Set<String> pKeys = pictureBitmapWorkerTaskMap.keySet();
-        for (String pkey : pKeys) {
-            pictureBitmapWorkerTaskMap.get(pkey).cancel(true);
-            pictureBitmapWorkerTaskMap.remove(pkey);
-        }
 
     }
 
@@ -369,17 +361,15 @@ public class CommentsByIdTimeLineFragment extends Fragment {
                 dao.setMax_id(getList().getComments().get(getList().getComments().size() - 1).getId());
             }
             CommentListBean result = dao.getGSONMsgList();
-
             return result;
-
         }
 
         @Override
         protected void onPostExecute(CommentListBean newValue) {
-            if (newValue != null) {
+            if (newValue != null && newValue.getComments().size() > 1) {
                 Toast.makeText(getActivity(), "total " + newValue.getComments().size() + " old messages", Toast.LENGTH_SHORT).show();
-
-                getList().getComments().addAll(newValue.getComments().subList(1, newValue.getComments().size() - 1));
+                List<CommentBean> list=newValue.getComments();
+                getList().getComments().addAll(list.subList(1, list.size() - 1));
 
             }
 
