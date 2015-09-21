@@ -26,11 +26,8 @@ import com.ysy.ysywb.bean.CommentBean;
 import com.ysy.ysywb.bean.CommentListBean;
 import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.dao.CommentsTimeLineMsgByIdDao;
-import com.ysy.ysywb.dao.CommentsTimeLineMsgDao;
-import com.ysy.ysywb.support.database.DatabaseManager;
 import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
-import com.ysy.ysywb.ui.Abstract.IAccountInfo;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
 import com.ysy.ysywb.ui.main.MainTimeLineActivity;
 import com.ysy.ysywb.ui.main.PictureBitmapWorkerTask;
@@ -303,18 +300,11 @@ public class CommentsByIdTimeLineFragment extends Fragment {
 
         @Override
         protected CommentListBean doInBackground(Void... params) {
-            CommentsTimeLineMsgDao dao = new CommentsTimeLineMsgDao(((MainTimeLineActivity) getActivity()).getToken());
+            CommentsTimeLineMsgByIdDao dao = new CommentsTimeLineMsgByIdDao(token, id);
             if (getList().getComments().size() > 0) {
                 dao.setSince_id(getList().getComments().get(0).getId());
             }
             CommentListBean result = dao.getGSONMsgList();
-            if (result != null) {
-                if (result.getComments().size() < AppConfig.DEFAULT_MSG_NUMBERS) {
-                    DatabaseManager.getInstance().addCommentLineMsg(result, ((IAccountInfo) getActivity()).getAccount().getUid());
-                } else {
-                    DatabaseManager.getInstance().replaceCommentLineMsg(result, ((IAccountInfo) getActivity()).getAccount().getUid());
-                }
-            }
             return result;
         }
 
@@ -374,7 +364,7 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         @Override
         protected CommentListBean doInBackground(Void... params) {
 
-            CommentsTimeLineMsgDao dao = new CommentsTimeLineMsgDao(((MainTimeLineActivity) getActivity()).getToken());
+            CommentsTimeLineMsgByIdDao dao = new CommentsTimeLineMsgByIdDao(token, id);
             if (getList().getComments().size() > 0) {
                 dao.setMax_id(getList().getComments().get(getList().getComments().size() - 1).getId());
             }
