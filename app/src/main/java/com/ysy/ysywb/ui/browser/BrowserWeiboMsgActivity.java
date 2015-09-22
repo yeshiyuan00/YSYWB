@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,7 +19,6 @@ import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.dao.StatusesShowMsgDao;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
-import com.ysy.ysywb.ui.send.CommentNewActivity;
 import com.ysy.ysywb.ui.send.RepostNewActivity;
 
 import java.util.ArrayList;
@@ -68,7 +66,6 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
 
         buildView();
         buildViewData();
-        buildViewPager();
         //TODO 新浪微博禁用了根据ID获取单条微博的接口，只可以获取授权用户所发的微博
         //new UpdateMsgTask().execute();
     }
@@ -83,19 +80,6 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
         content_pic = (ImageView) findViewById(R.id.content_pic);
         repost_pic = (ImageView) findViewById(R.id.repost_content_pic);
 
-        Button switchBtn = (Button) findViewById(R.id.switchbtn);
-        switchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (a) {
-                    mViewPager.setCurrentItem(0);
-                    a = false;
-                } else {
-                    mViewPager.setCurrentItem(1);
-                    a = true;
-                }
-            }
-        });
     }
 
     private void buildViewPager() {
@@ -195,7 +179,7 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
                 startActivity(intent);
                 return true;
             case R.id.menu_comment:
-                intent = new Intent(this, CommentNewActivity.class);
+                intent = new Intent(this, BrowserRepostAndCommentListActivity.class);
                 intent.putExtra("token", token);
                 intent.putExtra("id", msg.getId());
                 startActivity(intent);
@@ -218,6 +202,7 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
                 msg = newValue;
                 retweetMsg = msg.getRetweeted_status();
                 buildViewData();
+                invalidateOptionsMenu();
             }
             super.onPostExecute(newValue);
         }
