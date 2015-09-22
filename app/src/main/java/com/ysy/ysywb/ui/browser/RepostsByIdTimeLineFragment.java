@@ -430,6 +430,5 @@ public class RepostsByIdTimeLineFragment extends Fragment {
         listView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
     }
-    
-}
 
+}
