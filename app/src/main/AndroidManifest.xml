@@ -44,11 +44,16 @@
             android:uiOptions="splitActionBarWhenNarrow" />
         <activity android:name=".ui.browser.BrowserCommentListActivity" />
         <activity android:name=".ui.browser.BrowserRepostListActivity" />
+        <activity android:name=".ui.send.CommentNewActivity" />
+        <activity android:name=".ui.send.RepostNewActivity" />
         <activity android:name=".ui.preference.SettingActivity" />
 
-        <service android:name=".ui.backgroundservices.FetchNewMsgService"/>
+        <service android:name=".ui.backgroundservices.FetchNewMsgService" />
+
         <receiver android:name=".ui.receiver.MentionsAndCommentsReceiver" />
-        <receiver android:name=".ui.receiver.ConnectionChangeReceiver" android:label="NetworkConnection">
+        <receiver
+            android:name=".ui.receiver.ConnectionChangeReceiver"
+            android:label="NetworkConnection">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>

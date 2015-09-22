@@ -4,10 +4,15 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +20,11 @@ import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.dao.StatusesShowMsgDao;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
+import com.ysy.ysywb.ui.send.CommentNewActivity;
+import com.ysy.ysywb.ui.send.RepostNewActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * User: ysy
@@ -39,6 +49,9 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
     private String comment_sum = "";
     private String retweet_sum = "";
 
+    private ViewPager mViewPager = null;
+    boolean a = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +68,7 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
 
         buildView();
         buildViewData();
-
+        buildViewPager();
         //TODO 新浪微博禁用了根据ID获取单条微博的接口，只可以获取授权用户所发的微博
         //new UpdateMsgTask().execute();
     }
@@ -69,6 +82,48 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
         avatar = (ImageView) findViewById(R.id.avatar);
         content_pic = (ImageView) findViewById(R.id.content_pic);
         repost_pic = (ImageView) findViewById(R.id.repost_content_pic);
+
+        Button switchBtn = (Button) findViewById(R.id.switchbtn);
+        switchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (a) {
+                    mViewPager.setCurrentItem(0);
+                    a = false;
+                } else {
+                    mViewPager.setCurrentItem(1);
+                    a = true;
+                }
+            }
+        });
+    }
+
+    private void buildViewPager() {
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        TimeLinePagerAdapter adapter = new TimeLinePagerAdapter(getSupportFragmentManager());
+        mViewPager.setOffscreenPageLimit(5);
+        mViewPager.setAdapter(adapter);
+    }
+
+    class TimeLinePagerAdapter extends FragmentPagerAdapter {
+
+        List<Fragment> list = new ArrayList<Fragment>();
+
+        public TimeLinePagerAdapter(FragmentManager fm) {
+            super(fm);
+            list.add(new RepostsByIdTimeLineFragment(token, msg.getId()));
+            list.add(new CommentsByIdTimeLineFragment(token, msg.getId()));
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return list.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return list.size();
+        }
     }
 
     private void buildViewData() {
@@ -133,13 +188,14 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
                 finish();
                 return true;
             case R.id.menu_repost:
-                intent = new Intent(this, BrowserRepostListActivity.class);
+                intent = new Intent(this, RepostNewActivity.class);
                 intent.putExtra("token", token);
                 intent.putExtra("id", msg.getId());
+                intent.putExtra("repost_content", msg.getText());
                 startActivity(intent);
                 return true;
             case R.id.menu_comment:
-                intent = new Intent(this, BrowserCommentListActivity.class);
+                intent = new Intent(this, CommentNewActivity.class);
                 intent.putExtra("token", token);
                 intent.putExtra("id", msg.getId());
                 startActivity(intent);
