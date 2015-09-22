@@ -1,5 +1,7 @@
 package com.ysy.ysywb.ui.browser;
 
+import android.app.ActionBar;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,7 @@ import com.ysy.ysywb.dao.RepostsTimeLineMsgByIdDao;
 import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
+import com.ysy.ysywb.ui.send.RepostNewActivity;
 import com.ysy.ysywb.ui.timeline.Commander;
 
 import java.util.List;
@@ -103,7 +106,10 @@ public class RepostsByIdTimeLineFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object... params) {
-            bean = new RepostsTimeLineMsgByIdDao(token, id).getGSONMsgList();
+            RepostListBean newValue = new RepostsTimeLineMsgByIdDao(token, id).getGSONMsgList();
+            if (newValue != null) {
+                bean = newValue;
+            }
             return null;
         }
 
@@ -111,6 +117,7 @@ public class RepostsByIdTimeLineFragment extends Fragment {
         protected void onPostExecute(Object o) {
             timeLineAdapter.notifyDataSetChanged();
             refreshLayout(bean);
+            invlidateTabText();
             super.onPostExecute(o);
         }
     }
@@ -266,7 +273,7 @@ public class RepostsByIdTimeLineFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.mentionstimelinefragment_menu, menu);
+        inflater.inflate(R.menu.repostsbyidtimelinefragment_menu, menu);
 
     }
 
@@ -274,7 +281,14 @@ public class RepostsByIdTimeLineFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.mentionstimelinefragment_refresh:
+            case R.id.repostsbyidtimelinefragment_repost:
+                Intent intent = new Intent(getActivity(), RepostNewActivity.class);
+                intent.putExtra("token", token);
+                intent.putExtra("id", id);
+                startActivity(intent);
+                break;
+
+            case R.id.repostsbyidtimelinefragment_repost_refresh:
 
                 refresh();
 
@@ -345,9 +359,18 @@ public class RepostsByIdTimeLineFragment extends Fragment {
             } else {
                 footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
             }
+            invlidateTabText();
+
             super.onPostExecute(newValue);
 
         }
+    }
+
+    private void invlidateTabText() {
+        ActionBar.Tab tab = this.getActivity().getActionBar().getTabAt(0);
+        String name = tab.getText().toString();
+        String num = "(" + bean.getReposts().size() + ")";
+        tab.setText(name + num);
     }
 
 
@@ -397,6 +420,7 @@ public class RepostsByIdTimeLineFragment extends Fragment {
             footerView.findViewById(R.id.refresh).clearAnimation();
             footerView.findViewById(R.id.refresh).setVisibility(View.GONE);
             timeLineAdapter.notifyDataSetChanged();
+            invlidateTabText();
             super.onPostExecute(newValue);
         }
     }
@@ -406,5 +430,6 @@ public class RepostsByIdTimeLineFragment extends Fragment {
         listView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
     }
+    
 }
 

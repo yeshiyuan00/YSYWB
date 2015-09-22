@@ -23,7 +23,9 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_listview_header_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_listview_item_comments_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/menu/browserweibomsgactivity_menu.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/commentsbyidtimelinefragment_menu.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/menu/myinfofragment_menu.xml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/menu/repostsbyidtimelinefragment_menu.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/raw/spec.txt" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/values/arrays.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/values/colors.xml" charset="GBK" />

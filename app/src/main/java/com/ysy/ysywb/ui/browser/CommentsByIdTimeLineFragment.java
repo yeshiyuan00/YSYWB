@@ -1,5 +1,7 @@
 package com.ysy.ysywb.ui.browser;
 
+import android.app.ActionBar;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -28,6 +30,7 @@ import com.ysy.ysywb.dao.CommentsTimeLineMsgByIdDao;
 import com.ysy.ysywb.support.utils.AppConfig;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
+import com.ysy.ysywb.ui.send.CommentNewActivity;
 import com.ysy.ysywb.ui.timeline.Commander;
 
 import java.util.List;
@@ -101,15 +104,19 @@ public class CommentsByIdTimeLineFragment extends Fragment {
 
         @Override
         protected Object doInBackground(Object... params) {
-            bean = new CommentsTimeLineMsgByIdDao(token, id).getGSONMsgList();
+            CommentListBean newValue = new CommentsTimeLineMsgByIdDao(token, id).getGSONMsgList();
+            if (newValue != null) {
+                bean = newValue;
+            }
             return null;
         }
 
         @Override
-        protected void onPreExecute() {
+        protected void onPostExecute(Object o) {
             timeLineAdapter.notifyDataSetChanged();
             refreshLayout(bean);
-            super.onPreExecute();
+            invlidateTabText();
+            super.onPostExecute(o);
         }
     }
 
@@ -252,7 +259,7 @@ public class CommentsByIdTimeLineFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.mentionstimelinefragment_menu, menu);
+        inflater.inflate(R.menu.commentsbyidtimelinefragment_menu, menu);
 
     }
 
@@ -260,8 +267,14 @@ public class CommentsByIdTimeLineFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.mentionstimelinefragment_refresh:
+            case R.id.commentsbyidtimelinefragment_comment:
+                Intent intent = new Intent(getActivity(), CommentNewActivity.class);
+                intent.putExtra("token", token);
+                intent.putExtra("id", id);
+                startActivity(intent);
 
+                break;
+            case R.id.commentsbyidtimelinefragment_refresh:
                 refresh();
 
                 break;
@@ -327,6 +340,9 @@ public class CommentsByIdTimeLineFragment extends Fragment {
             } else {
                 footerView.findViewById(R.id.listview_footer).setVisibility(View.VISIBLE);
             }
+
+            invlidateTabText();
+
             super.onPostExecute(newValue);
 
         }
@@ -367,7 +383,7 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         protected void onPostExecute(CommentListBean newValue) {
             if (newValue != null && newValue.getComments().size() > 1) {
                 Toast.makeText(getActivity(), "total " + newValue.getComments().size() + " old messages", Toast.LENGTH_SHORT).show();
-                List<CommentBean> list=newValue.getComments();
+                List<CommentBean> list = newValue.getComments();
                 getList().getComments().addAll(list.subList(1, list.size() - 1));
 
             }
@@ -377,6 +393,9 @@ public class CommentsByIdTimeLineFragment extends Fragment {
             footerView.findViewById(R.id.refresh).clearAnimation();
             footerView.findViewById(R.id.refresh).setVisibility(View.GONE);
             timeLineAdapter.notifyDataSetChanged();
+
+            invlidateTabText();
+
             super.onPostExecute(newValue);
         }
     }
@@ -385,5 +404,12 @@ public class CommentsByIdTimeLineFragment extends Fragment {
         empty.setVisibility(View.INVISIBLE);
         listView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.INVISIBLE);
+    }
+
+    private void invlidateTabText() {
+        ActionBar.Tab tab = this.getActivity().getActionBar().getTabAt(1);
+        String name = tab.getText().toString();
+        String num = "(" + bean.getComments().size() + ")";
+        tab.setText(name + num);
     }
 }
