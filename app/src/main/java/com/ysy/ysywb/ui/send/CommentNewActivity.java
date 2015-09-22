@@ -22,14 +22,11 @@ public class CommentNewActivity extends AbstractAppActivity {
 
     private String token;
 
-    private EditText content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.statusnewactivity_layout);
-
-        content = ((EditText) findViewById(R.id.status_new_content));
 
         token = getIntent().getStringExtra("token");
         id = getIntent().getStringExtra("id");
