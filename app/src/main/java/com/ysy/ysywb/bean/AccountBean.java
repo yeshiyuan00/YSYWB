@@ -48,8 +48,7 @@ public class AccountBean implements Serializable{
     public void setAvatar_url(String avatar_url) {
         this.avatar_url = avatar_url;
     }
-
-
+    
     public String getPortrait() {
         return portrait;
     }
