@@ -51,11 +51,13 @@ public class ImageTool {
         absoluteFilePath = absoluteFilePath + ".jpg";
         Bitmap bitmap = BitmapFactory.decodeFile(absoluteFilePath);
 
-        if (bitmap != null) {
-            return bitmap;
-        } else {
+        if (bitmap == null) {
             return getBitmapFromNetWork(url, absoluteFilePath);
         }
+        if (bitmap != null) {
+            bitmap = ImageEdit.getRoundedCornerBitmap(bitmap);
+        }
+        return bitmap;
     }
 
     private static Bitmap getBitmapFromNetWork(String url, String path) {
