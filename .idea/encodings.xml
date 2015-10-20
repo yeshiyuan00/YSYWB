@@ -10,11 +10,13 @@
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-ldpi/listitem_background_pressed.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/account.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/app.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/comment.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/friendstimelinefragment_search.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/ic_launcher.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/maintimelineactivity_account_management.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/maintimelineactivity_settings.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/picture.png" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/res/drawable-xhdpi/repost.png" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/browsercommentlistactivity_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/browserrepostlistactivity_layout.xml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/res/layout/browserweibomsgactivity_layout.xml" charset="GBK" />

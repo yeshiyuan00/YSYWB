@@ -1,11 +1,13 @@
 package com.ysy.ysywb.ui.send;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.CommentBean;
@@ -21,7 +23,7 @@ public class CommentNewActivity extends AbstractAppActivity {
     private String id;
 
     private String token;
-
+    private EditText et;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +32,13 @@ public class CommentNewActivity extends AbstractAppActivity {
 
         token = getIntent().getStringExtra("token");
         id = getIntent().getStringExtra("id");
-
+        getActionBar().setTitle(getString(R.string.comments));
+        et = (EditText) findViewById(R.id.status_new_content);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.statusnewactivity_menu, menu);
+        getMenuInflater().inflate(R.menu.commentnewactivity_menu, menu);
         return true;
     }
 
@@ -43,10 +46,12 @@ public class CommentNewActivity extends AbstractAppActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_send:
-                final String content = ((EditText) findViewById(R.id.status_new_content)).getText().toString();
+                final String content = et.getText().toString();
 
                 if (!TextUtils.isEmpty(content)) {
                     new SimpleTask().execute();
+                } else {
+                    Toast.makeText(this, "comment can't be empty", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -56,17 +61,40 @@ public class CommentNewActivity extends AbstractAppActivity {
     class SimpleTask extends AsyncTask<Void, Void, CommentBean> {
 
         String content1;
+        SendProgressFragment progressFragment = new SendProgressFragment();
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
-            content1 = ((EditText) findViewById(R.id.status_new_content)).getText().toString();
+            progressFragment.onCancel(new DialogInterface() {
+                @Override
+                public void cancel() {
+                    SimpleTask.this.cancel(true);
+                }
+
+                @Override
+                public void dismiss() {
+                    SimpleTask.this.cancel(true);
+                }
+            });
+            progressFragment.show(getFragmentManager(), "");
         }
 
         @Override
         protected CommentBean doInBackground(Void... params) {
-            CommentNewMsgDao dao = new CommentNewMsgDao(token, id, content1);
+            CommentNewMsgDao dao = new CommentNewMsgDao(token, id, ((EditText) findViewById(R.id.status_new_content)).getText().toString());
             return dao.sendNewMsg();
+        }
+
+        @Override
+        protected void onPostExecute(CommentBean s) {
+            progressFragment.dismissAllowingStateLoss();
+            if (s != null) {
+                finish();
+                Toast.makeText(CommentNewActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(CommentNewActivity.this, "failed", Toast.LENGTH_SHORT).show();
+            }
+            super.onPostExecute(s);
         }
     }
 }
