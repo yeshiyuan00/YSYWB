@@ -192,7 +192,7 @@ public class AccountActivity extends AbstractAppActivity implements AdapterView.
 
         intent.putExtra("account", accountList.get(i));
         intent.putExtra("uid", accountList.get(i).getUid());
-
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
 
