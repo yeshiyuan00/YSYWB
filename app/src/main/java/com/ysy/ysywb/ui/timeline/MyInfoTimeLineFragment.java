@@ -40,6 +40,7 @@ public class MyInfoTimeLineFragment extends Fragment {
     private Button weibo_number;
     private Button following_number;
     private Button fans_number;
+    private Button fav_number;
 
     private Commander commander;
 
@@ -80,6 +81,11 @@ public class MyInfoTimeLineFragment extends Fragment {
         if (!TextUtils.isEmpty(avatarUrl)) {
             new SimpleBitmapWorkerTask(avatar).execute(avatarUrl);
         }
+        setTextViewNum(weibo_number, bean.getStatuses_count());
+        setTextViewNum(fans_number, bean.getFollowers_count());
+        setTextViewNum(following_number, bean.getFriends_count());
+        setTextViewNum(fav_number, bean.getFavourites_count());
+
     }
 
     View view;
@@ -95,7 +101,7 @@ public class MyInfoTimeLineFragment extends Fragment {
         weibo_number = (Button) view.findViewById(R.id.weibo_number);
         following_number = (Button) view.findViewById(R.id.following_number);
         fans_number = (Button) view.findViewById(R.id.fans_number);
-
+        fav_number = (Button) view.findViewById(R.id.fav_number);
 
         return view;
     }
@@ -133,6 +139,8 @@ public class MyInfoTimeLineFragment extends Fragment {
             UserBean user = new OAuthDao(((MainTimeLineActivity) getActivity()).getToken()).getOAuthUserInfo();
             if (user != null) {
                 bean = user;
+            }else {
+                cancel(true);
             }
             return user;
         }
@@ -142,6 +150,20 @@ public class MyInfoTimeLineFragment extends Fragment {
             setValue();
             super.onPostExecute(o);
         }
+    }
+
+    private void setTextViewNum(TextView tv, String num) {
+
+        String name = tv.getText().toString();
+        String value = "(" + num + ")";
+        if (!name.endsWith(")")) {
+            tv.setText(name + value);
+        } else {
+            int index = name.indexOf("(");
+            String newName = name.substring(0, index);
+            tv.setText(newName + value);
+        }
+
     }
 
 }
