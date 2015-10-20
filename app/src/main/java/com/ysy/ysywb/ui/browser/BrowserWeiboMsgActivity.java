@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.WeiboMsgBean;
@@ -79,7 +80,22 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
         content_pic = (ImageView) findViewById(R.id.content_pic);
         repost_pic = (ImageView) findViewById(R.id.repost_content_pic);
 
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(BrowserWeiboMsgActivity.this, "ing", Toast.LENGTH_SHORT).show();
+            }
+        });
+        content_pic.setOnClickListener(picOnClickListener);
+        repost_pic.setOnClickListener(picOnClickListener);
     }
+
+    private android.view.View.OnClickListener picOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(BrowserWeiboMsgActivity.this, "ing", Toast.LENGTH_SHORT).show();
+        }
+    };
 
     private void buildViewPager() {
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -174,14 +190,14 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
                 intent = new Intent(this, BrowserRepostAndCommentListActivity.class);
                 intent.putExtra("token", token);
                 intent.putExtra("id", msg.getId());
-                intent.putExtra("tabindex",0);
+                intent.putExtra("tabindex", 0);
                 startActivity(intent);
                 return true;
             case R.id.menu_comment:
                 intent = new Intent(this, BrowserRepostAndCommentListActivity.class);
                 intent.putExtra("token", token);
                 intent.putExtra("id", msg.getId());
-                intent.putExtra("tabindex",1);
+                intent.putExtra("tabindex", 1);
                 startActivity(intent);
                 return true;
             default:
