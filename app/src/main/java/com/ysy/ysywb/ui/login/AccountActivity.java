@@ -195,7 +195,6 @@ public class AccountActivity extends AbstractAppActivity implements AdapterView.
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
-
     }
 
 
