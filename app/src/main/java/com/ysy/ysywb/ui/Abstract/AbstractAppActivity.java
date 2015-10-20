@@ -4,8 +4,10 @@ import android.graphics.Bitmap;
 import android.support.v4.app.FragmentActivity;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.ysy.ysywb.R;
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.support.utils.GlobalContext;
 import com.ysy.ysywb.ui.main.AvatarBitmapWorkerTask;
 import com.ysy.ysywb.ui.main.PictureBitmapWorkerTask;
@@ -79,5 +81,9 @@ public class AbstractAppActivity extends FragmentActivity {
 
     public Commander getCommander() {
         return commander;
+    }
+
+    protected void dealWithException(WeiboException e) {
+        Toast.makeText(this, e.getError(), Toast.LENGTH_SHORT).show();
     }
 }

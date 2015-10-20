@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.ysy.ysywb.bean.MessageListBean;
 import com.ysy.ysywb.bean.WeiboMsgBean;
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.utils.ActivityUtils;
@@ -34,7 +35,12 @@ public class MentionsTimeLineMsgDao {
         map.put("filter_by_source", filter_by_source);
         map.put("trim_user", trim_user);
 
-        String jsonData = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        String jsonData = null;
+        try {
+            jsonData = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        } catch (WeiboException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
         return jsonData;
     }

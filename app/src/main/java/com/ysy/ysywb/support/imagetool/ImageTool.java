@@ -55,7 +55,7 @@ public class ImageTool {
             return getBitmapFromNetWork(url, absoluteFilePath);
         }
         if (bitmap != null) {
-            bitmap = ImageEdit.getRoundedCornerBitmap(bitmap);
+            //bitmap = ImageEdit.getRoundedCornerBitmap(bitmap);
         }
         return bitmap;
     }

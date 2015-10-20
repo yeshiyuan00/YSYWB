@@ -3,6 +3,7 @@ package com.ysy.ysywb.dao;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.ysy.ysywb.bean.WeiboMsgBean;
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.utils.AppLogger;
@@ -25,7 +26,7 @@ public class StatusesShowMsgDao {
         this.id = id;
     }
 
-    public WeiboMsgBean getMsg() {
+    public WeiboMsgBean getMsg() throws WeiboException{
         String url = URLHelper.getStatuses_Show();
         Map<String, String> map = new HashMap<String, String>();
         map.put("access_token", access_token);

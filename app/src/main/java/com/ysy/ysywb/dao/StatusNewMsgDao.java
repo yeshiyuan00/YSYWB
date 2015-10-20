@@ -2,6 +2,7 @@ package com.ysy.ysywb.dao;
 
 import android.text.TextUtils;
 
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.http.URLManager;
@@ -30,7 +31,11 @@ public class StatusNewMsgDao {
         map.put("access_token", access_token);
         map.put("status", str);
 
-        HttpUtility.getInstance().executeNormalTask(HttpMethod.Post, url, map);
+        try {
+            HttpUtility.getInstance().executeNormalTask(HttpMethod.Post, url, map);
+        } catch (WeiboException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
     }
 }

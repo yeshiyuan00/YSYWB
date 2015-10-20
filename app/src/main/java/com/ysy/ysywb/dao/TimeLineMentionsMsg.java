@@ -1,5 +1,6 @@
 package com.ysy.ysywb.dao;
 
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 
@@ -20,7 +21,7 @@ import java.util.Map;
  */
 public class TimeLineMentionsMsg {
 
-    public String getMsgs() {
+    public String getMsgs() throws WeiboException {
         String msg = "";
 
         String url = URLHelper.getMyCommentsTimeLine();
@@ -32,7 +33,7 @@ public class TimeLineMentionsMsg {
         return msg;
     }
 
-    public List<Map<String, String>> getMsgList() {
+    public List<Map<String, String>> getMsgList() throws WeiboException {
 
         List<Map<String, String>> list = new ArrayList<Map<String, String>>();
         String msg = getMsgs();

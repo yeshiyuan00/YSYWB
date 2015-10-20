@@ -3,6 +3,7 @@ package com.ysy.ysywb.dao;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.ysy.ysywb.bean.RepostListBean;
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.utils.ActivityUtils;
@@ -32,7 +33,12 @@ public class RepostsTimeLineMsgByIdDao {
         map.put("filter_by_author", filter_by_author);
 
 
-        String jsonData = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        String jsonData = null;
+        try {
+            jsonData = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        } catch (WeiboException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
 
         Gson gson = new Gson();

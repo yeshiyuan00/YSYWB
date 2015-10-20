@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.ysy.ysywb.bean.UserBean;
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.http.URLManager;
@@ -49,7 +50,12 @@ public class OAuthDao {
         map.put("access_token", access_token);
 
         String url = URLManager.getRealUrl("usershow");
-        String result = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        String result = null;
+        try {
+            result = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        } catch (WeiboException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
 
         Gson gson = new Gson();
 
@@ -68,6 +74,11 @@ public class OAuthDao {
         String url = URLManager.getRealUrl("uid");
         Map<String, String> map = new HashMap<String, String>();
         map.put("access_token", access_token);
-        return HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        try {
+            return HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        } catch (WeiboException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return null;
     }
 }

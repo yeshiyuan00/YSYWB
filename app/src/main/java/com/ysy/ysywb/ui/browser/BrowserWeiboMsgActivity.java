@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.WeiboMsgBean;
 import com.ysy.ysywb.dao.StatusesShowMsgDao;
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
 
 import java.util.ArrayList;
@@ -50,6 +51,8 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
     private ViewPager mViewPager = null;
     boolean a = true;
 
+    private UpdateMsgTask task;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +70,13 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
         buildView();
         buildViewData();
         //TODO 新浪微博禁用了根据ID获取单条微博的接口，只可以获取授权用户所发的微博
-        //new UpdateMsgTask().execute();
+        //task = new UpdateMsgTask();
+        //task.execute();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     private void buildView() {
@@ -127,7 +136,13 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
 
     private void buildViewData() {
 
-        username.setText(msg.getUser().getScreen_name());
+        if (msg.getUser() != null) {
+            username.setText(msg.getUser().getScreen_name());
+            SimpleBitmapWorkerTask avatarTask = new SimpleBitmapWorkerTask(avatar);
+            avatarTask.execute(msg.getUser().getProfile_image_url());
+        }
+
+
         content.setText(msg.getText());
         time.setText(msg.getCreated_at());
 
@@ -135,9 +150,6 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
         retweet_sum = msg.getReposts_count();
 
         invalidateOptionsMenu();
-        SimpleBitmapWorkerTask avatarTask = new SimpleBitmapWorkerTask(avatar);
-        avatarTask.execute(msg.getUser().getProfile_image_url());
-
 
         if (retweetMsg != null) {
             recontent.setVisibility(View.VISIBLE);
@@ -206,15 +218,28 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
     }
 
     class UpdateMsgTask extends AsyncTask<Void, Void, WeiboMsgBean> {
+        WeiboException e;
 
         @Override
         protected WeiboMsgBean doInBackground(Void... params) {
-            return new StatusesShowMsgDao(token, msg.getId()).getMsg();
+            try {
+                return new StatusesShowMsgDao(token, msg.getId()).getMsg();
+            } catch (WeiboException e) {
+                this.e = e;
+                cancel(true);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onCancelled(WeiboMsgBean weiboMsgBean) {
+            dealWithException(e);
+            super.onCancelled(weiboMsgBean);
         }
 
         @Override
         protected void onPostExecute(WeiboMsgBean newValue) {
-            if (newValue != null) {
+            if (newValue != null && e == null) {
                 msg = newValue;
                 retweetMsg = msg.getRetweeted_status();
                 buildViewData();

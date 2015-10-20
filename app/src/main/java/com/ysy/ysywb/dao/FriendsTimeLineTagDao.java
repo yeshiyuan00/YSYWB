@@ -1,6 +1,7 @@
 package com.ysy.ysywb.dao;
 
 import com.ysy.ysywb.bean.TagBean;
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.support.http.HttpMethod;
 import com.ysy.ysywb.support.http.HttpUtility;
 import com.ysy.ysywb.support.utils.AppLogger;
@@ -29,7 +30,12 @@ public class FriendsTimeLineTagDao {
         map.put("count", count);
         map.put("page", page);
 
-        String jsonData = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        String jsonData = null;
+        try {
+            jsonData = HttpUtility.getInstance().executeNormalTask(HttpMethod.Get, url, map);
+        } catch (WeiboException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
         return jsonData;
     }
 

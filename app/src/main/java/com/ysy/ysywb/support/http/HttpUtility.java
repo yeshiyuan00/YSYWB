@@ -4,6 +4,7 @@ package com.ysy.ysywb.support.http;
 import android.text.TextUtils;
 
 import com.ysy.ysywb.R;
+import com.ysy.ysywb.support.error.WeiboException;
 import com.ysy.ysywb.support.file.FileDownloaderHttpHelper;
 import com.ysy.ysywb.support.utils.ActivityUtils;
 import com.ysy.ysywb.support.utils.AppLogger;
@@ -72,7 +73,8 @@ public class HttpUtility {
         return httpUtility;
     }
 
-    public String executeNormalTask(HttpMethod httpMethod, String url, Map<String, String> param) {
+    public String executeNormalTask(HttpMethod httpMethod, String url, Map<String, String> param)
+            throws WeiboException {
         switch (httpMethod) {
             case Post:
                 return doPost(url, param);
@@ -89,7 +91,7 @@ public class HttpUtility {
     }
 
 
-    private String doPost(String url, Map<String, String> param) {
+    private String doPost(String url, Map<String, String> param) throws WeiboException {
         AppLogger.d(url);
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 
@@ -169,7 +171,7 @@ public class HttpUtility {
         }
     }
 
-    private String doGet(String url, Map<String, String> param) {
+    private String doGet(String url, Map<String, String> param) throws WeiboException {
 
         URIBuilder uriBuilder;
         try {
@@ -223,7 +225,7 @@ public class HttpUtility {
         return response;
     }
 
-    private String dealWithResponse(HttpResponse httpResponse) {
+    private String dealWithResponse(HttpResponse httpResponse) throws WeiboException {
         StatusLine status = httpResponse.getStatusLine();
         int statusCode = status.getStatusCode();
         String result = "";
@@ -252,7 +254,7 @@ public class HttpUtility {
         return result;
     }
 
-    private String dealWithError(HttpResponse httpResponse) {
+    private String dealWithError(HttpResponse httpResponse) throws WeiboException {
 
         StatusLine status = httpResponse.getStatusLine();
         int statusCode = status.getStatusCode();
@@ -268,6 +270,10 @@ public class HttpUtility {
                 JSONObject json = new JSONObject(result);
                 err = json.getString("error");
                 errCode = json.getInt("error_code");
+                WeiboException exception = new WeiboException();
+                exception.setError_code(errCode);
+                exception.setError(err);
+                throw exception;
             } catch (JSONException e) {
                 e.printStackTrace();
             }
