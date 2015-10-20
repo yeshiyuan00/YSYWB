@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.StrikethroughSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,10 +50,7 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
     private String comment_sum = "";
     private String retweet_sum = "";
 
-    private ViewPager mViewPager = null;
-    boolean a = true;
 
-    private UpdateMsgTask task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +69,7 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
         buildView();
         buildViewData();
         //TODO 新浪微博禁用了根据ID获取单条微博的接口，只可以获取授权用户所发的微博
-        //task = new UpdateMsgTask();
+        //UpdateMsgTask task = new UpdateMsgTask();
         //task.execute();
     }
 
@@ -106,12 +105,6 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
         }
     };
 
-    private void buildViewPager() {
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        TimeLinePagerAdapter adapter = new TimeLinePagerAdapter(getSupportFragmentManager());
-        mViewPager.setOffscreenPageLimit(5);
-        mViewPager.setAdapter(adapter);
-    }
 
     class TimeLinePagerAdapter extends FragmentPagerAdapter {
 
@@ -234,6 +227,7 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
         @Override
         protected void onCancelled(WeiboMsgBean weiboMsgBean) {
             dealWithException(e);
+            setTextViewDeleted();
             super.onCancelled(weiboMsgBean);
         }
 
@@ -247,5 +241,11 @@ public class BrowserWeiboMsgActivity extends AbstractAppActivity {
             }
             super.onPostExecute(newValue);
         }
+    }
+    private void setTextViewDeleted() {
+        SpannableString ss = new SpannableString(content.getText().toString());
+        ss.setSpan(new StrikethroughSpan(), 0, ss.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        content.setText(ss);
     }
 }
