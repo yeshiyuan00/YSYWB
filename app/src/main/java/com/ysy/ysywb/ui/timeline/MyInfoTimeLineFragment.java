@@ -2,8 +2,10 @@ package com.ysy.ysywb.ui.timeline;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,7 +18,11 @@ import android.widget.TextView;
 
 import com.ysy.ysywb.R;
 import com.ysy.ysywb.bean.UserBean;
+import com.ysy.ysywb.dao.OAuthDao;
+import com.ysy.ysywb.ui.Abstract.AbstractAppActivity;
+import com.ysy.ysywb.ui.browser.SimpleBitmapWorkerTask;
 import com.ysy.ysywb.ui.login.AccountActivity;
+import com.ysy.ysywb.ui.main.MainTimeLineActivity;
 import com.ysy.ysywb.ui.preference.SettingActivity;
 
 /**
@@ -26,18 +32,20 @@ import com.ysy.ysywb.ui.preference.SettingActivity;
  */
 public class MyInfoTimeLineFragment extends Fragment {
 
-    ImageView avatar;
-    TextView username;
-    TextView jshao;
-    Button weibo_number;
-    Button following_number;
-    Button fans_number;
+    private UserBean bean;
+
+    private ImageView avatar;
+    private TextView username;
+    private TextView info;
+    private Button weibo_number;
+    private Button following_number;
+    private Button fans_number;
+
+    private Commander commander;
 
     public static interface IUserInfo {
         public UserBean getUser();
     }
-
-    private UserBean bean;
 
 
     public MyInfoTimeLineFragment() {
@@ -59,6 +67,19 @@ public class MyInfoTimeLineFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        bean = ((IUserInfo) getActivity()).getUser();
+        commander = ((AbstractAppActivity) getActivity()).getCommander();
+        setValue();
+        new SimpleTask().execute();
+    }
+
+    private void setValue() {
+        username.setText(bean.getScreen_name());
+        info.setText(bean.getDescription());
+        String avatarUrl = bean.getAvatar_large();
+        if (!TextUtils.isEmpty(avatarUrl)) {
+            new SimpleBitmapWorkerTask(avatar).execute(avatarUrl);
+        }
     }
 
     View view;
@@ -70,7 +91,7 @@ public class MyInfoTimeLineFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_info_layout, container, false);
         avatar = (ImageView) view.findViewById(R.id.avatar);
         username = (TextView) view.findViewById(R.id.username);
-        jshao = (TextView) view.findViewById(R.id.textView_info);
+        info = (TextView) view.findViewById(R.id.textView_info);
         weibo_number = (Button) view.findViewById(R.id.weibo_number);
         following_number = (Button) view.findViewById(R.id.following_number);
         fans_number = (Button) view.findViewById(R.id.fans_number);
@@ -106,5 +127,21 @@ public class MyInfoTimeLineFragment extends Fragment {
         return true;
     }
 
+    private class SimpleTask extends AsyncTask<Object, UserBean, UserBean> {
+        @Override
+        protected UserBean doInBackground(Object... params) {
+            UserBean user = new OAuthDao(((MainTimeLineActivity) getActivity()).getToken()).getOAuthUserInfo();
+            if (user != null) {
+                bean = user;
+            }
+            return user;
+        }
+
+        @Override
+        protected void onPostExecute(UserBean o) {
+            setValue();
+            super.onPostExecute(o);
+        }
+    }
 
 }
